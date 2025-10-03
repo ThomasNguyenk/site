@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Authentification Étudiant</title>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    /* LIGNE À AJOUTER POUR LE FOND D'ÉCRAN */
+    background-image: url('https://e0.pxfuel.com/wallpapers/617/285/desktop-wallpaper-futuristic-background-blue-futuristic.jpg'); /* Remplacez 'background.jpg' par le nom de votre fichier */
+    background-size: cover; /* Optionnel: Assure que l'image couvre toute la zone */
+    background-attachment: fixed; /* Optionnel: Fixe l'image lors du défilement */
+    /* FIN DES AJOUTS */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+    .login-box {
+        background-color: rgba(255, 255, 255, 0.9); /* Ajout d'une opacité pour mieux voir le fond */
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        width: 300px;
+        text-align: center;
+    }
+    h2 { margin-bottom: 20px; color: #333; }
+    input {
+        width: 100%; padding: 10px; margin-bottom: 15px;
+        border: 1px solid #ccc; border-radius: 4px;
+    }
+    button {
+        background-color: #007bff; color: white;
+        padding: 10px; border: none; border-radius: 4px;
+        cursor: pointer; font-size: 16px; width: 100%;
+    }
+    button:hover { background-color: #0056b3; }
+    .error { color: red; margin: 10px 0; font-weight: bold; }
+    .switch-link { margin-top: 15px; font-size: 14px; }
+    .switch-link a { color: #007bff; text-decoration: none; cursor: pointer; }
+    #mfa-instruction-debug {
+        font-weight: bold; color: darkred; border: 1px dashed darkred;
+        padding: 10px; margin-bottom: 15px; background-color: #ffeaea; border-radius: 4px;
+    }
+</style>
+</head>
+<body>
+<div class="login-box">
+    <h2 id="view-title">Connexion</h2>
+    <p class="error" id="errorMsg"></p>
+
+    <div id="login-view">
+        <form id="loginForm">
+            <input type="text" id="loginUsername" placeholder="Nom d'utilisateur" required>
+            <input type="password" id="loginPassword" placeholder="Mot de passe" required>
+            <button type="submit">Se connecter</button>
+        </form>
+        <p class="switch-link">Pas encore de compte ? <a href="#" onclick="showView('register-view')">S'inscrire</a></p>
+    </div>
+
+    <div id="register-view" style="display:none;">
+        <form id="registerForm">
+            <input type="text" id="regUsername" placeholder="Nom et Prénom (ex: Dupont Jean)" required>
+            <input type="email" id="regEmail" placeholder="Email" required>
+            <input type="password" id="regPassword" placeholder="Mot de passe (min 4 caractères)" required>
+            <button type="submit">S'inscrire</button>
+        </form>
+        <p class="switch-link">Déjà un compte ? <a href="#" onclick="showView('login-view')">Se connecter</a></p>
+    </div>
+
+    <div id="mfa-view" style="display:none;">
+        <p>Un code à 4 chiffres a été 'envoyé' à votre email.</p>
+        <p id="mfa-instruction-debug">CODE 2FA (DEBUG) : ****</p>
+        <form id="mfaForm">
+            <input type="text" id="mfaCode" placeholder="Code 2FA (4 chiffres)" maxlength="4" required>
+            <button type="submit">Vérifier le code</button>
+        </form>
+    </div>
+</div>
+
+<script>
+let currentLogin = { username: null, code: null };
+
+function getUsers() { return JSON.parse(localStorage.getItem('studentUsers')) || {}; }
+function saveUsers(users) { localStorage.setItem('studentUsers', JSON.stringify(users)); }
+
+function showView(viewId) {
+    ["login-view","register-view","mfa-view"].forEach(v=>document.getElementById(v).style.display="none");
+    document.getElementById(viewId).style.display = "block";
+    const errorMsg = document.getElementById("errorMsg");
+    errorMsg.textContent = "";
+    errorMsg.style.color = "red";
+    document.getElementById("view-title").textContent =
+        viewId === "login-view" ? "Connexion" :
+        viewId === "register-view" ? "Inscription" : "Double Authentification";
+}
+
+// Inscription
+document.getElementById("registerForm").addEventListener("submit", e=>{
+    e.preventDefault();
+    const username = document.getElementById("regUsername").value.trim();
+    const email = document.getElementById("regEmail").value.trim();
+    const password = document.getElementById("regPassword").value;
+    const users = getUsers();
+    
+    // NOUVELLE RÈGLE : Validation du Nom/Prénom (doit contenir au moins deux mots (un espace) et seulement des lettres/espaces)
+    const nameRegex = /^[A-Za-zÀ-ÿ\s]{4,}$/; // Au moins 4 caractères, lettres, accents, espaces
+
+    if(!nameRegex.test(username) || !username.includes(' ')){
+        document.getElementById("errorMsg").textContent = "Veuillez entrer un Nom et Prénom valides (lettres et espaces uniquement, pas de pseudo)."; 
+        return; 
+    }
+    
+    // ANCIENNE RÈGLE : Vérification de la longueur du mot de passe
+    if(password.length < 4){ 
+        document.getElementById("errorMsg").textContent = "Mot de passe trop court (min 4 caractères)."; 
+        return; 
+    }
+
+    // ANCIENNE RÈGLE : Vérification de l'existence du nom d'utilisateur
+    if(users[username]){ 
+        document.getElementById("errorMsg").textContent = "Ce Nom et Prénom sont déjà enregistrés."; 
+        return; 
+    }
+
+    // Par défaut, enregistrer en Seconde
+    users[username] = { password, email, class: "Seconde" };
+    saveUsers(users);
+
+    const errorMsg = document.getElementById("errorMsg");
+    errorMsg.style.color = "green";
+    errorMsg.textContent = "Inscription réussie !";
+    document.getElementById("registerForm").reset();
+
+    setTimeout(()=>{ showView("login-view"); errorMsg.style.color="red"; }, 1000);
+});
+
+// Connexion
+document.getElementById("loginForm").addEventListener("submit", e=>{
+    e.preventDefault();
+    const username = document.getElementById("loginUsername").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    const user = getUsers()[username];
+
+    const errorMsg = document.getElementById("errorMsg");
+    if(user && user.password === password){
+        const code = String(Math.floor(1000 + Math.random()*9000));
+        currentLogin = { username, code };
+        document.getElementById("mfa-instruction-debug").textContent = `CODE 2FA (DEBUG) : ${code}`;
+        showView("mfa-view");
+    } else {
+        errorMsg.textContent = "Identifiants incorrects.";
+    }
+});
+
+// Vérification 2FA
+document.getElementById("mfaForm").addEventListener("submit", e=>{
+    e.preventDefault();
+    const codeInput = document.getElementById("mfaCode").value.trim();
+    const errorMsg = document.getElementById("errorMsg");
+
+    if(!/^\d{4}$/.test(codeInput)){
+        errorMsg.textContent = "Le code doit comporter 4 chiffres.";
+        return;
+    }
+
+    if(codeInput === currentLogin.code){
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("currentUser", currentLogin.username);
+        // MODIFICATION CLÉ: Force la classe à 'Première' pour débloquer les liens de menu existants
+        localStorage.setItem("studentClass", "Première"); 
+        // MODIFICATION CLÉ: Redirige vers 'index.html' où le menu filtrera correctement
+        window.location.replace("index.html");
+    } else {
+        errorMsg.textContent = "Code 2FA incorrect.";
+        document.getElementById("mfaCode").value = "";
+    }
+});
+
+document.addEventListener("DOMContentLoaded", ()=>showView("login-view"));
+</script>
+</body>
+</html>

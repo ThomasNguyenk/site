@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM Physique-Chimie - Première</title>
+<style>
+/* Reset & Base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: url('https://cdn-imgix.headout.com/media/images/e4a728601dae2c994a2a7bba52d35e74-harrypotterlondon-13.jpg?auto=format&w=1222.3999999999999&h=687.6&q=90&ar=16%3A9&crop=faces&fit=crop') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Header */
+header {
+    text-align: center;
+    padding: 30px 20px;
+    margin-bottom: 30px;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    background: url('https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyZnJ6bDNwbWRkNWt5YTVtcjR4Mmd2YnJkM29mcjZuajZ4ZmJybnkweiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/OZCZRFgOx9nGxd0XQf/giphy.gif') no-repeat center center;
+    background-size: cover;
+    border-radius: 10px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* Containers */
+.quiz-container,
+.leaderboard-container {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.quiz-header,
+.leaderboard-header {
+    background: #2c3e50;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.quiz-body,
+.leaderboard-body {
+    padding: 30px;
+}
+
+/* Questions */
+.question {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background: #f9f9f9;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.question-number {
+    font-weight: bold;
+    color: #2575fc;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.question-text {
+    font-weight: bold;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    color: #2c3e50;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.option:hover {
+    background: #edf7fd;
+    border-color: #3498db;
+}
+
+.option input {
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+.option label {
+    cursor: pointer;
+    width: 100%;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 14px 28px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.submit-btn {
+    background: #3498db;
+    color: white;
+}
+
+.submit-btn:hover {
+    background: #2980b9;
+}
+
+.reset-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.reset-btn:hover {
+    background: #c0392b;
+}
+
+.save-score-btn {
+    background: #27ae60;
+    color: white;
+}
+
+.save-score-btn:hover {
+    background: #219653;
+}
+
+.show-leaderboard-btn {
+    background: #8e44ad;
+    color: white;
+}
+
+.show-leaderboard-btn:hover {
+    background: #732d91;
+}
+
+/* Results */
+.results {
+    margin-top: 40px;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    display: none;
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+}
+
+.score {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.score-details {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+}
+
+.message {
+    font-size: 1.3rem;
+    margin-bottom: 25px;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.excellent {
+    background: #d4edda;
+    color: #155724;
+}
+
+.good {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.average {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Leaderboard */
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.leaderboard-table th {
+    background: #f8f9fa;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.leaderboard-table tr:hover {
+    background: #f5f5f5;
+}
+
+/* Save Score */
+.save-score-container {
+    margin-top: 20px;
+    padding: 15px;
+    background: #edf7fd;
+    border-radius: 8px;
+    display: none;
+}
+
+.save-score-input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 250px;
+    margin-right: 10px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    color: white;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    border-radius: 10px;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
+                url('https://i.pinimg.com/236x/5a/d8/77/5ad8779ec60744d790880a7f398f34cf.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+/* Access Denied */
+#access-denied-message {
+    display: none;
+    text-align: center;
+    padding: 50px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    margin-top: 100px;
+}
+
+#access-denied-message h2 {
+    color: #c0392b;
+    margin-bottom: 20px;
+}
+
+#access-denied-message a {
+    background: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 15px;
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+    <h1>QCM de Physique-Chimie</h1>
+    <p class="subtitle">Niveau Première - Testez vos connaissances</p>
+</header>
+
+<div id="quiz-content">
+    <div class="quiz-container" id="quiz-container">
+        <div class="quiz-header">
+            <h2>Questionnaire à Choix Multiples</h2>
+            <p>20 questions générées aléatoirement</p>
+        </div>
+        <div class="quiz-body">
+            <div id="quiz"></div>
+            <div class="buttons">
+                <button class="btn submit-btn" onclick="checkAnswers()">Soumettre les réponses</button>
+                <button class="btn reset-btn" onclick="resetQuiz()">Réinitialiser</button>
+            </div>
+
+            <div class="results" id="results">
+                <div class="score" id="score"></div>
+                <div class="score-details" id="score-details"></div>
+                <div class="message" id="message"></div>
+
+                <div class="save-score-container" id="save-score-container">
+                    <input type="text" class="save-score-input" id="player-name" placeholder="Entrez votre nom" maxlength="20">
+                    <button class="btn save-score-btn" onclick="saveScore()">Enregistrer mon score</button>
+                </div>
+
+                <div class="buttons">
+                    <button class="btn show-leaderboard-btn" onclick="showLeaderboard()">Voir le classement</button>
+                    <button class="btn reset-btn" onclick="resetQuiz()">Refaire le quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="leaderboard-container" id="leaderboard-container" style="display:none;">
+        <div class="leaderboard-header">
+            <h2>Classement Personnel</h2>
+        </div>
+        <div class="leaderboard-body">
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>Nom</th>
+                        <th>Score</th>
+                        <th>Date</th>
+                        <th>Commentaire</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body"></tbody>
+            </table>
+            <div class="buttons" style="justify-content:center; margin-top:20px;">
+                <button class="btn reset-btn" onclick="hideLeaderboard()">Retour au quiz</button>
+                <button class="btn reset-btn" onclick="clearLeaderboard()">Effacer mon classement</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="access-denied-message">
+    <h2>Accès Restreint</h2>
+    <p>Vous devez être connecté pour accéder à ce quiz.</p>
+    <a href="Connexion étudiant.html">Se connecter</a>
+</div>
+
+<footer>
+<p>&copy; 2025 Nguyen Thomas. Tous droits réservés.</p>
+</footer>
+</div>
+
+<script>
+// --- CONFIGURATION DE SÉCURITÉ ---
+const quizContent = document.getElementById('quiz-content');
+const accessDeniedMessage = document.getElementById('access-denied-message');
+
+function checkLoginStatus() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    // NOTE: Le quiz vérifie 'username', mais la page de connexion sauvegarde 'currentUser'. Pour la démonstration, on assume la connexion est le point de contrôle principal.
+    const username = localStorage.getItem('currentUser'); 
+    if (!isLoggedIn || !username) {
+        quizContent.style.display = 'none';
+        accessDeniedMessage.style.display = 'block';
+        return false; 
+    } else {
+        quizContent.style.display = 'block';
+        accessDeniedMessage.style.display = 'none';
+        return true;
+    }
+}
+
+// --- QUESTIONS ---
+const questions = [
+    {
+        text: "Quelle est la formule de l’énergie cinétique ?",
+        options: { a: "Ec = mv", b: "Ec = 1/2 mv²", c: "Ec = m/v", d: "Ec = m×v²" },
+        answer: "b"
+    },
+    {
+        text: "Quelle est l’unité de la force ?",
+        options: { a: "Joule", b: "Newton", c: "Pascal", d: "Watt" },
+        answer: "b"
+    },
+    {
+        text: "Quelle est la loi reliant U, R et I ?",
+        options: { a: "Loi de Newton", b: "Loi d’Ohm", c: "Loi de Coulomb", d: "Loi de Joule" },
+        answer: "b"
+    },
+    {
+        text: "Quelle est la formule de la masse volumique ?",
+        options: { a: "ρ = m/V", b: "ρ = V/m", c: "ρ = m×V", d: "ρ = m+V" },
+        answer: "a"
+    },
+    {
+        text: "Quelle est la constante de gravitation universelle ?",
+        options: { a: "9,81", b: "6,67×10⁻¹¹", c: "3×10⁸", d: "1,6×10⁻¹⁹" },
+        answer: "b"
+    },
+    {
+        text: "Quelle est l’unité de la pression ?",
+        options: { a: "Pa", b: "N", c: "J", d: "W" },
+        answer: "a"
+    },
+    {
+        text: "Quelle particule n’a pas de charge ?",
+        options: { a: "Proton", b: "Neutron", c: "Électron", d: "Ion" },
+        answer: "b"
+    },
+    {
+        text: "Quelle est la vitesse de la lumière ?",
+        options: { a: "3×10⁸ m/s", b: "9,8 m/s²", c: "1,6×10⁻¹⁹ m/s", d: "6,02×10²³ m/s" },
+        answer: "a"
+    },
+    {
+        text: "Quelle est la charge élémentaire ?",
+        options: { a: "9,81 N", b: "6,67×10⁻¹¹ N.m²/kg²", c: "1,6×10⁻¹⁹ C", d: "3×10⁸ m/s" },
+        answer: "c"
+    },
+    {
+        text: "Quelle loi décrit la force électrostatique ?",
+        options: { a: "Loi de Coulomb", b: "Loi de Newton", c: "Loi d’Ohm", d: "Loi de Joule" },
+        answer: "a"
+    },
+    {
+        text: "Quelle est la formule de la vitesse ?",
+        options: { a: "v = d/t", b: "v = t/d", c: "v = d×t", d: "v = d-t" },
+        answer: "a"
+    },
+    {
+        text: "Quelle est l’unité de l’énergie ?",
+        options: { a: "Joule", b: "Newton", c: "Watt", d: "Volt" },
+        answer: "a"
+    },
+    {
+        text: "Quelle est l’équation de la loi des gaz parfaits ?",
+        options: { a: "PV = nRT", b: "P = F/S", c: "E = mc²", d: "U = RI" },
+        answer: "a"
+    },
+    {
+        text: "Quelle est l’unité de la puissance électrique ?",
+        options: { a: "Watt", b: "Joule", c: "Volt", d: "Ampère" },
+        answer: "a"
+    },
+    {
+        text: "La lumière se comporte comme :",
+        options: { a: "Une onde", b: "Une particule", c: "Les deux", d: "Ni l’un ni l’autre" },
+        answer: "c"
+    }
+];
+
+
+function shuffle(array){ return array.sort(()=>Math.random()-0.5); }
+
+function loadQuiz(){
+    if (!checkLoginStatus()) return;
+    const quizDiv=document.getElementById("quiz");
+    quizDiv.innerHTML="";
+    const shuffled=shuffle([...questions]).slice(0,20);
+    window.currentQuestions=shuffled;
+    shuffled.forEach((q,i)=>{
+        quizDiv.innerHTML+=`
+        <div class="question">
+            <div class="question-number">Question ${i+1}/${shuffled.length}</div>
+            <div class="question-text">${q.text}</div>
+            <div class="options">
+                ${Object.entries(q.options).map(([k,v])=>`<label class="option"><input type="radio" name="q${i}" value="${k}"> ${k}) ${v}</label>`).join('')}
+            </div>
+        </div>`;
+    });
+    document.getElementById('results').style.display='none';
+    document.getElementById('save-score-container').style.display='none';
+}
+
+function checkAnswers(){
+    let score=0;
+    const allQuestions=document.querySelectorAll('.question');
+    allQuestions.forEach((qDiv,i)=>{
+        const selected=qDiv.querySelector("input[type=radio]:checked");
+        if(selected && window.currentQuestions[i] && selected.value===window.currentQuestions[i].answer) score++;
+    });
+
+    document.getElementById('score').textContent=`Score: ${score}/${allQuestions.length}`;
+    document.getElementById('score-details').textContent=`Vous avez répondu correctement à ${score} questions sur ${allQuestions.length}.`;
+    const messageElement=document.getElementById('message');
+    if(score>=13){ messageElement.textContent="Excellent !"; messageElement.className="message excellent"; }
+    else if(score>=10){ messageElement.textContent="Bien joué !"; messageElement.className="message good"; }
+    else{ messageElement.textContent="Continuez à réviser."; messageElement.className="message average"; }
+
+    document.getElementById('save-score-container').style.display='block';
+    document.getElementById('results').style.display='block';
+}
+
+function saveScore(){
+    if (!checkLoginStatus()) return;
+    
+    // NOTE: utilise 'currentUser' de Connexion étudiant.html comme clé de stockage
+    const username = localStorage.getItem('currentUser'); 
+    const playerName=document.getElementById('player-name').value.trim();
+    if(!playerName){ alert("Veuillez entrer votre nom."); return; }
+
+    const key = `quizScores_${username}`;
+    const scores=JSON.parse(localStorage.getItem(key))||[];
+
+    const scoreText = document.getElementById('score').textContent;
+    const match = scoreText.match(/Score: (\d+)\/(\d+)/);
+    if (!match) { alert("Erreur lors de la récupération du score."); return; }
+
+    const scoreValue = parseInt(match[1]);
+    const totalValue = parseInt(match[2]);
+
+    scores.push({name:playerName, score:scoreValue, total:totalValue, date:new Date().toLocaleDateString('fr-FR')});
+    scores.sort((a,b)=>((b.score/b.total)-(a.score/a.total)));
+    localStorage.setItem(key,JSON.stringify(scores.slice(0,10)));
+
+    alert(`Score enregistré avec succès, ${playerName}!`);
+    document.getElementById('save-score-container').style.display='none';
+}
+
+function getComment(score,total){
+    const pct=(score/total)*100;
+    if(pct>=90) return "Excellent 🌟";
+    if(pct>=70) return "Bien joué 🙂";
+    if(pct>=50) return "Peut mieux faire 😐";
+    return "À revoir 🔴";
+}
+
+function showLeaderboard(){
+    if (!checkLoginStatus()) return;
+    const username = localStorage.getItem('currentUser');
+    const key = `quizScores_${username}`;
+
+    const leaderboard=document.getElementById('leaderboard-container');
+    const body=document.getElementById('leaderboard-body');
+    const scores=JSON.parse(localStorage.getItem(key))||[];
+
+    body.innerHTML='';
+    if(scores.length===0) body.innerHTML='<tr><td colspan="5" style="text-align:center;">Aucun score enregistré.</td></tr>';
+    else{
+        scores.forEach((s,i)=>{
+            const pct=((s.score/s.total)*100).toFixed(1);
+            const comment=getComment(s.score,s.total);
+            body.innerHTML+=`<tr>
+                <td>${i+1}</td>
+                <td>${s.name}</td>
+                <td>${s.score}/${s.total} (${pct}%)</td>
+                <td>${s.date}</td>
+                <td>${comment}</td>
+            </tr>`;
+        });
+    }
+    document.getElementById('quiz-container').style.display='none';
+    leaderboard.style.display='block';
+}
+
+function hideLeaderboard(){
+    document.getElementById('leaderboard-container').style.display='none';
+    document.getElementById('quiz-container').style.display='block';
+}
+
+function clearLeaderboard(){
+    if (!checkLoginStatus()) return;
+    const username = localStorage.getItem('currentUser');
+    const key = `quizScores_${username}`;
+    if(confirm("Voulez-vous vraiment effacer votre classement personnel ?")){
+        localStorage.removeItem(key);
+        document.getElementById('leaderboard-body').innerHTML='<tr><td colspan="5" style="text-align:center;">Aucun score enregistré.</td></tr>';
+        alert("Votre classement a été effacé !");
+    }
+}
+
+function resetQuiz(){ loadQuiz(); }
+
+window.onload = function() {
+    if (checkLoginStatus()) loadQuiz();
+};
+
+</script>
+</body>
+</html>

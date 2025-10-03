@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding-top: 60px;
+            background-color: #f4f4f4;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        section {
+            padding: 20px;
+            margin: 10px;
+            background: #ff0000;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #333;
+        }
+        .project {
+            margin-bottom: 20px;
+        }
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background: #333;
+            color: #fff;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* ======= MENU ======= */
+        .bandeau {
+            background-color: #000000;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            background-image: url('https://png.pngtree.com/thumb_back/fw800/background/20190813/pngtree-digital-technology-blue-background-banner-image_298195.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Bouton burger */
+        .menu-btn {
+            font-size: 26px;
+            cursor: pointer;
+            color: white;
+            background: none;
+            border: none;
+            display: none;
+        }
+
+        /* Liens du menu */
+        .menu-links {
+            display: flex;
+            gap: 15px;
+        }
+        .menu-links a {
+            color: rgb(0, 0, 0); 
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+            display: inline-block;
+        }
+        .menu-links a:hover {
+            color: yellow;
+        }
+
+        /* ======= MODE MOBILE ======= */
+        @media (max-width: 768px) {
+            .menu-btn {
+                display: block;
+            }
+            .menu-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: rgba(0, 0, 0, 0.9);
+                text-align: center;
+                padding: 20px 0;
+            }
+            .menu-links a {
+                display: block;
+                margin: 10px 0;
+                color: white;
+            }
+            .menu-links.active {
+                display: flex;
+            }
+        }
+
+        /* Animation zoom fond */
+        @keyframes zoomBg {
+            from {
+                background-size: 120%;
+            }
+            to {
+                background-size: 150%;
+            }
+        }
+
+        /* SECTION avec fond dynamique */
+        #about {
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            text-align: center; 
+            background-color: #000; 
+            background-image: url('https://live.staticflickr.com/5444/7375631634_64e0c5b687_b.jpg'); 
+            background-size: 120%; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            animation: zoomBg 12s ease-in-out infinite alternate;
+            color: #ffffff; /* Texte en blanc */
+            padding: 20px;
+        }
+
+        /* Styles spécifiques au sélecteur de classe */
+        .class-select-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            margin: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            width: 250px;
+        }
+
+        .class-select-btn:hover {
+            background-color: #0056b3;
+        }
+        
+        #content-box {
+            background-color: rgba(0,0,0,0.6); 
+            padding: 20px; 
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="bandeau">
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <div class="menu-links" id="menuLinks">
+            <a href="index.html">Accueil</a>
+            <a href="1ere année.html" data-class="Première">Cours de 1ère Année</a>
+            <a href="Quiz de révision de 1ère Année.html" data-class="Première">Quiz de révision de 1ère Année</a>            
+            <a href="Connexion étudiant.html" id="authLink">Connexion Étudiant</a> 
+        </div>
+    </nav>
+
+    <section id="about">
+        <div id="content-box">
+             <h2 style="color: #ffffff;">Chargement en cours...</h2>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025. Programmée par NGUYEN Thomas. Tous droits réservés</p>
+    </footer>
+
+    <script>
+        const LOGIN_PAGE = "Connexion étudiant.html";
+        // Map pour comparer les niveaux de classe
+        const classOrder = { 'Seconde': 1, 'Première': 2, 'Terminale': 3 };
+
+        /**
+         * Déconnecte l'utilisateur et le redirige.
+         */
+        function logout(event) {
+            if (event) event.preventDefault();
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('studentClass'); // Supprime la classe stockée
+            alert("Vous êtes déconnecté. Redirection vers la page de connexion.");
+            window.location.replace(LOGIN_PAGE);
+        }
+
+        /**
+         * La fonction setStudentClass est retirée/vidée car la classe est forcée.
+         * @param {string} selectedClass - La classe choisie ('Seconde', 'Première', 'Terminale').
+         */
+        function setStudentClass(selectedClass) {
+             // Ne fait rien, car la classe est forcée lors de la connexion.
+        }
+
+        /**
+         * Applique le contrôle d'accès sur le menu en fonction de la classe de l'étudiant.
+         */
+        function applyAccessControl() {
+            // studentClass sera 'Première' grâce à la modification dans Connexion étudiant.html
+            const studentClass = localStorage.getItem('studentClass'); 
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const menuLinksContainer = document.getElementById('menuLinks');
+            const authLink = document.getElementById('authLink');
+            
+            // Le niveau de classe visé est toujours la Première (2)
+            const TARGET_LEVEL = 2; 
+
+            // 1. GESTION DU LIEN D'AUTHENTIFICATION / DÉCONNEXION
+            if (isLoggedIn) {
+                // Si connecté, le lien devient Déconnexion et affiche la classe
+                authLink.textContent = `Déconnexion (${studentClass || 'Première'})`; // Affiche 'Première' par défaut
+                authLink.href = "#";
+                authLink.onclick = logout;
+            } else {
+                 // Si non connecté, redirige
+                 authLink.textContent = "Connexion Étudiant";
+                 authLink.href = LOGIN_PAGE;
+                 authLink.onclick = null;
+                 return;
+            }
+            
+            // 2. FILTRAGE DES LIENS (COURS & QUIZ)
+            
+            const allLinks = menuLinksContainer.querySelectorAll('a');
+            
+            allLinks.forEach(link => {
+                const requiredClass = link.getAttribute('data-class');
+                const isAuthLink = link.id === 'authLink';
+                const isHomeLink = link.href.includes('index.html');
+                
+                if (isAuthLink || isHomeLink) {
+                    // Les liens Accueil et Déconnexion/Connexion restent visibles
+                    link.style.display = 'inline-block';
+                } else if (requiredClass) {
+                    // Liens avec data-class ('1ère année.html', 'Quiz de révision de 1ère Année.html', etc.)
+                    const requiredLevel = classOrder[requiredClass];
+                    
+                    // Masque si le niveau requis n'est PAS Première (niveau 2)
+                    if (requiredLevel !== TARGET_LEVEL) { 
+                        link.style.display = 'none';
+                    } else {
+                        // S'assurer que les liens de Première sont visibles
+                        link.style.display = 'inline-block'; 
+                    }
+                } else {
+                    // Liens sans data-class (Ex: 'Cours de 2nd.html', 'Quiz de révision de seconde.html')
+                    // Nous masquons ces liens pour une restriction stricte à Première.
+                    link.style.display = 'none';
+                }
+            });
+        }
+
+        /**
+         * Rend le contenu de la page d'accueil (message de bienvenue fixe pour Première).
+         */
+        function renderHomePageContent() {
+            const contentBox = document.getElementById('content-box');
+            // La classe est définie lors de la connexion (Première)
+            const studentClass = localStorage.getItem('studentClass') || 'Première'; 
+            const studentName = localStorage.getItem('currentUser') || 'Étudiant(e)';
+
+            // Contenu fixe pour la Première Année (le bouton 'Changer de classe' est retiré)
+            contentBox.innerHTML = `
+                <h2 style="color: #ffffff;">Bienvenue sur le site, ${studentName} !</h2>
+                <p style="color: #ffffff; margin-top: 15px; font-size: 1.2em;">
+                    Vous êtes connecté pour les cours de **${studentClass}**.
+                </p>
+                <p style="color: #ffffff; width: 60%; margin: 20px auto 10px;">
+                    Seuls les cours et quiz de **Première** sont visibles dans le menu.
+                </p>
+            `;
+            
+            // Appliquer le filtre de menu après le rendu
+            applyAccessControl();
+        }
+
+
+        // --- EXÉCUTION AU CHARGEMENT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+            if (!isLoggedIn) {
+                // Si non connecté, REDIRIGER immédiatement vers la page de connexion
+                alert("Accès refusé. Veuillez vous connecter.");
+                window.location.replace(LOGIN_PAGE);
+                return;
+            }
+            
+            // Si connecté, RENDRE le contenu de la page d'accueil
+            renderHomePageContent();
+        });
+
+        // Fonction pour le menu mobile
+        function toggleMenu() {
+            document.getElementById("menuLinks").classList.toggle("active");
+        }
+    </script>
+</body>
+</html>
