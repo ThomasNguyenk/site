@@ -20,8 +20,13 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: #e0e0e0; /* Texte clair pour le fond sombre */
-    background: url('https://preview.redd.it/new-assassins-creed-mirage-legacy-4k-wallpaper-that-ubisoft-v0-1yingsop7u5b1.png?auto=webp&s=3626fff045824a5861adf9cf15bb93119567b462') no-repeat center center fixed;
+    
+    /* MODIFICATION 1 : Éviter la multiplication des images et assurer une couverture totale */
+    background: url('https://e0.pxfuel.com/wallpapers/955/776/desktop-wallpaper-assassins-creed-4-logo-version-black-flag-game-2013-assassin-s-creed-logo.jpg') no-repeat center center fixed;
     background-size: cover;
+    background-repeat: no-repeat; /* Ajouté */
+    background-attachment: fixed; /* Ajouté pour un meilleur effet */
+    
     min-height: 100vh;
     padding: 20px 20px 80px 20px; /* Plus d'espace pour le footer */
     background-color: #1a1a2e; /* Couleur de secours */
@@ -42,7 +47,7 @@ header {
     
     /* Fond plus sombre et thématique pour le header */
     background: linear-gradient(rgba(16, 16, 32, 0.8), rgba(16, 16, 32, 0.8)), 
-                 url('https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyZnJ6bDNwbWRkNWt5YTVtcjR4Mmd2YnJkM29mcjZuajZ4ZmJybnkweiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/OZCZRFgOx9nGxd0XQf/giphy.gif') no-repeat center center;
+                url('https://e1.pxfuel.com/desktop-wallpaper/344/998/desktop-wallpaper-assassin-s-creed-for-pc-10041-assassin-creed.jpg') no-repeat center center;
     background-size: cover;
     border-radius: 15px;
     border: 2px solid #5757a3;
@@ -139,9 +144,6 @@ h1 {
     border-color: #5757a3;
 }
 
-/* ATTENTION : La règle CSS suivante est problématique car l'input n'est pas directement suivi du label 
-dans votre structure HTML. Nous allons corriger la structure HTML pour la rendre fonctionnelle.
-*/
 .option input[type="radio"]:checked + span { 
     font-weight: bold;
     color: #92dff3; /* Texte de l'option sélectionnée en bleu clair */
@@ -261,7 +263,7 @@ dans votre structure HTML. Nous allons corriger la structure HTML pour la rendre
 }
 
 
-/* 7. CLASSEMENT */
+/* 7. CLASSEMENT - MODIFIÉ POUR LES COULEURS ET LE TOP 3 */
 .leaderboard-table {
     width: 100%;
     border-collapse: collapse;
@@ -283,17 +285,56 @@ dans votre structure HTML. Nous allons corriger la structure HTML pour la rendre
 }
 
 .leaderboard-table th {
-    background: rgba(16, 16, 32, 0.9);
-    color: #92dff3;
+    background: #0d1a33; /* Bleu très foncé pour l'entête (identique au quiz-header) */
+    color: #92dff3; /* Bleu clair thématique */
     font-size: 1.1rem;
 }
 
+/* Ligne impaire (couleur de base) */
+.leaderboard-table tr { 
+    background: rgba(255, 255, 255, 0.05); /* Ligne impaire (presque transparente) */
+}
+
+/* Ligne paire (couleur alternée pour le contraste) */
 .leaderboard-table tr:nth-child(even) {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(16, 16, 32, 0.5); /* Bleu foncé légèrement transparent */
 }
 .leaderboard-table tr:hover {
-    background: rgba(70, 70, 150, 0.2);
+    background: rgba(70, 70, 150, 0.3); /* Bleu foncé plus prononcé au survol */
 }
+
+/* --- NOUVEAUX STYLES POUR METTRE EN ÉVIDENCE LE TOP 3 --- */
+
+/* Style pour la première place (or) */
+.leaderboard-table tr:nth-child(1) {
+    background: rgba(255, 215, 0, 0.2) !important; /* Jaune/Or très clair */
+    color: #ffd700;
+    font-weight: bold;
+}
+.leaderboard-table tr:nth-child(1) td:first-child { 
+    color: #ffd700; 
+    font-size: 1.3rem; 
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+}
+
+/* Style pour la deuxième place (argent) */
+.leaderboard-table tr:nth-child(2) {
+    background: rgba(192, 192, 192, 0.2) !important;
+}
+.leaderboard-table tr:nth-child(2) td:first-child { 
+    color: #c0c0c0; 
+    font-size: 1.2rem;
+}
+
+/* Style pour la troisième place (bronze) */
+.leaderboard-table tr:nth-child(3) {
+    background: rgba(205, 127, 50, 0.2) !important;
+}
+.leaderboard-table tr:nth-child(3) td:first-child { 
+    color: #cd7f32; 
+    font-size: 1.1rem; 
+}
+
 
 /* 8. FOOTER */
 footer {
