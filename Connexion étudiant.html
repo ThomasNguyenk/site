@@ -8,11 +8,9 @@
     body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    /* LIGNE À AJOUTER POUR LE FOND D'ÉCRAN */
-    background-image: url('https://e0.pxfuel.com/wallpapers/617/285/desktop-wallpaper-futuristic-background-blue-futuristic.jpg'); /* Remplacez 'background.jpg' par le nom de votre fichier */
-    background-size: cover; /* Optionnel: Assure que l'image couvre toute la zone */
-    background-attachment: fixed; /* Optionnel: Fixe l'image lors du défilement */
-    /* FIN DES AJOUTS */
+    background-image: url('https://preview.redd.it/new-assassins-creed-mirage-legacy-4k-wallpaper-that-ubisoft-v0-1yingsop7u5b1.png?auto=webp&s=3626fff045824a5861adf9cf15bb93119567b462'); 
+    background-size: cover; 
+    background-attachment: fixed; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,136 +18,181 @@
     margin: 0;
 }
     .login-box {
-        background-color: rgba(255, 255, 255, 0.9); /* Ajout d'une opacité pour mieux voir le fond */
+        background-color: rgba(255, 255, 255, 0.9);
         padding: 30px;
         border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-        width: 300px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        width: 100%;
+        max-width: 350px;
         text-align: center;
     }
-    h2 { margin-bottom: 20px; color: #333; }
-    input {
-        width: 100%; padding: 10px; margin-bottom: 15px;
-        border: 1px solid #ccc; border-radius: 4px;
+    .login-box h2 {
+        margin-bottom: 20px;
+        color: #333;
     }
-    button {
-        background-color: #007bff; color: white;
-        padding: 10px; border: none; border-radius: 4px;
-        cursor: pointer; font-size: 16px; width: 100%;
+    .login-box input[type="text"], 
+    .login-box input[type="password"],
+    /* Suppression de la classe 'select' du style car elle est retirée du HTML */
+    .login-box select { 
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
     }
-    button:hover { background-color: #0056b3; }
-    .error { color: red; margin: 10px 0; font-weight: bold; }
-    .switch-link { margin-top: 15px; font-size: 14px; }
-    .switch-link a { color: #007bff; text-decoration: none; cursor: pointer; }
-    #mfa-instruction-debug {
-        font-weight: bold; color: darkred; border: 1px dashed darkred;
-        padding: 10px; margin-bottom: 15px; background-color: #ffeaea; border-radius: 4px;
+    .login-box button {
+        width: 100%;
+        padding: 10px;
+        background-color: #5cb85c;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+        margin-bottom: 10px; /* Espace sous les boutons */
+    }
+    /* Style spécifique pour le bouton d'inscription */
+    .login-box #registerBtn { 
+        background-color: #007bff; /* Bleu pour l'inscription */
+    }
+    .login-box #registerBtn:hover { 
+        background-color: #0056b3; 
+    }
+    .login-box button:hover {
+        background-color: #4cae4c;
+    }
+    /* Style pour le bouton de bascule vers l'inscription */
+    .toggle-link {
+        color: #007bff;
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: 14px;
+        display: block;
+        margin-top: 10px;
+    }
+    .error-message {
+        color: red;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+    .hidden {
+        display: none;
     }
 </style>
 </head>
 <body>
-<div class="login-box">
-    <h2 id="view-title">Connexion</h2>
-    <p class="error" id="errorMsg"></p>
 
+<div class="login-box">
+    
     <div id="login-view">
+        <h2>Connexion Étudiant</h2>
         <form id="loginForm">
-            <input type="text" id="loginUsername" placeholder="Nom d'utilisateur" required>
-            <input type="password" id="loginPassword" placeholder="Mot de passe" required>
+            <input type="text" id="username" placeholder="Nom d'utilisateur (e.g. etudiant1)" required>
+            <input type="password" id="password" placeholder="Mot de passe (e.g. 123)" required>
             <button type="submit">Se connecter</button>
         </form>
-        <p class="switch-link">Pas encore de compte ? <a href="#" onclick="showView('register-view')">S'inscrire</a></p>
+        <span class="toggle-link" onclick="showView('register-view')">S'inscrire</span>
     </div>
 
-    <div id="register-view" style="display:none;">
+    <div id="register-view" class="hidden">
+        <h2>Inscription</h2>
         <form id="registerForm">
-            <input type="text" id="regUsername" placeholder="Nom et Prénom (ex: Dupont Jean)" required>
-            <input type="email" id="regEmail" placeholder="Email" required>
-            <input type="password" id="regPassword" placeholder="Mot de passe (min 4 caractères)" required>
-            <button type="submit">S'inscrire</button>
+            <input type="text" id="regUsername" placeholder="Nouveau Nom d'utilisateur" required>
+            <input type="password" id="regPassword" placeholder="Mot de passe (min. 3 caractères)" required minlength="3">
+            <button type="submit" id="registerBtn">Créer mon compte</button>
         </form>
-        <p class="switch-link">Déjà un compte ? <a href="#" onclick="showView('login-view')">Se connecter</a></p>
+        <span class="toggle-link" onclick="showView('login-view')">Déjà inscrit ? Se connecter</span>
     </div>
 
-    <div id="mfa-view" style="display:none;">
-        <p>Un code à 4 chiffres a été 'envoyé' à votre email.</p>
-        <p id="mfa-instruction-debug">CODE 2FA (DEBUG) : ****</p>
+    <div id="mfa-view" class="hidden">
+        <h2>Vérification 2FA</h2>
+        <p>Un code de vérification a été 'envoyé'.</p>
+        <p id="mfa-instruction-debug" style="color: blue; font-weight: bold;"></p>
         <form id="mfaForm">
-            <input type="text" id="mfaCode" placeholder="Code 2FA (4 chiffres)" maxlength="4" required>
-            <button type="submit">Vérifier le code</button>
+            <input type="text" id="mfaCode" placeholder="Code à 4 chiffres" required maxlength="4">
+            <button type="submit">Vérifier</button>
         </form>
     </div>
+
+    <p id="errorMsg" class="error-message"></p>
+
 </div>
 
 <script>
-let currentLogin = { username: null, code: null };
+// Base de données utilisateurs (Simulée)
+let USERS = [
+    { username: "etudiant1", password: "123", class: "Première" },
+    { username: "etudiant2", password: "456", class: "Seconde" }
+];
 
-function getUsers() { return JSON.parse(localStorage.getItem('studentUsers')) || {}; }
-function saveUsers(users) { localStorage.setItem('studentUsers', JSON.stringify(users)); }
+let currentLogin = null;
 
-function showView(viewId) {
-    ["login-view","register-view","mfa-view"].forEach(v=>document.getElementById(v).style.display="none");
-    document.getElementById(viewId).style.display = "block";
-    const errorMsg = document.getElementById("errorMsg");
-    errorMsg.textContent = "";
-    errorMsg.style.color = "red";
-    document.getElementById("view-title").textContent =
-        viewId === "login-view" ? "Connexion" :
-        viewId === "register-view" ? "Inscription" : "Double Authentification";
+// Fonction pour afficher la bonne vue
+function showView(viewId){
+    document.getElementById("login-view").classList.add("hidden");
+    document.getElementById("register-view").classList.add("hidden"); 
+    document.getElementById("mfa-view").classList.add("hidden");
+    document.getElementById(viewId).classList.remove("hidden");
+    document.getElementById("errorMsg").textContent = "";
 }
 
-// Inscription
-document.getElementById("registerForm").addEventListener("submit", e=>{
+// =================================================================
+// LOGIQUE D'INSCRIPTION (MODIFIÉE)
+// =================================================================
+
+document.getElementById("registerForm").addEventListener("submit", e => {
     e.preventDefault();
     const username = document.getElementById("regUsername").value.trim();
-    const email = document.getElementById("regEmail").value.trim();
-    const password = document.getElementById("regPassword").value;
-    const users = getUsers();
-    
-    // NOUVELLE RÈGLE : Validation du Nom/Prénom (doit contenir au moins deux mots (un espace) et seulement des lettres/espaces)
-    const nameRegex = /^[A-Za-zÀ-ÿ\s]{4,}$/; // Au moins 4 caractères, lettres, accents, espaces
-
-    if(!nameRegex.test(username) || !username.includes(' ')){
-        document.getElementById("errorMsg").textContent = "Veuillez entrer un Nom et Prénom valides (lettres et espaces uniquement, pas de pseudo)."; 
-        return; 
-    }
-    
-    // ANCIENNE RÈGLE : Vérification de la longueur du mot de passe
-    if(password.length < 4){ 
-        document.getElementById("errorMsg").textContent = "Mot de passe trop court (min 4 caractères)."; 
-        return; 
-    }
-
-    // ANCIENNE RÈGLE : Vérification de l'existence du nom d'utilisateur
-    if(users[username]){ 
-        document.getElementById("errorMsg").textContent = "Ce Nom et Prénom sont déjà enregistrés."; 
-        return; 
-    }
-
-    // Par défaut, enregistrer en Seconde
-    users[username] = { password, email, class: "Seconde" };
-    saveUsers(users);
-
+    const password = document.getElementById("regPassword").value.trim();
+    // ATTRIBUTION AUTOMATIQUE DE LA CLASSE 'Première'
+    const studentClass = "Première"; 
     const errorMsg = document.getElementById("errorMsg");
-    errorMsg.style.color = "green";
-    errorMsg.textContent = "Inscription réussie !";
-    document.getElementById("registerForm").reset();
 
-    setTimeout(()=>{ showView("login-view"); errorMsg.style.color="red"; }, 1000);
+    if (password.length < 3) {
+        errorMsg.textContent = "Le mot de passe doit contenir au moins 3 caractères.";
+        return;
+    }
+
+    if (USERS.some(u => u.username === username)) {
+        errorMsg.textContent = "Ce nom d'utilisateur est déjà pris.";
+        return;
+    }
+
+    // Ajout du nouvel utilisateur avec la classe 'Première' par défaut
+    const newUser = { username, password, class: studentClass };
+    USERS.push(newUser);
+    
+    // Simuler la connexion automatique après l'inscription
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("currentUser", newUser.username);
+    localStorage.setItem("studentClass", newUser.class); 
+    
+    alert(`Compte créé pour ${username} en classe de ${studentClass} !`);
+    window.location.replace("index.html");
+
 });
 
-// Connexion
+
+// =================================================================
+// LOGIQUE DE CONNEXION (INCHANGÉE)
+// =================================================================
+
+// Vérification des identifiants et envoi 2FA
 document.getElementById("loginForm").addEventListener("submit", e=>{
     e.preventDefault();
-    const username = document.getElementById("loginUsername").value.trim();
-    const password = document.getElementById("loginPassword").value;
-    const user = getUsers()[username];
-
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const user = USERS.find(u => u.username === username);
     const errorMsg = document.getElementById("errorMsg");
+
     if(user && user.password === password){
         const code = String(Math.floor(1000 + Math.random()*9000));
-        currentLogin = { username, code };
+        currentLogin = { username, code, class: user.class }; 
+        
         document.getElementById("mfa-instruction-debug").textContent = `CODE 2FA (DEBUG) : ${code}`;
+        
         showView("mfa-view");
     } else {
         errorMsg.textContent = "Identifiants incorrects.";
@@ -170,9 +213,10 @@ document.getElementById("mfaForm").addEventListener("submit", e=>{
     if(codeInput === currentLogin.code){
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("currentUser", currentLogin.username);
-        // MODIFICATION CLÉ: Force la classe à 'Première' pour débloquer les liens de menu existants
-        localStorage.setItem("studentClass", "Première"); 
-        // MODIFICATION CLÉ: Redirige vers 'index.html' où le menu filtrera correctement
+        
+        // UTILISATION DE LA CLASSE STOCKÉE
+        localStorage.setItem("studentClass", currentLogin.class); 
+        
         window.location.replace("index.html");
     } else {
         errorMsg.textContent = "Code 2FA incorrect.";
@@ -180,7 +224,16 @@ document.getElementById("mfaForm").addEventListener("submit", e=>{
     }
 });
 
-document.addEventListener("DOMContentLoaded", ()=>showView("login-view"));
+// Vérification de la déconnexion au chargement de la page de connexion
+document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('studentClass');
+    }
+    showView("login-view");
+});
 </script>
+
 </body>
 </html>
