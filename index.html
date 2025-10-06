@@ -3,295 +3,261 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil</title>
+    <title>Accueil - Espace Étudiant</title>
     <style>
+/* 1. Reset & Base */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding-top: 60px;
-            background-color: #f4f4f4;
-        }
-        header {
-            background: #333;
-            color: #fff;
-            padding: 10px 0;
-            text-align: center;
-        }
-        section {
-            padding: 20px;
-            margin: 10px;
-            background: #ff0000;
-            border-radius: 5px;
-        }
-        h2 {
-            color: #333;
-        }
-        .project {
-            margin-bottom: 20px;
-        }
-        footer {
-            text-align: center;
-            padding: 10px 0;
-            background: #333;
-            color: #fff;
-            position: relative;
-            bottom: 0;
-            width: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #ccc; /* Couleur de texte principale éclaircie pour le fond sombre */
+            
+            /* Fond Thème Magie/Science */
+            background: url('https://cdn-imgix.headout.com/media/images/e4a728601dae2c994a2a7bba52d35e74-harrypotterlondon-13.jpg') 
+                        no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            padding-top: 70px; /* Espace pour le bandeau fixe */
         }
 
-        /* ======= MENU ======= */
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+/* 2. Bandeau (Navigation) */
         .bandeau {
-            background-color: #000000;
-            padding: 10px;
+            background-color: rgba(16, 16, 32, 0.95); /* Bleu nuit très foncé */
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: fixed;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             width: 100%;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
             z-index: 1000;
-            background-image: url('https://png.pngtree.com/thumb_back/fw800/background/20190813/pngtree-digital-technology-blue-background-banner-image_298195.jpg');
-            background-size: cover;
-            background-position: center;
         }
-
-        /* Bouton burger */
-        .menu-btn {
-            font-size: 26px;
-            cursor: pointer;
-            color: white;
-            background: none;
-            border: none;
-            display: none;
-        }
-
-        /* Liens du menu */
         .menu-links {
             display: flex;
-            gap: 15px;
+            gap: 20px;
+            flex-grow: 1;
+            justify-content: flex-end;
         }
-        .menu-links a {
-            color: rgb(0, 0, 0); 
+        .bandeau a {
+            color: #e0e0ff; /* Bleu clair subtil */
             text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-            transition: color 0.3s ease;
-            display: inline-block;
+            padding: 8px 15px;
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 5px;
+            font-weight: 500;
         }
-        .menu-links a:hover {
-            color: yellow;
+        .bandeau a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        .menu-btn {
+            display: none; 
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0 10px;
         }
 
-        /* ======= MODE MOBILE ======= */
+/* 3. Section d'Entête (Le 'Hero') */
+        .hero-header {
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 40px;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+            
+            /* Nouveau fond d'entête plus dynamique */
+            background: linear-gradient(rgba(16, 16, 32, 0.7), rgba(16, 16, 32, 0.7)), 
+                        url('https://media3.giphy.com/media/OZCZRFgOx9nGxd0XQf/giphy.gif') 
+                        no-repeat center center;
+            background-size: cover;
+            border-radius: 15px;
+            border: 2px solid #5757a3; /* Bordure thématique */
+        }
+        .hero-header h1 { 
+            font-size: 3rem; 
+            margin-bottom: 15px; 
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        .hero-header p { 
+            font-size: 1.4rem; 
+            font-style: italic;
+        }
+
+/* 4. Contenu Principal (Boîte d'information) */
+        .info-box {
+            background: rgba(255, 255, 255, 0.1); /* Fond légèrement transparent */
+            backdrop-filter: blur(5px); /* Effet de flou sur l'arrière-plan */
+            -webkit-backdrop-filter: blur(5px);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff; /* Texte clair pour le fond semi-transparent */
+        }
+        .info-box h2 {
+            color: #92dff3; /* Titre bleu clair */
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        .info-box strong {
+            color: #ffcc00; /* Jaune pour les informations importantes */
+        }
+
+/* 5. Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: #b0b0b0;
+            font-size: 0.85rem;
+            background-color: rgba(16, 16, 32, 0.95);
+            margin-top: 40px;
+            border-top: 2px solid #5757a3;
+        }
+
+/* 6. Media Queries pour Mobile */
         @media (max-width: 768px) {
-            .menu-btn {
-                display: block;
+            .bandeau {
+                padding: 10px 15px;
             }
             .menu-links {
                 display: none;
                 flex-direction: column;
-                position: absolute;
-                top: 60px;
-                left: 0;
                 width: 100%;
-                background: rgba(0, 0, 0, 0.9);
-                text-align: center;
-                padding: 20px 0;
-            }
-            .menu-links a {
-                display: block;
-                margin: 10px 0;
-                color: white;
+                position: absolute;
+                top: 54px; 
+                left: 0;
+                background-color: rgba(16, 16, 32, 0.98);
+                box-shadow: 0 4px 5px rgba(0,0,0,0.3);
             }
             .menu-links.active {
                 display: flex;
             }
-        }
-
-        /* Animation zoom fond */
-        @keyframes zoomBg {
-            from {
-                background-size: 120%;
+            .menu-links a {
+                padding: 12px 20px;
+                border-bottom: 1px solid #333;
+                text-align: left;
             }
-            to {
-                background-size: 150%;
+            .menu-btn {
+                display: block;
             }
+            .hero-header h1 { font-size: 2rem; }
+            .hero-header p { font-size: 1.1rem; }
+            .info-box { padding: 20px; }
         }
-
-        /* SECTION avec fond dynamique */
-        #about {
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            text-align: center; 
-            background-color: #000; 
-            background-image: url('https://live.staticflickr.com/5444/7375631634_64e0c5b687_b.jpg'); 
-            background-size: 120%; 
-            background-position: center; 
-            background-repeat: no-repeat; 
-            animation: zoomBg 12s ease-in-out infinite alternate;
-            color: #ffffff; /* Texte en blanc */
-            padding: 20px;
-        }
-
-        /* Styles spécifiques au sélecteur de classe */
-        .class-select-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            margin: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            width: 250px;
-        }
-
-        .class-select-btn:hover {
-            background-color: #0056b3;
-        }
-        
-        #content-box {
-            background-color: rgba(0,0,0,0.6); 
-            padding: 20px; 
-            border-radius: 10px;
-            max-width: 80%;
-        }
-
     </style>
 </head>
 <body>
-    <nav class="bandeau">
+    <div class="bandeau">
         <button class="menu-btn" onclick="toggleMenu()">☰</button>
         <div class="menu-links" id="menuLinks">
-            <a href="index.html">Accueil</a>
-            <a href="1ere année.html" data-class="Première">Cours de 1ère Année</a>
-            <a href="Quiz de révision de 1ère Année.html" data-class="Première">Quiz de révision de 1ère Année</a>            
-            <a href="Connexion étudiant.html" id="authLink">Connexion Étudiant</a> 
+            <a href="index.html">Accueil</a> 
+            <a href="1ere année.html" data-class="Première">Cours de Première</a>
+            <a href="Quiz de révision de 1ère Année.html" data-class="Première">Quiz de Première</a> 
+            <a href="Connexion étudiant.html" id="authLink">Connexion Étudiant</a>
         </div>
-    </nav>
+    </div>
+    
+    <div class="container">
+        <header class="hero-header">
+            <h1>Espace Élève : Physique-Chimie ✨</h1>
+            <p>Votre portail sécurisé pour la réussite en science.</p>
+        </header>
 
-    <section id="about">
-        <div id="content-box">
-             <h2 style="color: #ffffff;">Chargement en cours...</h2>
+        <div class="info-box" id="pageContent">
+            <h2 style="color: #ffffff;">Chargement...</h2>
         </div>
-    </section>
+    </div>
 
     <footer>
-        <p>&copy; 2025. Programmée par NGUYEN Thomas. Tous droits réservés</p>
+        <p>&copy; 2024 Mon Site Éducatif | Programmée par NGUYEN Thomas</p>
     </footer>
 
     <script>
         const LOGIN_PAGE = "Connexion étudiant.html";
-        // Map pour comparer les niveaux de classe
-        const classOrder = { 'Seconde': 1, 'Première': 2, 'Terminale': 3 };
+        const TARGET_CLASS = "Première"; 
 
-        /**
-         * Déconnecte l'utilisateur et le redirige.
-         */
-        function logout(event) {
-            if (event) event.preventDefault();
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('studentClass'); // Supprime la classe stockée
-            alert("Vous êtes déconnecté. Redirection vers la page de connexion.");
+        function logout() {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("currentUser");
+            localStorage.removeItem("studentClass");
             window.location.replace(LOGIN_PAGE);
         }
 
         /**
-         * La fonction setStudentClass est retirée/vidée car la classe est forcée.
-         * @param {string} selectedClass - La classe choisie ('Seconde', 'Première', 'Terminale').
-         */
-        function setStudentClass(selectedClass) {
-             // Ne fait rien, car la classe est forcée lors de la connexion.
-        }
-
-        /**
-         * Applique le contrôle d'accès sur le menu en fonction de la classe de l'étudiant.
+         * Applique le contrôle d'accès sur le menu.
          */
         function applyAccessControl() {
-            // studentClass sera 'Première' grâce à la modification dans Connexion étudiant.html
             const studentClass = localStorage.getItem('studentClass'); 
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const menuLinksContainer = document.getElementById('menuLinks');
             const authLink = document.getElementById('authLink');
             
-            // Le niveau de classe visé est toujours la Première (2)
-            const TARGET_LEVEL = 2; 
-
             // 1. GESTION DU LIEN D'AUTHENTIFICATION / DÉCONNEXION
             if (isLoggedIn) {
-                // Si connecté, le lien devient Déconnexion et affiche la classe
-                authLink.textContent = `Déconnexion (${studentClass || 'Première'})`; // Affiche 'Première' par défaut
+                authLink.textContent = `Déconnexion (${studentClass || TARGET_CLASS})`; 
                 authLink.href = "#";
                 authLink.onclick = logout;
             } else {
-                 // Si non connecté, redirige
                  authLink.textContent = "Connexion Étudiant";
                  authLink.href = LOGIN_PAGE;
                  authLink.onclick = null;
-                 return;
             }
             
             // 2. FILTRAGE DES LIENS (COURS & QUIZ)
-            
             const allLinks = menuLinksContainer.querySelectorAll('a');
             
             allLinks.forEach(link => {
                 const requiredClass = link.getAttribute('data-class');
                 const isAuthLink = link.id === 'authLink';
-                const isHomeLink = link.href.includes('index.html');
+                const isHomeLink = link.href.endsWith('index.html');
                 
+                // Masquer par défaut (sera surchargé par le CSS media query en mobile, mais c'est ok)
+                if (!isAuthLink && !isHomeLink) {
+                   link.style.display = 'none';
+                }
+
                 if (isAuthLink || isHomeLink) {
-                    // Les liens Accueil et Déconnexion/Connexion restent visibles
-                    link.style.display = 'inline-block';
-                } else if (requiredClass) {
-                    // Liens avec data-class ('1ère année.html', 'Quiz de révision de 1ère Année.html', etc.)
-                    const requiredLevel = classOrder[requiredClass];
-                    
-                    // Masque si le niveau requis n'est PAS Première (niveau 2)
-                    if (requiredLevel !== TARGET_LEVEL) { 
-                        link.style.display = 'none';
-                    } else {
-                        // S'assurer que les liens de Première sont visibles
-                        link.style.display = 'inline-block'; 
+                    // Toujours visibles
+                    link.style.display = 'block'; 
+                } else if (isLoggedIn && requiredClass) {
+                    // Afficher uniquement si l'utilisateur est dans la bonne classe
+                    if (studentClass === TARGET_CLASS) { 
+                        link.style.display = 'block'; 
                     }
-                } else {
-                    // Liens sans data-class (Ex: 'Cours de 2nd.html', 'Quiz de révision de seconde.html')
-                    // Nous masquons ces liens pour une restriction stricte à Première.
-                    link.style.display = 'none';
                 }
             });
         }
 
-        /**
-         * Rend le contenu de la page d'accueil (message de bienvenue fixe pour Première).
-         */
-        function renderHomePageContent() {
-            const contentBox = document.getElementById('content-box');
-            // La classe est définie lors de la connexion (Première)
-            const studentClass = localStorage.getItem('studentClass') || 'Première'; 
-            const studentName = localStorage.getItem('currentUser') || 'Étudiant(e)';
 
-            // Contenu fixe pour la Première Année (le bouton 'Changer de classe' est retiré)
+        // Fonction pour afficher le contenu de la page d'accueil si connecté
+        function renderHomePageContent() {
+            const contentBox = document.getElementById('pageContent');
+            const studentName = localStorage.getItem('currentUser') || "Étudiant";
+            const studentClass = localStorage.getItem('studentClass') || TARGET_CLASS;
+            
             contentBox.innerHTML = `
-                <h2 style="color: #ffffff;">Bienvenue sur le site, ${studentName} !</h2>
-                <p style="color: #ffffff; margin-top: 15px; font-size: 1.2em;">
-                    Vous êtes connecté pour les cours de **${studentClass}**.
+                <h2>🎉 Bienvenue, ${studentName} !</h2>
+                <p style="margin-top: 15px; font-size: 1.3em;">
+                    Vous êtes connecté(e) en tant qu'élève de **${studentClass}** !
                 </p>
-                <p style="color: #ffffff; width: 60%; margin: 20px auto 10px;">
-                    Seuls les cours et quiz de **Première** sont visibles dans le menu.
+                <p style="width: 80%; margin: 30px auto 10px; font-size: 1.1em;">
+                    Utilisez le menu ci-dessus pour accéder directement à vos ressources :
+                    <br><br>
+                    <span style="color: #ffcc00; font-weight: bold;">Cours de Première</span> et
+                    <span style="color: #ffcc00; font-weight: bold;">Quiz de révision</span>.
                 </p>
             `;
             
-            // Appliquer le filtre de menu après le rendu
             applyAccessControl();
         }
 
@@ -301,13 +267,11 @@
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
             if (!isLoggedIn) {
-                // Si non connecté, REDIRIGER immédiatement vers la page de connexion
-                alert("Accès refusé. Veuillez vous connecter.");
+                // Rediriger si non connecté
                 window.location.replace(LOGIN_PAGE);
                 return;
             }
             
-            // Si connecté, RENDRE le contenu de la page d'accueil
             renderHomePageContent();
         });
 
