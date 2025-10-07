@@ -9,791 +9,837 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
 
 <style>
-/* 1. RESET & BASE (Thème Sombre/Magique) */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+/* --- STYLE GLOBAL --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    color: #e0e0e0; /* Texte clair pour le fond sombre */
-    
-    /* MODIFICATION 1 : Éviter la multiplication des images et assurer une couverture totale */
-    background: url('https://e0.pxfuel.com/wallpapers/955/776/desktop-wallpaper-assassins-creed-4-logo-version-black-flag-game-2013-assassin-s-creed-logo.jpg') no-repeat center center fixed;
-    background-size: cover;
-    background-repeat: no-repeat; /* Ajouté */
-    background-attachment: fixed; /* Ajouté pour un meilleur effet */
-    
-    min-height: 100vh;
-    padding: 20px 20px 80px 20px; /* Plus d'espace pour le footer */
-    background-color: #1a1a2e; /* Couleur de secours */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url('https://e0.pxfuel.com/wallpapers/955/776/desktop-wallpaper-assassins-creed-4-logo-version-black-flag-game-2013-assassin-s-creed-logo.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #e0e0e0;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #1a1a2e;
 }
 
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-}
+.container { max-width: 1000px; margin: auto; }
 
-/* 2. HEADER */
+/* HEADER */
 header {
-    text-align: center;
-    padding: 40px 20px;
-    margin-bottom: 40px;
-    color: white;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
-    
-    /* Fond plus sombre et thématique pour le header */
-    background: linear-gradient(rgba(16, 16, 32, 0.8), rgba(16, 16, 32, 0.8)), 
-                url('https://e1.pxfuel.com/desktop-wallpaper/344/998/desktop-wallpaper-assassin-s-creed-for-pc-10041-assassin-creed.jpg') no-repeat center center;
-    background-size: cover;
-    border-radius: 15px;
-    border: 2px solid #5757a3;
-    box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+  text-align: center;
+  padding: 40px 20px;
+  color: white;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+  background: linear-gradient(rgba(16, 16, 32, 0.8), rgba(16, 16, 32, 0.8)), url('https://e1.pxfuel.com/desktop-wallpaper/344/998/desktop-wallpaper-assassin-s-creed-for-pc-10041-assassin-creed.jpg') no-repeat center center;
+  background-size: cover;
+  border-radius: 15px;
+  border: 2px solid #5757a3;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.4);
 }
 
-h1 {
-    font-size: 2.8rem;
-    margin-bottom: 5px;
-    color: #92dff3; /* Titre bleu clair */
+h1 { font-size: 2.8rem; color: #92dff3; }
+.subtitle { font-size: 1.3rem; opacity: 0.9; font-style: italic; }
+
+/* --- BLOCS --- */
+.quiz-container {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.2);
 }
 
-.subtitle {
-    font-size: 1.3rem;
-    opacity: 0.9;
-    font-style: italic;
+.quiz-header {
+  background: #0d1a33;
+  color: white;
+  padding: 25px;
+  text-align: center;
+  border-bottom: 2px solid #5757a3;
 }
 
-/* 3. CONTENEURS DU QUIZ/CLASSEMENT (Effet Verre Dépoli) */
-.quiz-container,
-.leaderboard-container {
-    background: rgba(255, 255, 255, 0.1); /* Fond légèrement transparent */
-    backdrop-filter: blur(8px); /* Effet de flou accru */
-    -webkit-backdrop-filter: blur(8px);
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    overflow: hidden;
-    margin-bottom: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
+/* --- QUESTIONS --- */
+.quiz-body { padding: 30px; }
 
-.quiz-header,
-.leaderboard-header {
-    background: #0d1a33; /* Bleu très foncé pour l'entête */
-    color: white;
-    padding: 25px;
-    text-align: center;
-    border-bottom: 2px solid #5757a3;
-}
-
-.quiz-header h2,
-.leaderboard-header h2 {
-    font-size: 1.8rem;
-}
-
-.quiz-body,
-.leaderboard-body {
-    padding: 30px;
-}
-
-/* 4. QUESTIONS */
 .question {
-    margin-bottom: 30px;
-    padding: 20px;
-    border: none; 
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.3); /* Fond sombre pour la question */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  margin-bottom: 30px;
+  padding: 20px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-.question-number {
-    font-weight: 600;
-    color: #ffcc00; /* Jaune Thématique */
-    margin-bottom: 10px;
-    font-size: 1.1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 5px;
-}
-
-.question-text {
-    font-weight: bold;
-    margin-bottom: 15px;
-    font-size: 1.2rem;
-    color: #ffffff;
-}
-
-.options {
-    display: flex; /* Utilisation de flex pour aligner Vrai/Faux ou 4 options */
-    flex-direction: column;
-    gap: 10px;
-}
+.question-number { color: #ffcc00; font-weight: bold; margin-bottom: 10px; }
+.question-text { font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; color: #fff; }
 
 .option {
-    padding: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
-    cursor: pointer;
-    background: rgba(255, 255, 255, 0.05);
-    color: #e0e0e0;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.05);
+  margin-bottom: 10px;
 }
 
-.option:hover {
-    background: rgba(70, 70, 150, 0.3); /* Bleu foncé au survol */
-    border-color: #5757a3;
-}
+.option:hover { background: rgba(70,70,150,0.3); }
+.option input[type="radio"]:checked + span { font-weight: bold; color: #92dff3; }
 
-.option input[type="radio"]:checked + span { 
-    font-weight: bold;
-    color: #92dff3; /* Texte de l'option sélectionnée en bleu clair */
-}
-
-
-/* 5. BOUTONS */
-.buttons {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
+/* --- BOUTONS --- */
+.buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 .btn {
-    padding: 12px 25px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    cursor: pointer;
-    transition: background 0.3s;
+  padding: 12px 25px; border: none; border-radius: 8px;
+  font-size: 1rem; cursor: pointer;
+  transition: all 0.3s ease;
 }
+.submit-btn { background: #5757a3; color: white; }
+.reset-btn { background: #e74c3c; color: white; }
+.pdf-btn { background: #3498db; color: white; }
+.pdf-btn:hover { background: #2980b9; }
+.mindmap-btn { background: #16a085; color: white; }
+.mindmap-btn:hover { background: #138d75; }
 
-.submit-btn {
-    background: #5757a3;
-    color: white;
-}
-
-.reset-btn {
-    background: #e74c3c;
-    color: white;
-}
-
-.save-score-btn {
-    background: #2ecc71;
-    color: white;
-}
-
-.show-leaderboard-btn {
-    background: #9b59b6;
-    color: white;
-}
-
-/* Style pour le bouton PDF */
-.pdf-btn {
-    background: #3498db; /* Bleu vif */
-    color: white;
-}
-.pdf-btn:hover {
-    background: #2980b9;
-}
-
-/* 6. RÉSULTATS */
+/* --- RÉSULTATS --- */
 .results {
-    margin-top: 30px;
-    padding: 20px;
-    border-radius: 10px;
-    background: rgba(16, 16, 32, 0.8);
-    border: 1px solid #5757a3;
-    color: white;
-    text-align: center;
+  display: none;
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 10px;
+  background: rgba(16,16,32,0.8);
+  border: 1px solid #5757a3;
+  color: white;
+  text-align: center;
 }
 
-.score {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #ffcc00;
-    margin-bottom: 10px;
-}
+.score { font-size: 2rem; color: #ffcc00; }
+.message { font-size: 1.3rem; margin: 10px 0; }
 
-.score-details {
-    color: #b0b0b0;
-    margin-bottom: 15px;
-}
-
-.message {
-    font-weight: bold;
-    font-size: 1.4rem;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-}
-
-.excellent {
-    background: #27ae60;
-    color: white;
-}
-
-.good {
-    background: #f1c40f;
-    color: #333;
-}
-
-.average {
-    background: #e74c3c;
-    color: white;
-}
-
-/* Style pour l'input du nom */
-.save-score-input {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #5757a3;
-    background: #1a1a2e;
-    color: white;
-    margin-right: 10px;
-    max-width: 200px;
-    text-align: center;
-}
-.save-score-input:disabled {
-    opacity: 0.7;
-    background: #0d1a33;
-    cursor: default;
-}
-
-
-/* 7. CLASSEMENT - MODIFIÉ POUR LES COULEURS ET LE TOP 3 */
-.leaderboard-table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.leaderboard-table th,
-.leaderboard-table td {
-    padding: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    color: #e0e0e0;
-    text-align: left;
-}
-.leaderboard-table td:first-child,
-.leaderboard-table th:first-child {
-    text-align: center; /* Centrer le numéro de classement */
-}
-
-.leaderboard-table th {
-    background: #0d1a33; /* Bleu très foncé pour l'entête (identique au quiz-header) */
-    color: #92dff3; /* Bleu clair thématique */
-    font-size: 1.1rem;
-}
-
-/* Ligne impaire (couleur de base) */
-.leaderboard-table tr { 
-    background: rgba(255, 255, 255, 0.05); /* Ligne impaire (presque transparente) */
-}
-
-/* Ligne paire (couleur alternée pour le contraste) */
-.leaderboard-table tr:nth-child(even) {
-    background: rgba(16, 16, 32, 0.5); /* Bleu foncé légèrement transparent */
-}
-.leaderboard-table tr:hover {
-    background: rgba(70, 70, 150, 0.3); /* Bleu foncé plus prononcé au survol */
-}
-
-/* --- NOUVEAUX STYLES POUR METTRE EN ÉVIDENCE LE TOP 3 --- */
-
-/* Style pour la première place (or) */
-.leaderboard-table tr:nth-child(1) {
-    background: rgba(255, 215, 0, 0.2) !important; /* Jaune/Or très clair */
-    color: #ffd700;
-    font-weight: bold;
-}
-.leaderboard-table tr:nth-child(1) td:first-child { 
-    color: #ffd700; 
-    font-size: 1.3rem; 
-    text-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
-}
-
-/* Style pour la deuxième place (argent) */
-.leaderboard-table tr:nth-child(2) {
-    background: rgba(192, 192, 192, 0.2) !important;
-}
-.leaderboard-table tr:nth-child(2) td:first-child { 
-    color: #c0c0c0; 
-    font-size: 1.2rem;
-}
-
-/* Style pour la troisième place (bronze) */
-.leaderboard-table tr:nth-child(3) {
-    background: rgba(205, 127, 50, 0.2) !important;
-}
-.leaderboard-table tr:nth-child(3) td:first-child { 
-    color: #cd7f32; 
-    font-size: 1.1rem; 
-}
-
-
-/* 8. FOOTER */
+/* --- FOOTER --- */
 footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    padding: 15px;
-    color: #b0b0b0;
-    font-size: 0.85rem;
-    background-color: rgba(16, 16, 32, 0.95);
-    border-top: 2px solid #5757a3;
-    box-shadow: 0 -2px 8px rgba(0,0,0,0.5);
-    z-index: 10;
-}
-
-/* 9. ACCÈS REFUSÉ */
-#access-denied-message {
-    padding: 30px;
-    text-align: center;
-    border-radius: 15px;
-    max-width: 500px;
-    margin: 50px auto;
-    background: rgba(16, 16, 32, 0.9);
-    border: 1px solid #c0392b;
-    color: white;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-#access-denied-message h2 {
-    color: #e74c3c;
-    margin-bottom: 10px;
-}
-#access-denied-message p {
-    margin-bottom: 20px;
-}
-#access-denied-message a {
-    display: inline-block;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-    background: #5757a3;
-    color: white;
-    transition: background 0.3s;
-}
-#access-denied-message a:hover {
-    background: #46468a;
+  text-align: center;
+  padding: 15px;
+  color: #b0b0b0;
+  font-size: 0.85rem;
+  background-color: rgba(16,16,32,0.95);
+  border-top: 2px solid #5757a3;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.5);
 }
 </style>
 </head>
+
 <body>
 <div class="container">
 <header>
-    <h1>QCM de Physique-Chimie</h1>
-    <p class="subtitle">Niveau Première - Testez vos connaissances ✨</p>
+  <h1>QCM de Physique-Chimie</h1>
+  <p class="subtitle">Niveau Première - Testez vos connaissances ✨</p>
 </header>
 
-<div id="quiz-content">
-    <div class="quiz-container" id="quiz-container">
-        <div class="quiz-header">
-            <h2>Questionnaire à Choix Multiples</h2>
-            <p>20 questions générées aléatoirement</p>
-        </div>
-        <div class="quiz-body">
-            <div id="quiz"></div>
-            <div class="buttons">
-                <button class="btn submit-btn" onclick="checkAnswers()">Soumettre les réponses</button>
-                <button class="btn reset-btn" onclick="resetQuiz()">Réinitialiser</button>
-            </div>
+<div class="quiz-container">
+  <div class="quiz-header">
+    <h2>Questionnaire à Choix Multiples</h2>
+    <div style="margin-top: 10px;">
+      <label for="questionType">Type de questions :</label>
+      <select id="questionType" onchange="loadQuiz()">
+        <option value="mixte" selected>Physique + Chimie</option>
+        <option value="physique">Physique uniquement</option>
+        <option value="chimie">Chimie uniquement</option>
+      </select>
+      &nbsp;&nbsp;
+      <label for="questionCount">Nombre de questions :</label>
+      <select id="questionCount" onchange="loadQuiz()">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20" selected>20</option>
+      </select>
+    </div>
+  </div>
 
-            <div class="results" id="results" style="display:none;"> <div class="score" id="score"></div>
-                <div class="score-details" id="score-details"></div>
-                <div class="message" id="message"></div>
+  <div class="quiz-body">
+    <div id="quiz"></div>
 
-                <div class="save-score-container" id="save-score-container" style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px;">
-                    <input type="text" class="save-score-input" id="player-name" placeholder="Entrez votre nom" maxlength="20">
-                    <button class="btn save-score-btn" onclick="saveScore()">Enregistrer mon score</button>
-                </div>
-
-                <div class="buttons">
-                    <button class="btn show-leaderboard-btn" onclick="showLeaderboard()">Voir le classement</button>
-                    <button class="btn pdf-btn" onclick="generatePDF()">Télécharger le corrigé (PDF)</button>
-                    <button class="btn reset-btn" onclick="resetQuiz()">Refaire le quiz</button>
-                </div>
-            </div>
-        </div>
+    <div class="buttons">
+      <button class="btn submit-btn" onclick="checkAnswers()">Soumettre</button>
+      <button class="btn reset-btn" onclick="loadQuiz()">Réinitialiser</button>
     </div>
 
-    <div class="leaderboard-container" id="leaderboard-container" style="display:none;">
-        <div class="leaderboard-header">
-            <h2>Classement Personnel</h2>
-        </div>
-        <div class="leaderboard-body">
-            <table class="leaderboard-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nom</th>
-                        <th>Score</th>
-                        <th>Date</th>
-                        <th>Commentaire</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboard-body"></tbody>
-            </table>
-            <div class="buttons" style="justify-content:center; margin-top:30px;">
-                <button class="btn submit-btn" onclick="hideLeaderboard()">Retour au quiz</button>
-                <button class="btn reset-btn" onclick="clearLeaderboard()">Effacer mon classement</button>
-            </div>
-        </div>
+    <div class="results" id="results">
+      <div class="score" id="score"></div>
+      <div class="message" id="message"></div>
+      <div class="buttons">
+        <button class="btn pdf-btn" onclick="generatePDF()">Télécharger le corrigé</button>
+        <button class="btn mindmap-btn" onclick="generateMindMap()">Carte mentale du thème</button>
+        <button class="btn reset-btn" onclick="loadQuiz()">Recommencer</button>
+      </div>
     </div>
+  </div>
 </div>
 
-<div id="access-denied-message" style="display:none;">
-    <h2>🔒 Accès Restreint</h2>
-    <p>Vous devez être connecté pour accéder à ce quiz.</p>
-    <a href="Connexion étudiant.html">Se connecter</a>
-</div>
-
-<footer style="margin-top: 50px;">
-<p>&copy; 2025 Nguyen Thomas. Tous droits réservés.</p>
-</footer>
+<footer><p>&copy; 2025 Nguyen Thomas. Tous droits réservés.</p></footer>
 </div>
 
 <script>
-// --- CONFIGURATION DE SÉCURITÉ & INITIALISATION ---
-const quizContent = document.getElementById('quiz-content');
-const accessDeniedMessage = document.getElementById('access-denied-message');
-
-function setPlayerNameFromLogin(username) {
-    const playerNameInput = document.getElementById('player-name');
-    if (playerNameInput) {
-        playerNameInput.value = username; 
-        playerNameInput.disabled = true; 
-        playerNameInput.placeholder = `Connecté comme : ${username}`;
-    }
-}
-
-function checkLoginStatus() {
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    const username = localStorage.getItem('currentUser'); 
-    if (!isLoggedIn || !username) {
-        quizContent.style.display = 'none';
-        accessDeniedMessage.style.display = 'block';
-        return false; 
-    } else {
-        quizContent.style.display = 'block';
-        accessDeniedMessage.style.display = 'none';
-        setPlayerNameFromLogin(username);
-        return true;
-    }
-}
-
-// --- QUESTIONS (20 questions, y compris 5 Vrai/Faux) ---
+// --- QUESTIONS (avec type) ---
+// --- QUESTIONS (50 questions au total, mix physique/chimie) ---
 const questions = [
-    {
-        text: "Quelle est la formule de l’énergie cinétique ?",
-        options: { a: "Ec = mv", b: "Ec = 1/2 mv²", c: "Ec = m/v", d: "Ec = m×v²" },
-        answer: "b"
+  // QUESTIONS ORIGINALES
+  {
+    text: "Quelle est la formule de l'énergie cinétique ?",
+    options: {
+      a: "Ec = mv",
+      b: "Ec = 1/2 mv²",
+      c: "Ec = m/v",
+      d: "Ec = m×v²"
     },
-    {
-        text: "Quelle est l’unité de la force ?",
-        options: { a: "Joule", b: "Newton", c: "Pascal", d: "Watt" },
-        answer: "b"
+    answer: "b"
+  },
+  {
+    text: "Quelle est l'unité de la force ?",
+    options: {
+      a: "Joule",
+      b: "Newton",
+      c: "Pascal",
+      d: "Watt"
     },
-    {
-        text: "Quelle est la loi reliant U, R et I ?",
-        options: { a: "Loi de Newton", b: "Loi d’Ohm", c: "Loi de Coulomb", d: "Loi de Joule" },
-        answer: "b"
+    answer: "b"
+  },
+  {
+    text: "Quelle est la loi reliant U, R et I ?",
+    options: {
+      a: "Loi de Newton",
+      b: "Loi d'Ohm",
+      c: "Loi de Coulomb",
+      d: "Loi de Joule"
     },
-    {
-        text: "Quelle est la formule de la masse volumique ?",
-        options: { a: "ρ = m/V", b: "ρ = V/m", c: "ρ = m×V", d: "ρ = m+V" },
-        answer: "a"
+    answer: "b"
+  },
+  {
+    text: "Quelle est la formule de la masse volumique ?",
+    options: {
+      a: "ρ = m/V",
+      b: "ρ = V/m",
+      c: "ρ = m×V",
+      d: "ρ = m+V"
     },
-    {
-        text: "Quelle est la constante de gravitation universelle ?",
-        options: { a: "9,81", b: "6,67×10⁻¹¹", c: "3×10⁸", d: "1,6×10⁻¹⁹" },
-        answer: "b"
+    answer: "a"
+  },
+  {
+    text: "Quelle est la constante de gravitation universelle ?",
+    options: {
+      a: "9,81",
+      b: "6,67×10⁻¹¹",
+      c: "3×10⁸",
+      d: "1,6×10⁻¹⁹"
     },
-    {
-        text: "Quelle est l’unité de la pression ?",
-        options: { a: "Pa", b: "N", c: "J", d: "W" },
-        answer: "a"
+    answer: "b"
+  },
+  {
+    text: "Quelle est l'unité de la pression ?",
+    options: {
+      a: "Pa",
+      b: "N",
+      c: "J",
+      d: "W"
     },
-    {
-        text: "Quelle particule n’a pas de charge ?",
-        options: { a: "Proton", b: "Neutron", c: "Électron", d: "Ion" },
-        answer: "b"
+    answer: "a"
+  },
+  {
+    text: "Quelle particule n'a pas de charge ?",
+    options: {
+      a: "Proton",
+      b: "Neutron",
+      c: "Électron",
+      d: "Ion"
     },
-    {
-        text: "Quelle est la vitesse de la lumière ?",
-        options: { a: "3×10⁸ m/s", b: "9,8 m/s²", c: "1,6×10⁻¹⁹ m/s", d: "6,02×10²³ m/s" },
-        answer: "a"
+    answer: "b"
+  },
+  {
+    text: "Quelle est la vitesse de la lumière ?",
+    options: {
+      a: "3×10⁸ m/s",
+      b: "9,8 m/s²",
+      c: "1,6×10⁻¹⁹ m/s",
+      d: "6,02×10²³ m/s"
     },
-    {
-        text: "Quelle est la charge élémentaire ?",
-        options: { a: "9,81 N", b: "6,67×10⁻¹¹ N.m²/kg²", c: "1,6×10⁻¹⁹ C", d: "3×10⁸ m/s" },
-        answer: "c"
+    answer: "a"
+  },
+  {
+    text: "Quelle est la charge élémentaire ?",
+    options: {
+      a: "9,81 N",
+      b: "6,67×10⁻¹¹ N.m²/kg²",
+      c: "1,6×10⁻¹⁹ C",
+      d: "3×10⁸ m/s"
     },
-    {
-        text: "Quelle loi décrit la force électrostatique ?",
-        options: { a: "Loi de Coulomb", b: "Loi de Newton", c: "Loi d’Ohm", d: "Loi de Joule" },
-        answer: "a"
+    answer: "c"
+  },
+  {
+    text: "Quelle loi décrit la force électrostatique ?",
+    options: {
+      a: "Loi de Coulomb",
+      b: "Loi de Newton",
+      c: "Loi d'Ohm",
+      d: "Loi de Joule"
     },
-    {
-        text: "Quelle est la formule de la vitesse ?",
-        options: { a: "v = d/t", b: "v = t/d", c: "v = d×t", d: "v = d-t" },
-        answer: "a"
+    answer: "a"
+  },
+  {
+    text: "Quelle est la formule de la vitesse ?",
+    options: {
+      a: "v = d/t",
+      b: "v = t/d",
+      c: "v = d×t",
+      d: "v = d-t"
     },
-    {
-        text: "Quelle est l’unité de l’énergie ?",
-        options: { a: "Joule", b: "Newton", c: "Watt", d: "Volt" },
-        answer: "a"
+    answer: "a"
+  },
+  {
+    text: "Quelle est l'unité de l'énergie ?",
+    options: {
+      a: "Joule",
+      b: "Newton",
+      c: "Watt",
+      d: "Volt"
     },
-    {
-        text: "Quelle est l’équation de la loi des gaz parfaits ?",
-        options: { a: "PV = nRT", b: "P = F/S", c: "E = mc²", d: "U = RI" },
-        answer: "a"
+    answer: "a"
+  },
+  {
+    text: "Quelle est l'équation de la loi des gaz parfaits ?",
+    options: {
+      a: "PV = nRT",
+      b: "P = F/S",
+      c: "E = mc²",
+      d: "U = RI"
     },
-    {
-        text: "Quelle est l’unité de la puissance électrique ?",
-        options: { a: "Watt", b: "Joule", c: "Volt", d: "Ampère" },
-        answer: "a"
+    answer: "a"
+  },
+  {
+    text: "Quelle est l'unité de la puissance électrique ?",
+    options: {
+      a: "Watt",
+      b: "Joule",
+      c: "Volt",
+      d: "Ampère"
     },
-    {
-        text: "La lumière se comporte comme :",
-        options: { a: "Une onde", b: "Une particule", c: "Les deux", d: "Ni l’un ni l’autre" },
-        answer: "c"
+    answer: "a"
+  },
+  {
+    text: "La lumière se comporte comme :",
+    options: {
+      a: "Une onde",
+      b: "Une particule",
+      c: "Les deux",
+      d: "Ni l'un ni l'autre"
     },
-    // --- QUESTIONS VRAI/FAUX ---
-    {
-        text: "L'énergie potentielle de pesanteur d'un objet dépend de sa vitesse.",
-        options: { a: "Vrai", b: "Faux" },
-        answer: "b"
+    answer: "c"
+  },
+  {
+    text: "L'énergie potentielle de pesanteur d'un objet dépend de sa vitesse.",
+    options: { a: "Vrai", b: "Faux" },
+    answer: "b"
+  },
+  {
+    text: "Dans une solution aqueuse, le pH est d'autant plus faible que la concentration en ions H₃O⁺ est élevée.",
+    options: { a: "Vrai", b: "Faux" },
+    answer: "a"
+  },
+  {
+    text: "Le principe d'inertie stipule qu'un objet soumis à des forces qui se compensent est nécessairement immobile.",
+    options: { a: "Vrai", b: "Faux" },
+    answer: "b"
+  },
+  {
+    text: "Un atome est électriquement neutre car il possède autant de protons que de neutrons.",
+    options: { a: "Vrai", b: "Faux" },
+    answer: "b"
+  },
+  {
+    text: "La puissance électrique P consommée par un dipôle s'exprime par la relation P = R × I².",
+    options: { a: "Vrai", b: "Faux" },
+    answer: "a"
+  },
+
+  // --- NOUVELLES QUESTIONS (30 questions alternant physique/chimie) ---
+  // PHYSIQUE 1
+  {
+    text: "Quelle est la formule de l'énergie potentielle de pesanteur ?",
+    options: {
+      a: "Ep = mgh",
+      b: "Ep = 1/2 mv²",
+      c: "Ep = mh",
+      d: "Ep = gh"
     },
-    {
-        text: "Dans une solution aqueuse, le pH est d'autant plus faible que la concentration en ions H₃O⁺ est élevée.",
-        options: { a: "Vrai", b: "Faux" },
-        answer: "a"
+    answer: "a"
+  },
+  // CHIMIE 1
+  {
+    text: "Quelle est la formule chimique de l'eau ?",
+    options: {
+      a: "H₂O₂",
+      b: "HO",
+      c: "H₂O",
+      d: "H₃O"
     },
-    {
-        text: "Le principe d'inertie (première loi de Newton) stipule qu'un objet soumis à des forces qui se compensent est nécessairement immobile.",
-        options: { a: "Vrai", b: "Faux" },
-        answer: "b"
+    answer: "c"
+  },
+  // PHYSIQUE 2
+  {
+    text: "Quelle est la deuxième loi de Newton ?",
+    options: {
+      a: "F = ma",
+      b: "F = m/a",
+      c: "F = m + a",
+      d: "F = a/m"
     },
-    {
-        text: "Un atome est électriquement neutre car il possède autant de protons que de neutrons.",
-        options: { a: "Vrai", b: "Faux" },
-        answer: "b"
+    answer: "a"
+  },
+  // CHIMIE 2
+  {
+    text: "Quel est le nombre d'Avogadro ?",
+    options: {
+      a: "3×10⁸",
+      b: "6,02×10²³",
+      c: "1,6×10⁻¹⁹",
+      d: "9,81"
     },
-    {
-        text: "La puissance électrique P consommée par un dipôle s'exprime par la relation P = R × I².",
-        options: { a: "Vrai", b: "Faux" },
-        answer: "a"
-    }
+    answer: "b"
+  },
+  // PHYSIQUE 3
+  {
+    text: "Quelle est l'unité de la fréquence ?",
+    options: {
+      a: "Hertz",
+      b: "Joule",
+      c: "Watt",
+      d: "Newton"
+    },
+    answer: "a"
+  },
+  // CHIMIE 3
+  {
+    text: "Quel est le pH d'une solution neutre à 25°C ?",
+    options: {
+      a: "0",
+      b: "7",
+      c: "14",
+      d: "1"
+    },
+    answer: "b"
+  },
+  // PHYSIQUE 4
+  {
+    text: "Quelle est la formule du travail d'une force constante ?",
+    options: {
+      a: "W = F×d",
+      b: "W = F/d",
+      c: "W = F×d×cosθ",
+      d: "W = m×g×h"
+    },
+    answer: "c"
+  },
+  // CHIMIE 4
+  {
+    text: "Quelle est la formule du dioxyde de carbone ?",
+    options: {
+      a: "CO",
+      b: "CO₂",
+      c: "C₂O",
+      d: "CO₃"
+    },
+    answer: "b"
+  },
+  // PHYSIQUE 5
+  {
+    text: "Quelle est l'unité de la charge électrique ?",
+    options: {
+      a: "Ampère",
+      b: "Volt",
+      c: "Coulomb",
+      d: "Ohm"
+    },
+    answer: "c"
+  },
+  // CHIMIE 5
+  {
+    text: "Quelle est la masse molaire de l'eau (H₂O) ?",
+    options: {
+      a: "16 g/mol",
+      b: "18 g/mol",
+      c: "20 g/mol",
+      d: "22 g/mol"
+    },
+    answer: "b"
+  },
+  // PHYSIQUE 6
+  {
+    text: "Quelle est la formule de la période T d'un pendule simple ?",
+    options: {
+      a: "T = 2π√(L/g)",
+      b: "T = 2π√(g/L)",
+      c: "T = π√(L/g)",
+      d: "T = √(L/g)"
+    },
+    answer: "a"
+  },
+  // CHIMIE 6
+  {
+    text: "Quel gaz compose environ 78% de l'atmosphère terrestre ?",
+    options: {
+      a: "Oxygène",
+      b: "Dioxyde de carbone",
+      c: "Azote",
+      d: "Argon"
+    },
+    answer: "c"
+  },
+  // PHYSIQUE 7
+  {
+    text: "Quelle est l'unité de la résistance électrique ?",
+    options: {
+      a: "Ohm",
+      b: "Volt",
+      c: "Ampère",
+      d: "Watt"
+    },
+    answer: "a"
+  },
+  // CHIMIE 7
+  {
+    text: "Quelle est la formule de l'acide sulfurique ?",
+    options: {
+      a: "HCl",
+      b: "H₂SO₄",
+      c: "HNO₃",
+      d: "H₃PO₄"
+    },
+    answer: "b"
+  },
+  // PHYSIQUE 8
+  {
+    text: "Quelle est la relation entre puissance, énergie et temps ?",
+    options: {
+      a: "P = E×t",
+      b: "P = E/t",
+      c: "P = t/E",
+      d: "P = E+t"
+    },
+    answer: "b"
+  },
+  // CHIMIE 8
+  {
+    text: "Quel est le symbole chimique du sodium ?",
+    options: {
+      a: "S",
+      b: "So",
+      c: "Na",
+      d: "Sd"
+    },
+    answer: "c"
+  },
+  // PHYSIQUE 9
+  {
+    text: "Quelle est la formule de l'accélération ?",
+    options: {
+      a: "a = Δv/Δt",
+      b: "a = v×t",
+      c: "a = v/t²",
+      d: "a = v+t"
+    },
+    answer: "a"
+  },
+  // CHIMIE 9
+  {
+    text: "Quelle est la formule du méthane ?",
+    options: {
+      a: "CH₄",
+      b: "C₂H₆",
+      c: "CH₃",
+      d: "C₃H₈"
+    },
+    answer: "a"
+  },
+  // PHYSIQUE 10
+  {
+    text: "Quelle est l'unité du champ électrique ?",
+    options: {
+      a: "V/m",
+      b: "N/C",
+      c: "Les deux",
+      d: "Aucune des deux"
+    },
+    answer: "c"
+  },
+  // CHIMIE 10
+  {
+    text: "Combien d'électrons peut contenir la couche électronique K (n=1) ?",
+    options: {
+      a: "2",
+      b: "8",
+      c: "18",
+      d: "32"
+    },
+    answer: "a"
+  },
+  // PHYSIQUE 11
+  {
+    text: "Quelle est la loi de conservation en mécanique ?",
+    options: {
+      a: "Conservation de la masse",
+      b: "Conservation de l'énergie",
+      c: "Conservation de la charge",
+      d: "Toutes ces réponses"
+    },
+    answer: "b"
+  },
+  // CHIMIE 11
+  {
+    text: "Quelle est la formule de l'ion hydroxyde ?",
+    options: {
+      a: "H⁺",
+      b: "OH⁻",
+      c: "H₃O⁺",
+      d: "O²⁻"
+    },
+    answer: "b"
+  },
+  // PHYSIQUE 12
+  {
+    text: "Quelle est l'unité de l'intensité lumineuse ?",
+    options: {
+      a: "Lumen",
+      b: "Candela",
+      c: "Lux",
+      d: "Watt"
+    },
+    answer: "b"
+  },
+  // CHIMIE 12
+  {
+    text: "Quel type de liaison chimique implique un partage d'électrons ?",
+    options: {
+      a: "Liaison ionique",
+      b: "Liaison covalente",
+      c: "Liaison métallique",
+      d: "Liaison hydrogène"
+    },
+    answer: "b"
+  },
+  // PHYSIQUE 13
+  {
+    text: "Quelle est la formule de la longueur d'onde λ en fonction de la vitesse c et de la fréquence f ?",
+    options: {
+      a: "λ = c×f",
+      b: "λ = c/f",
+      c: "λ = f/c",
+      d: "λ = c+f"
+    },
+    answer: "b"
+  },
+  // CHIMIE 13
+  {
+    text: "Quelle est la configuration électronique de l'atome de carbone (Z=6) ?",
+    options: {
+      a: "1s² 2s² 2p²",
+      b: "1s² 2s² 2p⁴",
+      c: "1s² 2s¹ 2p³",
+      d: "1s² 2s² 2p⁶"
+    },
+    answer: "a"
+  },
+  // PHYSIQUE 14
+  {
+    text: "Dans un circuit en série, que peut-on dire de l'intensité ?",
+    options: {
+      a: "Elle varie",
+      b: "Elle est identique partout",
+      c: "Elle diminue",
+      d: "Elle augmente"
+    },
+    answer: "b"
+  },
+  // CHIMIE 14
+  {
+    text: "Quelle est la formule de l'ammoniac ?",
+    options: {
+      a: "NH₂",
+      b: "NH₃",
+      c: "NH₄",
+      d: "N₂H₄"
+    },
+    answer: "b"
+  },
+  // PHYSIQUE 15
+  {
+    text: "Quelle grandeur physique est mesurée en Tesla ?",
+    options: {
+      a: "Le champ électrique",
+      b: "Le champ magnétique",
+      c: "La force",
+      d: "La pression"
+    },
+    answer: "b"
+  },
+  // CHIMIE 15
+  {
+    text: "Quel est le nom de la réaction chimique où une substance gagne des électrons ?",
+    options: {
+      a: "Oxydation",
+      b: "Réduction",
+      c: "Combustion",
+      d: "Neutralisation"
+    },
+    answer: "b"
+  }
 ];
 
 
 function shuffle(array){ return array.sort(()=>Math.random()-0.5); }
 
+// --- CHARGER LE QUIZ ---
 function loadQuiz(){
-    if (!checkLoginStatus()) return;
-    const quizDiv=document.getElementById("quiz");
-    quizDiv.innerHTML="";
-    
-    const shuffled = shuffle([...questions]);
-    window.currentQuestions=shuffled.slice(0, 20);
-    
-    window.currentQuestions.forEach((q,i)=>{
-        // CORRECTION DE DÉBOGAGE ICI : Encapsuler l'input et le texte dans la balise <label> pour que le clic fonctionne sur toute la zone et le CSS s'applique correctement. J'utilise un <span> pour appliquer le style du texte via CSS.
-        quizDiv.innerHTML+=`
-        <div class="question">
-            <div class="question-number">Question ${i+1}/${window.currentQuestions.length}</div>
-            <div class="question-text">${q.text}</div>
-            <div class="options">
-                ${Object.entries(q.options).map(([k,v])=>`
-                <label class="option">
-                    <input type="radio" name="q${i}" value="${k}"> 
-                    <span>${k}) ${v}</span>
-                </label>`).join('')}
-            </div>
-        </div>`;
-    });
-    document.getElementById('results').style.display='none';
-    document.getElementById('save-score-container').style.display='none';
+  const quizDiv=document.getElementById("quiz");
+  quizDiv.innerHTML="";
+
+  const type=document.getElementById("questionType").value;
+  const count=parseInt(document.getElementById("questionCount").value);
+
+  let filtered=questions;
+  if(type!=="mixte"){ filtered=questions.filter(q=>q.type===type); }
+
+  const selected=shuffle(filtered).slice(0,count);
+  window.currentQuestions=selected;
+
+  selected.forEach((q,i)=>{
+    quizDiv.innerHTML+=`
+    <div class="question">
+      <div class="question-number">Question ${i+1}/${selected.length}</div>
+      <div class="question-text">${q.text}</div>
+      <div class="options">
+        ${Object.entries(q.options).map(([k,v])=>`
+          <label class="option">
+            <input type="radio" name="q${i}" value="${k}">
+            <span>${k}) ${v}</span>
+          </label>`).join("")}
+      </div>
+    </div>`;
+  });
+
+  document.getElementById("results").style.display="none";
 }
 
+// --- CORRECTION ---
 function checkAnswers(){
-    let score=0;
-    const allQuestions=document.querySelectorAll('.question');
-    allQuestions.forEach((qDiv,i)=>{
-        const selected=qDiv.querySelector("input[type=radio]:checked");
-        if(selected && window.currentQuestions[i] && selected.value===window.currentQuestions[i].answer) score++;
+  let score=0;
+  const questionsDiv=document.querySelectorAll(".question");
+  questionsDiv.forEach((qDiv,i)=>{
+    const checked=qDiv.querySelector("input:checked");
+    if(checked && checked.value===window.currentQuestions[i].answer) score++;
+  });
+
+  document.getElementById("score").textContent=`Score: ${score}/${window.currentQuestions.length}`;
+  const msg=document.getElementById("message");
+  const pct=(score/window.currentQuestions.length)*100;
+  msg.textContent = pct>=80 ? "Excellent 🌟" : pct>=60 ? "Bien joué 👍" : "Continuez à réviser 📚";
+  document.getElementById("results").style.display="block";
+}
+
+// --- PDF ---
+function generatePDF(){
+  if(!window.currentQuestions){ alert("Aucun quiz généré !"); return; }
+  const { jsPDF } = window.jspdf; const doc = new jsPDF();
+  doc.text("Corrigé du QCM de Physique-Chimie",10,10);
+  let y=20;
+  window.currentQuestions.forEach((q,i)=>{
+    doc.text(`${i+1}. ${q.text}`,10,y);
+    y+=6;
+    doc.text(`Réponse : ${q.answer}) ${q.options[q.answer]}`,15,y);
+    y+=10;
+    if(y>270){ doc.addPage(); y=20; }
+  });
+  doc.save("Corrigé_Quiz.pdf");
+}
+
+// --- CARTE MENTALE (avec questions + réponses) ---
+function generateMindMap(){
+  if(!window.currentQuestions){ alert("Générez d'abord un quiz."); return; }
+  
+  const canvas = document.createElement('canvas');
+  canvas.width = 1600; canvas.height = 1000;
+  const ctx = canvas.getContext('2d');
+  
+  // Fond
+  ctx.fillStyle = "#0b1739";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  
+  // Titre central
+  const theme = document.getElementById("questionType").value;
+  ctx.fillStyle = "#ffcc00";
+  ctx.font = "bold 32px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText(`Carte Mentale - ${theme.toUpperCase()}`, canvas.width/2, 70);
+  
+  const centerX = canvas.width/2;
+  const centerY = canvas.height/2;
+  const radius = 320;
+  const nodes = window.currentQuestions.slice(0,10); // max 10 bulles
+
+  ctx.strokeStyle = "#92dff3";
+  ctx.lineWidth = 2;
+  
+  nodes.forEach((q,i)=>{
+    const angle = (i / nodes.length) * Math.PI * 2;
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle);
+    
+    // Branche
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+
+    // Bulle
+    ctx.beginPath();
+    ctx.arc(x, y, 110, 0, Math.PI*2);
+    ctx.fillStyle = "#162a45";
+    ctx.fill();
+    ctx.strokeStyle = "#3498db";
+    ctx.stroke();
+    
+    // Texte question + réponse
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "14px Arial";
+    ctx.textAlign = "center";
+    const text = q.text + "\n→ " + q.options[q.answer];
+    const lines = wrapText(ctx, text, 160);
+    lines.forEach((line, j)=>{
+      ctx.fillText(line, x, y - (lines.length*8) + j*16);
     });
+  });
 
-    document.getElementById('score').textContent=`Score: ${score}/${allQuestions.length}`;
-    document.getElementById('score-details').textContent=`Vous avez répondu correctement à ${score} questions sur ${allQuestions.length}.`;
-    const messageElement=document.getElementById('message');
-    if(score>=18){ messageElement.textContent="Excellent ! 🌟"; messageElement.className="message excellent"; }
-    else if(score>=15){ messageElement.textContent="Très Bien ! 💪"; messageElement.className="message good"; }
-    else if(score>=12){ messageElement.textContent="Bien joué ! 🤔"; messageElement.className="message good"; }
-    else{ messageElement.textContent="Continuez à réviser. 📚"; messageElement.className="message average"; }
-
-    document.getElementById('save-score-container').style.display='flex';
-    document.getElementById('results').style.display='block';
+  const link = document.createElement('a');
+  link.download = `Carte_Mentale_${theme}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
 }
 
-function saveScore(){
-    if (!checkLoginStatus()) return;
-    
-    const username = localStorage.getItem('currentUser'); 
-    const playerName = document.getElementById('player-name').value.trim(); 
-
-    if(!playerName){ 
-        alert("Erreur: L'identifiant du joueur est manquant. Veuillez vous reconnecter."); 
-        return; 
+function wrapText(ctx, text, maxWidth){
+  const words = text.split(" ");
+  const lines = [];
+  let line = "";
+  for(let i=0;i<words.length;i++){
+    const test = line + words[i] + " ";
+    const width = ctx.measureText(test).width;
+    if(width > maxWidth && i > 0){
+      lines.push(line);
+      line = words[i] + " ";
+    } else {
+      line = test;
     }
-
-    const key = `quizScores_${username}`;
-    const scores=JSON.parse(localStorage.getItem(key))||[];
-
-    const scoreText = document.getElementById('score').textContent;
-    const match = scoreText.match(/Score: (\d+)\/(\d+)/);
-    if (!match) { alert("Erreur lors de la récupération du score."); return; }
-
-    const scoreValue = parseInt(match[1]);
-    const totalValue = parseInt(match[2]);
-
-    scores.push({name:playerName, score:scoreValue, total:totalValue, date:new Date().toLocaleDateString('fr-FR')});
-    scores.sort((a,b)=>((b.score/b.total)-(a.score/a.total)));
-    localStorage.setItem(key,JSON.stringify(scores.slice(0,10)));
-
-    alert(`Score enregistré avec succès, ${playerName}!`);
-    document.getElementById('save-score-container').style.display='none';
+  }
+  lines.push(line);
+  return lines;
 }
 
-function getComment(score,total){
-    const pct=(score/total)*100;
-    if(pct>=90) return "Excellent 🌟";
-    if(pct>=80) return "Très Bien 👍";
-    if(pct>=60) return "Bien joué 🙂";
-    if(pct>=40) return "Peut mieux faire 😐";
-    return "À revoir 🔴";
-}
-
-function showLeaderboard(){
-    if (!checkLoginStatus()) return;
-    const username = localStorage.getItem('currentUser');
-    const key = `quizScores_${username}`;
-
-    const leaderboard=document.getElementById('leaderboard-container');
-    const body=document.getElementById('leaderboard-body');
-    const scores=JSON.parse(localStorage.getItem(key))||[];
-
-    body.innerHTML='';
-    if(scores.length===0) body.innerHTML='<tr><td colspan="5" style="text-align:center; color: #b0b0b0;">Aucun score enregistré pour vous.</td></tr>';
-    else{
-        scores.forEach((s,i)=>{
-            const pct=((s.score/s.total)*100).toFixed(1);
-            const comment=getComment(s.score,s.total);
-            body.innerHTML+=`<tr>
-                <td>${i+1}</td>
-                <td>${s.name}</td>
-                <td>${s.score}/${s.total} (${pct}%)</td>
-                <td>${s.date}</td>
-                <td>${comment}</td>
-            </tr>`;
-        });
-    }
-    document.getElementById('quiz-container').style.display='none';
-    leaderboard.style.display='block';
-}
-
-function hideLeaderboard(){
-    document.getElementById('leaderboard-container').style.display='none';
-    document.getElementById('quiz-container').style.display='block';
-}
-
-function clearLeaderboard(){
-    if (!checkLoginStatus()) return;
-    const username = localStorage.getItem('currentUser');
-    const key = `quizScores_${username}`;
-    if(confirm("Voulez-vous vraiment effacer votre classement personnel ?")){
-        localStorage.removeItem(key);
-        document.getElementById('leaderboard-body').innerHTML='<tr><td colspan="5" style="text-align:center; color: #b0b0b0;">Aucun score enregistré pour vous.</td></tr>';
-        alert("Votre classement a été effacé !");
-    }
-}
-
-function resetQuiz(){ loadQuiz(); }
-
-// Fonction utilitaire pour obtenir la valeur de l'option (e.g. 'b' -> '1/2 mv²')
-function getOptionValue(question, answerKey) {
-    return question.options[answerKey] ? `${answerKey}) ${question.options[answerKey]}` : answerKey;
-}
-
-// FONCTION PDF : Génère et télécharge le corrigé
-function generatePDF() {
-    if (!window.currentQuestions || window.currentQuestions.length === 0) {
-        alert("Veuillez d'abord compléter et soumettre le quiz pour générer le corrigé.");
-        return;
-    }
-
-    // Récupérer la librairie window.jsPDF
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    let y = 10;
-    const margin = 10;
-    const lineHeight = 7;
-    const maxWidth = 190;
-    
-    // Titre
-    doc.setFontSize(16);
-    doc.text("Corrigé du QCM de Physique-Chimie", margin, y);
-    y += lineHeight * 2;
-
-    doc.setFontSize(12);
-    
-    // Parcourir les questions
-    window.currentQuestions.forEach((q, i) => {
-        const questionNumber = `Question ${i + 1}/${window.currentQuestions.length} : `;
-        const questionText = q.text;
-        const correctAnswer = q.answer;
-        const answerText = getOptionValue(q, correctAnswer);
-
-        // Gérer le saut de page automatique
-        if (y > doc.internal.pageSize.height - margin * 2) {
-            doc.addPage();
-            y = margin;
-        }
-
-        doc.setFont('helvetica', 'bold');
-        doc.text(questionNumber, margin, y, { maxWidth: maxWidth });
-        
-        // Simuler le texte de la question qui peut être long
-        doc.setFont('helvetica', 'normal');
-        const textLines = doc.splitTextToSize(questionText, maxWidth);
-        doc.text(textLines, margin, y + 5, { maxWidth: maxWidth }); // Le texte commence sous le numéro
-        y += textLines.length * lineHeight; 
-        
-        // Afficher la bonne réponse
-        doc.setFont('helvetica', 'italic');
-        doc.setTextColor(34, 139, 34); // Vert forêt pour la réponse
-        doc.text(`Réponse : ${answerText}`, margin + 5, y + 2);
-        doc.setTextColor(0, 0, 0); // Remettre le noir pour le texte par défaut
-        doc.setFont('helvetica', 'normal');
-        y += lineHeight * 2;
-    });
-
-    // Enregistrement du PDF
-    doc.save("Corrigé_Quiz_Physique_Chimie.pdf");
-}
-
-window.onload = function() {
-    if (checkLoginStatus()) loadQuiz();
-};
-
+window.onload=loadQuiz;
 </script>
 </body>
 </html>
