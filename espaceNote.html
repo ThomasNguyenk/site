@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Espace Notes + Carte Mentale</title>
+<style>
+/* === STYLE GLOBAL === */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: 
+    linear-gradient(135deg, rgba(102,126,234,0.8) 0%, rgba(118,75,162,0.8) 100%),
+    url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1950&q=80') 
+    no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  margin: 0;
+  padding-top: 90px; /* espace sous le menu */
+  color: #222;
+}
+
+/* === MENU === */
+.bandeau {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: linear-gradient(135deg, #007bff, #0056d2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 30px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  z-index: 100;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.bandeau .menu-links {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.bandeau a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease;
+}
+.bandeau a::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  left: 0;
+  bottom: -3px;
+  background: #fff;
+  transition: 0.3s ease;
+}
+.bandeau a:hover::after {
+  width: 100%;
+}
+.bandeau a:hover {
+  color: #dceeff;
+}
+
+/* Menu mobile */
+.menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .menu-links {
+    display: none;
+    flex-direction: column;
+    background: #004bb0;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+  }
+  .menu-links.show { display: flex; }
+  .menu-btn { display: block; }
+}
+
+/* === STRUCTURE PRINCIPALE === */
+main {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  flex-wrap: wrap;
+  padding: 30px;
+}
+
+/* === SECTIONS === */
+.note-section, .mindmap-section {
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 25px;
+  width: 45%;
+  min-width: 350px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+  animation: fadeIn 0.6s ease;
+}
+
+h2 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+/* === FORMULAIRES === */
+textarea, input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  font-size: 15px;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+  margin-bottom: 10px;
+}
+
+button {
+  margin-top: 5px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: transform 0.2s ease;
+}
+button:hover { transform: scale(1.05); }
+
+.add-btn { background: #007bff; color: white; }
+.clear-btn { background: #e74c3c; color: white; }
+.dynamic-btn { background: #2ecc71; color: white; }
+.generate-btn { background: #9b59b6; color: white; }
+.save-btn { background: #f39c12; color: white; }
+
+/* === NOTES === */
+.note {
+  background: #fefefe;
+  border-left: 5px solid #007bff;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 10px;
+  position: relative;
+}
+.delete-note {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* === CARTE MENTALE === */
+canvas {
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  width: 100%;
+  height: 500px;
+  background: rgba(255,255,255,0.8);
+  cursor: grab;
+}
+
+.tools {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.tools select, .tools input {
+  padding: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+</style>
+</head>
+<body>
+
+<!-- 🧭 MENU NAVIGATION -->
+<div class="bandeau">
+  <button class="menu-btn" onclick="toggleMenu()">☰</button>
+  <div class="menu-links" id="menuLinks">
+    <a href="index.html">Accueil</a>
+    <a href="1ere année.html">Cours</a>
+    <a href="Quiz de révision de 1ère Année.html">Quiz</a>
+    <a href="espaceNote.html">Notes</a>
+    <a href="AideAvecIA.html">Questions IA</a>
+    <a href="Connexion étudiant.html">Connexion</a>
+  </div>
+</div>
+
+<!-- 💻 CONTENU PRINCIPAL -->
+<main>
+  <!-- 📝 Espace Notes -->
+  <div class="note-section">
+    <h2>📝 Mes Notes</h2>
+    <input type="text" id="themeInput" placeholder="Thème principal (ex : Énergie, Chimie...)">
+    <textarea id="noteInput" placeholder="Écris ta note ici... (Entrée pour valider, Maj+Entrée pour aller à la ligne)"></textarea>
+    <button class="add-btn" onclick="ajouterNote()">Ajouter</button>
+    <button class="generate-btn" onclick="generateMindmapFromNotes()">Générer Carte Mentale</button>
+    <div id="notesContainer"></div>
+  </div>
+
+  <!-- 🧠 Carte Mentale -->
+  <div class="mindmap-section">
+    <h2>🧠 Carte Mentale Dynamique</h2>
+    <div class="tools">
+      <select id="bubbleShape">
+        <option value="circle">Cercle</option>
+        <option value="rectangle">Rectangle</option>
+        <option value="rounded">Arrondi</option>
+      </select>
+      <input type="color" id="bubbleColor" value="#007bff">
+      <button class="dynamic-btn" onclick="toggleDynamic()">🌐 Dynamique</button>
+      <button class="save-btn" onclick="saveMindmap()">💾 Sauvegarder</button>
+      <button class="generate-btn" onclick="loadMindmap()">📂 Recharger</button>
+      <button class="clear-btn" onclick="clearMindmap()">🗑️ Effacer</button>
+    </div>
+    <canvas id="mindmapCanvas" width="600" height="500"></canvas>
+  </div>
+</main>
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById("menuLinks");
+  menu.classList.toggle("show");
+}
+
+/* === SCRIPT CARTE MENTALE + NOTES === */
+const canvas = document.getElementById("mindmapCanvas");
+const ctx = canvas.getContext("2d");
+let bubbles = [];
+let connections = [];
+let centerBubble = null;
+let selectedBubble = null;
+let dragging = false;
+let offsetX, offsetY;
+let dynamicMode = false;
+let animationFrame;
+
+function ajouterNote() {
+  const input = document.getElementById("noteInput");
+  const notesContainer = document.getElementById("notesContainer");
+  const text = input.value.trim();
+  if (!text) return;
+  const div = document.createElement("div");
+  div.className = "note";
+  div.textContent = text;
+  const btn = document.createElement("button");
+  btn.textContent = "✕";
+  btn.className = "delete-note";
+  btn.onclick = () => { div.remove(); saveNotes(); };
+  div.appendChild(btn);
+  notesContainer.appendChild(div);
+  input.value = "";
+  saveNotes();
+}
+document.getElementById("noteInput").addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    ajouterNote();
+  }
+});
+function saveNotes() {
+  const notes = [...document.querySelectorAll(".note")].map(n => n.textContent.replace("✕", "").trim());
+  const theme = document.getElementById("themeInput").value.trim();
+  localStorage.setItem("notes", JSON.stringify(notes));
+  localStorage.setItem("theme", theme);
+}
+function loadNotes() {
+  const saved = JSON.parse(localStorage.getItem("notes") || "[]");
+  const theme = localStorage.getItem("theme") || "";
+  document.getElementById("themeInput").value = theme;
+  const notesContainer = document.getElementById("notesContainer");
+  notesContainer.innerHTML = "";
+  saved.forEach(text => {
+    const div = document.createElement("div");
+    div.className = "note";
+    div.textContent = text;
+    const btn = document.createElement("button");
+    btn.textContent = "✕";
+    btn.className = "delete-note";
+    btn.onclick = () => { div.remove(); saveNotes(); };
+    div.appendChild(btn);
+    notesContainer.appendChild(div);
+  });
+}
+
+/* === CARTE MENTALE === */
+function generateMindmapFromNotes() {
+  const notes = [...document.querySelectorAll(".note")].map(n => n.textContent.replace("✕", "").trim());
+  const theme = document.getElementById("themeInput").value.trim() || "Thème";
+  if (notes.length === 0) return alert("Ajoute des notes d'abord !");
+  clearMindmap();
+
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+  const shape = "circle";
+  const color = "#f39c12";
+  centerBubble = { text: theme, x: centerX, y: centerY, shape, color, vx: 0, vy: 0 };
+  bubbles.push(centerBubble);
+
+  const radius = 180;
+  const noteShape = document.getElementById("bubbleShape").value;
+  const noteColor = document.getElementById("bubbleColor").value;
+
+  notes.forEach((text, i) => {
+    const angle = (i / notes.length) * 2 * Math.PI;
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle);
+    const b = { text, x, y, shape: noteShape, color: noteColor, vx: 0, vy: 0 };
+    bubbles.push(b);
+    connections.push({ a: centerBubble, b });
+  });
+  draw();
+}
+
+/* Mouvements souris */
+canvas.addEventListener("mousedown", e => {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  selectedBubble = bubbles.find(b => Math.hypot(b.x - x, b.y - y) < 50);
+  if (selectedBubble) {
+    dragging = true;
+    offsetX = x - selectedBubble.x;
+    offsetY = y - selectedBubble.y;
+  }
+});
+canvas.addEventListener("mousemove", e => {
+  if (dragging && selectedBubble) {
+    const rect = canvas.getBoundingClientRect();
+    selectedBubble.x = e.clientX - rect.left - offsetX;
+    selectedBubble.y = e.clientY - rect.top - offsetY;
+    draw();
+  }
+});
+canvas.addEventListener("mouseup", () => dragging = false);
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = "#555";
+  ctx.lineWidth = 1.5;
+  for (let c of connections) {
+    const angleA = Math.atan2(c.b.y - c.a.y, c.b.x - c.a.x);
+    const angleB = Math.atan2(c.a.y - c.b.y, c.a.x - c.b.x);
+    const r = 45;
+    const ax = c.a.x + Math.cos(angleA) * r;
+    const ay = c.a.y + Math.sin(angleA) * r;
+    const bx = c.b.x + Math.cos(angleB) * r;
+    const by = c.b.y + Math.sin(angleB) * r;
+    ctx.beginPath();
+    ctx.moveTo(ax, ay);
+    ctx.lineTo(bx, by);
+    ctx.stroke();
+  }
+  for (let b of bubbles) {
+    ctx.fillStyle = b.color;
+    ctx.beginPath();
+    if (b.shape === "circle") ctx.arc(b.x, b.y, 45, 0, Math.PI * 2);
+    else if (b.shape === "rectangle") ctx.rect(b.x - 45, b.y - 25, 90, 50);
+    else {
+      ctx.moveTo(b.x - 40, b.y - 25);
+      ctx.quadraticCurveTo(b.x - 45, b.y, b.x - 40, b.y + 25);
+      ctx.lineTo(b.x + 40, b.y + 25);
+      ctx.quadraticCurveTo(b.x + 45, b.y, b.x + 40, b.y - 25);
+      ctx.closePath();
+    }
+    ctx.fill();
+    ctx.fillStyle = "#fff";
+    ctx.font = "13px Poppins";
+    ctx.textAlign = "center";
+    ctx.fillText(b.text.slice(0, 20), b.x, b.y + 4);
+  }
+}
+
+/* Mode dynamique */
+function toggleDynamic() {
+  dynamicMode = !dynamicMode;
+  if (dynamicMode) animate();
+  else cancelAnimationFrame(animationFrame);
+}
+function animate() {
+  for (let b of bubbles) {
+    for (let other of bubbles) {
+      if (b === other) continue;
+      const dx = b.x - other.x;
+      const dy = b.y - other.y;
+      const dist = Math.hypot(dx, dy);
+      if (dist < 150 && dist > 0) {
+        const force = (150 - dist) * 0.01;
+        b.vx += (dx / dist) * force;
+        b.vy += (dy / dist) * force;
+      }
+    }
+    b.vx *= 0.9;
+    b.vy *= 0.9;
+    b.x += b.vx;
+    b.y += b.vy;
+  }
+  draw();
+  animationFrame = requestAnimationFrame(animate);
+}
+
+/* Sauvegarde */
+function saveMindmap() {
+  localStorage.setItem("mindmap_bubbles", JSON.stringify(bubbles));
+  localStorage.setItem("mindmap_connections", JSON.stringify(connections));
+  alert("💾 Carte mentale sauvegardée !");
+}
+function loadMindmap() {
+  const savedBubbles = JSON.parse(localStorage.getItem("mindmap_bubbles") || "[]");
+  const savedConnections = JSON.parse(localStorage.getItem("mindmap_connections") || "[]");
+  if (savedBubbles.length === 0) return alert("Aucune carte mentale enregistrée !");
+  bubbles = savedBubbles;
+  connections = savedConnections.map(c => ({ 
+    a: bubbles.find(b => b.text === c.a.text), 
+    b: bubbles.find(b => b.text === c.b.text) 
+  }));
+  draw();
+  alert("📂 Carte mentale rechargée !");
+}
+function clearMindmap() { bubbles = []; connections = []; draw(); }
+
+window.onload = () => { loadNotes(); loadMindmap(); };
+</script>
+</body>
+</html>
