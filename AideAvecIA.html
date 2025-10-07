@@ -27,6 +27,21 @@
       color: white; z-index: 10;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
+    .menu-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 5px 10px;
+    }
+    .menu-links {
+      display: flex;
+      gap: 5px;
+    }
+    .menu-links.hidden {
+      display: none;
+    }
     .bandeau a {
       color: white; text-decoration: none; margin: 0 12px; font-weight: 500;
       transition: 0.3s;
@@ -114,6 +129,11 @@
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(102,126,234,0.6);
     }
+    .input-container button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
     .examples {
       padding: 15px 30px; background: #f8f9fa; border-top: 1px solid #e0e0e0;
     }
@@ -134,6 +154,17 @@
     }
     ::-webkit-scrollbar-thumb {
       background: #667eea; border-radius: 4px;
+    }
+    @media (max-width: 768px) {
+      .menu-links {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        flex-direction: column;
+        padding: 20px;
+      }
     }
   </style>
 </head>
@@ -162,45 +193,407 @@
       <div class="message ai">
         <div class="avatar">🤖</div>
         <div class="message-content">
-          Bonjour ! Je suis ton assistant IA local + connecté.  
-          Je peux répondre avec ma base de connaissances ou, si ce n’est pas suffisant, via une vraie IA externe.
+          Bonjour ! Je suis ton assistant IA en physique-chimie.  
+          Je peux répondre avec ma base de connaissances locale pour les concepts clés, ou rechercher des informations plus détaillées si nécessaire.
         </div>
       </div>
     </div>
 
-
+    <div class="examples">
+      <div class="example-buttons">
+        <button class="example-btn" onclick="askExample('Explique la loi d\'Ohm')">Loi d'Ohm</button>
+        <button class="example-btn" onclick="askExample('C\'est quoi l\'énergie cinétique ?')">Énergie cinétique</button>
+        <button class="example-btn" onclick="askExample('Qu\'est-ce que le pH ?')">Le pH</button>
+        <button class="example-btn" onclick="askExample('Explique la mole')">La mole</button>
+      </div>
+    </div>
 
     <div class="input-container">
       <input type="text" id="user-input" placeholder="Pose ta question ici..." onkeypress="handleKeyPress(event)">
-      <button onclick="sendMessage()">Envoyer</button>
+      <button id="send-btn" onclick="sendMessage()">Envoyer</button>
     </div>
   </div>
 
   <script>
     // === BASE DE CONNAISSANCES LOCALE OPTIMISÉE ===
-    const knowledgeBase = {
-      "loi d'ohm": { response: "La loi d’Ohm relie la tension, le courant et la résistance.", formula: "U = R × I", details: "U : V • R : Ω • I : A" },
-      "énergie cinétique": { response: "L’énergie cinétique est l’énergie associée au mouvement.", formula: "Ec = ½ m v²", details: "m : kg, v : m/s" },
-      "énergie potentielle": { response: "L’énergie potentielle dépend de la position dans un champ gravitationnel.", formula: "Ep = m g h", details: "h : hauteur (m)" },
-      "puissance": { response: "La puissance est l’énergie par unité de temps.", formula: "P = E / t", details: "P : W, E : J, t : s" },
-      "gravitation": { response: "Deux masses s’attirent selon la loi universelle de la gravitation.", formula: "F = G (m₁ m₂) / r²", details: "G = 6,67×10⁻¹¹ N·m²/kg²" },
-      "travail": { response: "Le travail d’une force est l’énergie transférée par cette force lors d’un déplacement.", formula: "W = F d cos(θ)", details: "θ : angle entre force et déplacement" },
-      "vitesse": { response: "La vitesse est le rapport de distance sur temps.", formula: "v = d / t", details: "d : m, t : s" },
-      "ph": { response: "Le pH mesure l’acidité d’une solution.", formula: "pH = -log[H₃O⁺]", details: "pH < 7 acide • pH = 7 neutre • pH > 7 basique" },
-      "liaison covalente": { response: "Une liaison covalente est le partage d’électrons entre atomes.", details: "Simple, double ou triple, selon le nombre de paires partagées" },
-      "mole": { response: "Une mole contient 6,022×10²³ entités.", formula: "n = m / M", details: "n : mol, m : g, M : g/mol" },
-      "réaction chimique": { response: "Une réaction chimique transforme des réactifs en produits.", details: "Ex : 2 H₂ + O₂ → 2 H₂O" },
-      "oxydoréduction": { response: "Une réaction redox implique un transfert d’électrons entre espèces.", details: "Oxydation = perte d’e⁻, Réduction = gain d’e⁻" },
-      "gaz parfait": { response: "Les gaz parfaits obéissent à l’équation d’état PV = nRT.", formula: "PV = nRT", details: "R = 8,31 J/(mol·K)" }
-    };
+    const knowledgeBase = 
+    {
+     // ======================================================
+// 🔬 PHYSIQUE - MÉCANIQUE
+// ======================================================
+  "loi d'ohm": {
+    response: "La loi d'Ohm relie la tension, le courant et la résistance.",
+    formula: "U = R × I",
+    details: "U : V • R : Ω • I : A"
+  },
+  "énergie cinétique": {
+    response: "L'énergie cinétique est l'énergie associée au mouvement.",
+    formula: "Ec = ½ m v²",
+    details: "m : kg, v : m/s"
+  },
+  "énergie potentielle": {
+    response: "L'énergie potentielle dépend de la position dans un champ gravitationnel.",
+    formula: "Ep = m g h",
+    details: "h : m, g = 9,81 m/s²"
+  },
+  "puissance": {
+    response: "La puissance est l'énergie par unité de temps.",
+    formula: "P = E / t ou P = U × I",
+    details: "P : W, E : J, t : s"
+  },
+  "gravitation": {
+    response: "Deux masses s'attirent selon la loi universelle de la gravitation.",
+    formula: "F = G (m₁ m₂) / r²",
+    details: "G = 6,67×10⁻¹¹ N·m²/kg²"
+  },
+  "travail": {
+    response: "Le travail d'une force est l'énergie transférée lors d'un déplacement.",
+    formula: "W = F d cos(θ)",
+    details: "θ : angle entre la force et le déplacement"
+  },
+  "vitesse": {
+    response: "La vitesse est le rapport distance/temps.",
+    formula: "v = d / t",
+    details: "d : m, t : s"
+  },
+  "accélération": {
+    response: "Variation de la vitesse par unité de temps.",
+    formula: "a = Δv / Δt",
+    details: "a : m/s², Δv : variation de vitesse"
+  },
+  "force": {
+    response: "La force modifie le mouvement d'un objet (2e loi de Newton).",
+    formula: "F = m × a",
+    details: "F : N, m : kg, a : m/s²"
+  },
+  "quantité de mouvement": {
+    response: "Produit de la masse par la vitesse.",
+    formula: "p = m × v",
+    details: "p : kg·m/s, conservée dans un système isolé"
+  },
+  "moment d'inertie": {
+    response: "Résistance d'un corps à la rotation.",
+    formula: "I = Σ m r²",
+    details: "Cylindre : I = ½ M R²"
+  },
+  "couple": {
+    response: "Effet de rotation d'une force.",
+    formula: "M = F × d",
+    details: "M : N·m, d : bras de levier"
+  },
+  "pression": {
+    response: "Force par unité de surface.",
+    formula: "P = F / S",
+    details: "P : Pa, F : N, S : m²"
+  },
+  "masse volumique": {
+    response: "Masse par unité de volume.",
+    formula: "ρ = m / V",
+    details: "ρ : kg/m³, eau : 1000 kg/m³"
+  },
+  "poussée d'archimède": {
+    response: "Un corps immergé subit une poussée verticale vers le haut.",
+    formula: "F = ρ × V × g",
+    details: "ρ : fluide, V : volume immergé"
+  },
+
+  // ======================================================
+  // ⚡ PHYSIQUE - ÉLECTRICITÉ
+  // ======================================================
+  "résistance": {
+    response: "La résistance s'oppose au passage du courant électrique.",
+    formula: "R = ρ × L / S",
+    details: "ρ : résistivité, L : longueur, S : section"
+  },
+  "loi des nœuds": {
+    response: "La somme des courants entrants égale celle des sortants.",
+    formula: "Σ I_entrant = Σ I_sortant",
+    details: "Conservation de la charge"
+  },
+  "loi des mailles": {
+    response: "La somme des tensions le long d’une maille est nulle.",
+    formula: "Σ U = 0",
+    details: "Conservation de l’énergie"
+  },
+  "résistances en série": {
+    response: "Les résistances s'additionnent.",
+    formula: "R_eq = R₁ + R₂ + R₃ + ...",
+    details: "Même courant traverse toutes les résistances"
+  },
+  "résistances en parallèle": {
+    response: "L’inverse de la résistance équivalente est la somme des inverses.",
+    formula: "1/R_eq = 1/R₁ + 1/R₂ + ...",
+    details: "Même tension aux bornes"
+  },
+  "énergie électrique": {
+    response: "Énergie consommée par un appareil.",
+    formula: "E = P × t ou E = U × I × t",
+    details: "E : J ou Wh, P : W"
+  },
+  "effet joule": {
+    response: "Transformation de l’énergie électrique en chaleur.",
+    formula: "Q = R × I² × t",
+    details: "Q : J (chaleur), perte d’énergie"
+  },
+  "condensateur": {
+    response: "Stocke de l’énergie sous forme électrique.",
+    formula: "Q = C × U",
+    details: "C : F, Q : C"
+  },
+  "capacité": {
+    response: "Charge stockée par unité de tension.",
+    formula: "C = Q / U",
+    details: "1 F = 1 C/V"
+  },
+  "inductance": {
+    response: "Opposition d'une bobine aux variations de courant.",
+    formula: "U = L × dI/dt",
+    details: "L : H (henry)"
+  },
+
+  // ======================================================
+  // 🌊 PHYSIQUE - ONDES ET OPTIQUE
+  // ======================================================
+  "fréquence": {
+    response: "Nombre d’oscillations par seconde.",
+    formula: "f = 1 / T",
+    details: "f : Hz, T : s"
+  },
+  "longueur d'onde": {
+    response: "Distance entre deux maxima consécutifs.",
+    formula: "λ = c / f",
+    details: "λ : m, c : vitesse de la lumière"
+  },
+  "vitesse du son": {
+    response: "≈ 340 m/s dans l’air.",
+    formula: "v = d / t",
+    details: "Dépend du milieu et de la température"
+  },
+  "réfraction": {
+    response: "Déviation d’un rayon lumineux changeant de milieu.",
+    formula: "n₁ sin(i₁) = n₂ sin(i₂)",
+    details: "Loi de Snell-Descartes"
+  },
+  "indice de réfraction": {
+    response: "Mesure la déviation de la lumière dans un milieu.",
+    formula: "n = c / v",
+    details: "c : vide, v : milieu"
+  },
+  "lentilles convergentes": {
+    response: "Fait converger les rayons lumineux.",
+    formula: "1/f = 1/p + 1/p'",
+    details: "f : focale, p : objet, p' : image"
+  },
+  "grandissement": {
+    response: "Rapport taille image / taille objet.",
+    formula: "γ = p' / p = A'B' / AB",
+    details: "γ > 1 → image agrandie"
+  },
+
+  // ======================================================
+  // 🔥 PHYSIQUE - THERMODYNAMIQUE
+  // ======================================================
+  "chaleur": {
+    response: "Transfert d’énergie thermique.",
+    formula: "Q = m × c × ΔT",
+    details: "c : capacité thermique massique"
+  },
+  "température": {
+    response: "Mesure l’agitation thermique.",
+    formula: "T(K) = T(°C) + 273,15",
+    details: "0 K = -273,15°C"
+  },
+  "dilatation": {
+    response: "Augmentation de volume avec la température.",
+    formula: "ΔL = α × L₀ × ΔT",
+    details: "α : coefficient de dilatation"
+  },
+  "premier principe": {
+    response: "Conservation de l’énergie.",
+    formula: "ΔU = W + Q",
+    details: "ΔU : énergie interne, W : travail, Q : chaleur"
+  },
+
+  // ======================================================
+  // ⚗️ CHIMIE - STRUCTURE DE LA MATIÈRE
+  // ======================================================
+  "ph": {
+    response: "Mesure l’acidité d’une solution.",
+    formula: "pH = -log[H₃O⁺]",
+    details: "pH < 7 acide • =7 neutre • >7 basique"
+  },
+  "liaison covalente": {
+    response: "Partage d’électrons entre atomes.",
+    details: "Simple, double ou triple"
+  },
+  "liaison ionique": {
+    response: "Transfert d’électrons entre atomes.",
+    details: "Cation (+) et anion (-)"
+  },
+  "électronégativité": {
+    response: "Capacité d’un atome à attirer des électrons.",
+    details: "F = 4,0 (max sur l’échelle de Pauling)"
+  },
+  "configuration électronique": {
+    response: "Répartition des électrons autour du noyau.",
+    details: "Ex : O (Z=8) : 1s² 2s² 2p⁴"
+  },
+  "orbitales": {
+    response: "Régions où la probabilité de trouver un électron est élevée.",
+    details: "Types : s, p, d, f"
+  },
+  "tableau périodique": {
+    response: "Classe les éléments par numéro atomique croissant.",
+    details: "118 éléments, 7 périodes, 18 groupes"
+  },
+
+  // ======================================================
+  // 🧪 CHIMIE - QUANTITÉ DE MATIÈRE
+  // ======================================================
+  "mole": {
+    response: "Contient 6,022×10²³ entités.",
+    formula: "n = m / M",
+    details: "n : mol, m : g, M : g/mol"
+  },
+  "masse molaire": {
+    response: "Masse d’une mole de substance.",
+    formula: "M = m / n",
+    details: "M : g/mol"
+  },
+  "concentration molaire": {
+    response: "Quantité de matière par volume.",
+    formula: "C = n / V",
+    details: "C : mol/L"
+  },
+  "concentration massique": {
+    response: "Masse de soluté par volume.",
+    formula: "Cm = m / V",
+    details: "Cm : g/L"
+  },
+  "dilution": {
+    response: "Diminue la concentration d’une solution.",
+    formula: "C₁V₁ = C₂V₂",
+    details: "Quantité de matière conservée"
+  },
+  "volume molaire": {
+    response: "Volume d’une mole de gaz.",
+    formula: "Vm = V / n = 22,4 L/mol",
+    details: "0°C, 1 atm"
+  },
+
+  // ======================================================
+  // ⚛️ CHIMIE - RÉACTIONS CHIMIQUES
+  // ======================================================
+  "réaction chimique": {
+    response: "Transforme des réactifs en produits.",
+    details: "Ex : 2 H₂ + O₂ → 2 H₂O"
+  },
+  "équilibrage": {
+    response: "Respecte la conservation des atomes.",
+    details: "Même nombre d’atomes de chaque côté"
+  },
+  "stœchiométrie": {
+    response: "Étudie les proportions des substances réagissant.",
+    details: "Basée sur les coefficients de l’équation"
+  },
+  "réactif limitant": {
+    response: "Réactif consommé en premier.",
+    details: "Détermine la quantité de produits"
+  },
+  "rendement": {
+    response: "Rapport obtenu/théorique.",
+    formula: "η = (n_réel / n_théorique) × 100",
+    details: "η : %, souvent < 100%"
+  },
+  "oxydoréduction": {
+    response: "Transfert d’électrons entre espèces.",
+    details: "Oxydation = perte e⁻, Réduction = gain e⁻"
+  },
+  "oxydant": {
+    response: "Capte des électrons.",
+    details: "Se réduit"
+  },
+  "réducteur": {
+    response: "Cède des électrons.",
+    details: "S’oxyde"
+  },
+  "nombre d'oxydation": {
+    response: "Degré d’oxydation d’un élément.",
+    details: "Change lors des réactions redox"
+  },
+  "pile électrochimique": {
+    response: "Convertit énergie chimique → électrique.",
+    details: "Oxydation : anode • Réduction : cathode"
+  },
+
+  // ======================================================
+  // ⚖️ CHIMIE - ACIDES ET BASES
+  // ======================================================
+  "acide": {
+    response: "Cède un proton H⁺.",
+    details: "Ex : HCl, H₂SO₄, CH₃COOH"
+  },
+  "base": {
+    response: "Capte un proton H⁺.",
+    details: "Ex : OH⁻, NH₃, HCO₃⁻"
+  },
+  "couple acide-base": {
+    response: "Acide et sa base conjuguée.",
+    details: "Ex : CH₃COOH / CH₃COO⁻"
+  },
+  "neutralisation": {
+    response: "Réaction entre acide et base.",
+    formula: "H₃O⁺ + OH⁻ → 2 H₂O",
+    details: "Produit de l’eau et un sel"
+  },
+  "indicateur coloré": {
+    response: "Change de couleur selon le pH.",
+    details: "Ex : BBT (jaune <6, bleu >7,6)"
+  },
+  "constante d'acidité": {
+    response: "Mesure la force d’un acide.",
+    formula: "Ka = [A⁻][H₃O⁺] / [AH]",
+    details: "pKa = -log(Ka)"
+  },
+  "tampon": {
+    response: "Résiste aux variations de pH.",
+    details: "Mélange acide faible / base conjuguée"
+  },
+
+  // ======================================================
+  // 💨 CHIMIE - GAZ
+  // ======================================================
+  "gaz parfait": {
+    response: "Respecte PV = nRT.",
+    formula: "PV = nRT",
+    details: "R = 8,31 J/(mol·K)"
+  },
+  "loi de boyle": {
+    response: "P × V = constante (T constante).",
+    formula: "P₁V₁ = P₂V₂",
+    details: "Transformation isotherme"
+  },
+  "loi de charles": {
+    response: "V/T = constante (P constante).",
+    formula: "V₁/T₁ = V₂/T₂",
+    details: "Isobare, T en K"
+  },
+  "loi de gay-lussac": {
+    response: "P/T = constante (V constante).",
+    formula: "P₁/T₁ = P₂/T₂",
+    details: "Isochore, T en K"
+  }
+};
+    
 
     // === SYNONYMES / MOTS-CLÉS POUR RECHERCHE INTELLIGENTE ===
     const keywords = {
       "tension": "loi d'ohm",
       "courant": "loi d'ohm",
       "résistance": "loi d'ohm",
+      "ohm": "loi d'ohm",
       "mouvement": "énergie cinétique",
-      "vitesse": "énergie cinétique",
+      "cinétique": "énergie cinétique",
       "force": "travail",
       "gravité": "gravitation",
       "poids": "gravitation",
@@ -208,17 +601,28 @@
       "acide": "ph",
       "basique": "ph",
       "liaison": "liaison covalente",
+      "covalente": "liaison covalente",
       "mole": "mole",
       "réaction": "réaction chimique",
       "électrons": "oxydoréduction",
+      "redox": "oxydoréduction",
       "gaz": "gaz parfait"
     };
 
-    // === FONCTIONS D’AFFICHAGE ===
-    function addMessage(content, isUser = false, formula = "", details = "") {
+    let isProcessing = false;
+
+    // === FONCTION TOGGLE MENU ===
+    function toggleMenu() {
+      const menu = document.getElementById("menuLinks");
+      menu.classList.toggle("hidden");
+    }
+
+    // === FONCTIONS D'AFFICHAGE ===
+    function addMessage(content, isUser = false, formula = "", details = "", messageId = null) {
       const chat = document.getElementById("chat-container");
       const div = document.createElement("div");
       div.className = `message ${isUser ? "user" : "ai"}`;
+      if (messageId) div.id = messageId;
       div.innerHTML = `
         <div class="avatar">${isUser ? "👤" : "🤖"}</div>
         <div class="message-content">
@@ -228,6 +632,7 @@
         </div>`;
       chat.appendChild(div);
       chat.scrollTop = chat.scrollHeight;
+      return div;
     }
 
     // === RECHERCHE DANS LA BASE LOCALE ===
@@ -247,14 +652,21 @@
       return null;
     }
 
-    // === APPEL À L’IA EXTERNE VIA OPENAI ===
+    // === APPEL À L'IA EXTERNE VIA OPENAI ===
     async function askAI(question) {
+      const apiKey = "YOUR_OPENAI_API_KEY_HERE";
+      
+      // Vérification de la clé API
+      if (apiKey === "YOUR_OPENAI_API_KEY_HERE" || !apiKey) {
+        return "⚠️ La clé API OpenAI n'est pas configurée. Pour activer l'IA externe, remplacez 'YOUR_OPENAI_API_KEY_HERE' par votre vraie clé API dans le code.";
+      }
+
       try {
         const resp = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer YOUR_OPENAI_API_KEY_HERE`
+            "Authorization": `Bearer ${apiKey}`
           },
           body: JSON.stringify({
             model: "gpt-4o-mini",
@@ -271,50 +683,61 @@
             temperature: 0.7
           })
         });
+
+        if (!resp.ok) {
+          const errorData = await resp.json();
+          console.error("Erreur API:", errorData);
+          return `❌ Erreur API (${resp.status}): ${errorData.error?.message || 'Erreur inconnue'}`;
+        }
+
         const data = await resp.json();
         if (data.choices && data.choices[0].message.content) {
           return data.choices[0].message.content;
         } else {
-          return null;
+          return "❌ Réponse invalide de l'API.";
         }
       } catch (err) {
         console.error("Erreur OpenAI:", err);
-        return null;
+        return `❌ Erreur de connexion: ${err.message}`;
       }
     }
 
     // === ENVOI DE MESSAGE ===
     async function sendMessage() {
+      if (isProcessing) return;
+
       const input = document.getElementById("user-input");
+      const sendBtn = document.getElementById("send-btn");
       const question = input.value.trim();
+      
       if (!question) return;
+
+      isProcessing = true;
+      sendBtn.disabled = true;
+      
       addMessage(question, true);
       input.value = "";
 
-      // D’abord regarder dans la base locale
+      // D'abord regarder dans la base locale
       const localAns = findAnswerLocal(question);
       if (localAns) {
-        // réponse locale trouvée
         addMessage(localAns.response, false, localAns.formula, localAns.details);
+        isProcessing = false;
+        sendBtn.disabled = false;
       } else {
-        // Sinon appeler l’IA
-        addMessage("⏳ Je réfléchis…", false);
+        // Afficher le message de chargement avec un ID unique
+        const loadingMsg = addMessage("⏳ Je réfléchis…", false, "", "", "loading-message");
+        
         const aiResponse = await askAI(question);
-        // Retirer le message de « Je réfléchis… »
-        const chat = document.getElementById("chat-container");
-        const msgs = chat.querySelectorAll(".message.ai .message-content");
-        // On retire le dernier message s’il est uniquement l’indicateur
-        if (msgs.length > 0) {
-          const last = msgs[msgs.length - 1];
-          if (last.innerText.includes("Je réfléchis")) {
-            last.parentElement.remove();
-          }
+        
+        // Retirer le message de chargement
+        if (loadingMsg && loadingMsg.parentElement) {
+          loadingMsg.remove();
         }
-        if (aiResponse) {
-          addMessage(aiResponse, false);
-        } else {
-          addMessage("❌ Désolé, je n’ai pas pu obtenir une réponse. Essaie d’être plus précis ou réessaie plus tard.");
-        }
+        
+        addMessage(aiResponse, false);
+        isProcessing = false;
+        sendBtn.disabled = false;
       }
     }
 
@@ -324,7 +747,9 @@
     }
 
     function handleKeyPress(e) {
-      if (e.key === "Enter") sendMessage();
+      if (e.key === "Enter" && !isProcessing) {
+        sendMessage();
+      }
     }
 
     window.onload = function() {
