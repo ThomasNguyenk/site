@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assistant IA Physique & Chimie</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        linear-gradient(135deg, rgba(102,126,234,0.85) 0%, rgba(118,75,162,0.85) 100%),
+        url("https://a-static.besthdwallpaper.com/chemistry-and-physics-symbols-on-black-board-wallpaper-1280x800-108136_3.jpg")
+        no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 80px;
+    }
+    .bandeau {
+      position: fixed; top:0; left:0; right:0;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 30px;
+      color: white; z-index: 10;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .bandeau a {
+      color: white; text-decoration: none; margin: 0 12px; font-weight: 500;
+      transition: 0.3s;
+    }
+    .bandeau a:hover {
+      color: #dfe6ff; text-decoration: underline;
+    }
+    .container {
+      max-width: 900px; width:100%;
+      background: rgba(255,255,255,0.95);
+      border-radius:20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+      animation: fadeIn 0.5s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity:1; transform: translateY(0); }
+    }
+    .header {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; padding: 30px; text-align: center; position: relative; overflow: hidden;
+    }
+    .header h1 { font-size: 2rem; margin-bottom: 10px; }
+    .header p { font-size: 1rem; opacity: 0.9; }
+    .chat-container {
+      height: 500px; overflow-y: auto; padding: 30px; background: #f8f9fa;
+      scroll-behavior: smooth;
+    }
+    .message {
+      margin-bottom: 20px; display: flex; align-items: flex-start;
+      animation: slideIn 0.3s ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); }
+    }
+    .message.user { flex-direction: row-reverse; }
+    .message-content {
+      max-width: 70%; padding: 15px 20px; border-radius: 15px; line-height: 1.6;
+    }
+    .message.user .message-content {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border-bottom-right-radius: 5px;
+    }
+    .message.ai .message-content {
+      background: white; color: #333; border-bottom-left-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; margin: 0 10px; flex-shrink: 0;
+    }
+    .message.user .avatar {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+    }
+    .message.ai .avatar {
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+    }
+    .formula {
+      background: #f0f0f0; padding: 10px 15px; border-radius: 8px;
+      margin: 10px 0; font-family: 'Courier New', monospace;
+      border-left: 3px solid #667eea;
+    }
+    .input-container {
+      padding: 20px 30px; background: white; border-top: 1px solid #e0e0e0;
+      display: flex; gap: 15px;
+    }
+    .input-container input {
+      flex: 1; padding: 15px 20px;
+      border: 2px solid #e0e0e0; border-radius: 25px;
+      font-size: 1rem; outline: none; transition: all 0.3s;
+    }
+    .input-container input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+    }
+    .input-container button {
+      padding: 15px 30px; background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white; border: none; border-radius: 25px;
+      font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+    }
+    .input-container button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102,126,234,0.6);
+    }
+    .examples {
+      padding: 15px 30px; background: #f8f9fa; border-top: 1px solid #e0e0e0;
+    }
+    .example-buttons {
+      display: flex; gap: 10px; flex-wrap: wrap;
+    }
+    .example-btn {
+      padding: 8px 15px; background: white;
+      border: 1px solid #e0e0e0; border-radius: 15px;
+      font-size: 0.9rem; cursor: pointer; transition: all 0.3s;
+      color: #667eea;
+    }
+    .example-btn:hover {
+      background: #667eea; color: white; transform: translateY(-2px);
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #667eea; border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bandeau">
+    <div class="logo">🔬 Physique & Chimie IA</div>
+    <div class="menu-links">
+      <a href="index.html">Accueil</a>
+      <a href="1ere année.html">Cours</a>
+      <a href="Quiz de révision de 1ère Année.html">Quiz</a>
+      <a href="espaceNote.html">Notes</a>
+      <a href="AideAvecIA.html">Assistant IA</a>
+      <a href="Connexion étudiant.html">Connexion</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <h1>🧠 Assistant IA Physique-Chimie</h1>
+      <p>Pose ta question et obtiens une explication claire et riche !</p>
+    </div>
+
+    <div class="chat-container" id="chat-container">
+      <div class="message ai">
+        <div class="avatar">🤖</div>
+        <div class="message-content">
+          Bonjour ! Je suis ton assistant IA local + connecté.  
+          Je peux répondre avec ma base de connaissances ou, si ce n’est pas suffisant, via une vraie IA externe.
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="input-container">
+      <input type="text" id="user-input" placeholder="Pose ta question ici..." onkeypress="handleKeyPress(event)">
+      <button onclick="sendMessage()">Envoyer</button>
+    </div>
+  </div>
+
+  <script>
+    // === BASE DE CONNAISSANCES LOCALE OPTIMISÉE ===
+    const knowledgeBase = {
+      "loi d'ohm": { response: "La loi d’Ohm relie la tension, le courant et la résistance.", formula: "U = R × I", details: "U : V • R : Ω • I : A" },
+      "énergie cinétique": { response: "L’énergie cinétique est l’énergie associée au mouvement.", formula: "Ec = ½ m v²", details: "m : kg, v : m/s" },
+      "énergie potentielle": { response: "L’énergie potentielle dépend de la position dans un champ gravitationnel.", formula: "Ep = m g h", details: "h : hauteur (m)" },
+      "puissance": { response: "La puissance est l’énergie par unité de temps.", formula: "P = E / t", details: "P : W, E : J, t : s" },
+      "gravitation": { response: "Deux masses s’attirent selon la loi universelle de la gravitation.", formula: "F = G (m₁ m₂) / r²", details: "G = 6,67×10⁻¹¹ N·m²/kg²" },
+      "travail": { response: "Le travail d’une force est l’énergie transférée par cette force lors d’un déplacement.", formula: "W = F d cos(θ)", details: "θ : angle entre force et déplacement" },
+      "vitesse": { response: "La vitesse est le rapport de distance sur temps.", formula: "v = d / t", details: "d : m, t : s" },
+      "ph": { response: "Le pH mesure l’acidité d’une solution.", formula: "pH = -log[H₃O⁺]", details: "pH < 7 acide • pH = 7 neutre • pH > 7 basique" },
+      "liaison covalente": { response: "Une liaison covalente est le partage d’électrons entre atomes.", details: "Simple, double ou triple, selon le nombre de paires partagées" },
+      "mole": { response: "Une mole contient 6,022×10²³ entités.", formula: "n = m / M", details: "n : mol, m : g, M : g/mol" },
+      "réaction chimique": { response: "Une réaction chimique transforme des réactifs en produits.", details: "Ex : 2 H₂ + O₂ → 2 H₂O" },
+      "oxydoréduction": { response: "Une réaction redox implique un transfert d’électrons entre espèces.", details: "Oxydation = perte d’e⁻, Réduction = gain d’e⁻" },
+      "gaz parfait": { response: "Les gaz parfaits obéissent à l’équation d’état PV = nRT.", formula: "PV = nRT", details: "R = 8,31 J/(mol·K)" }
+    };
+
+    // === SYNONYMES / MOTS-CLÉS POUR RECHERCHE INTELLIGENTE ===
+    const keywords = {
+      "tension": "loi d'ohm",
+      "courant": "loi d'ohm",
+      "résistance": "loi d'ohm",
+      "mouvement": "énergie cinétique",
+      "vitesse": "énergie cinétique",
+      "force": "travail",
+      "gravité": "gravitation",
+      "poids": "gravitation",
+      "potentielle": "énergie potentielle",
+      "acide": "ph",
+      "basique": "ph",
+      "liaison": "liaison covalente",
+      "mole": "mole",
+      "réaction": "réaction chimique",
+      "électrons": "oxydoréduction",
+      "gaz": "gaz parfait"
+    };
+
+    // === FONCTIONS D’AFFICHAGE ===
+    function addMessage(content, isUser = false, formula = "", details = "") {
+      const chat = document.getElementById("chat-container");
+      const div = document.createElement("div");
+      div.className = `message ${isUser ? "user" : "ai"}`;
+      div.innerHTML = `
+        <div class="avatar">${isUser ? "👤" : "🤖"}</div>
+        <div class="message-content">
+          ${content}
+          ${formula ? `<div class="formula">${formula}</div>` : ""}
+          ${details ? `<div style="margin-top:10px;font-size:0.9rem;">${details}</div>` : ""}
+        </div>`;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    // === RECHERCHE DANS LA BASE LOCALE ===
+    function findAnswerLocal(question) {
+      const lower = question.toLowerCase();
+      for (const key in knowledgeBase) {
+        if (lower.includes(key)) {
+          return knowledgeBase[key];
+        }
+      }
+      for (const kw in keywords) {
+        if (lower.includes(kw)) {
+          const target = keywords[kw];
+          return knowledgeBase[target];
+        }
+      }
+      return null;
+    }
+
+    // === APPEL À L’IA EXTERNE VIA OPENAI ===
+    async function askAI(question) {
+      try {
+        const resp = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer YOUR_OPENAI_API_KEY_HERE`
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            messages: [
+              {
+                role: "system",
+                content: "Tu es un assistant expert en physique et chimie, tu expliques clairement les concepts, formules, exercices."
+              },
+              {
+                role: "user",
+                content: question
+              }
+            ],
+            temperature: 0.7
+          })
+        });
+        const data = await resp.json();
+        if (data.choices && data.choices[0].message.content) {
+          return data.choices[0].message.content;
+        } else {
+          return null;
+        }
+      } catch (err) {
+        console.error("Erreur OpenAI:", err);
+        return null;
+      }
+    }
+
+    // === ENVOI DE MESSAGE ===
+    async function sendMessage() {
+      const input = document.getElementById("user-input");
+      const question = input.value.trim();
+      if (!question) return;
+      addMessage(question, true);
+      input.value = "";
+
+      // D’abord regarder dans la base locale
+      const localAns = findAnswerLocal(question);
+      if (localAns) {
+        // réponse locale trouvée
+        addMessage(localAns.response, false, localAns.formula, localAns.details);
+      } else {
+        // Sinon appeler l’IA
+        addMessage("⏳ Je réfléchis…", false);
+        const aiResponse = await askAI(question);
+        // Retirer le message de « Je réfléchis… »
+        const chat = document.getElementById("chat-container");
+        const msgs = chat.querySelectorAll(".message.ai .message-content");
+        // On retire le dernier message s’il est uniquement l’indicateur
+        if (msgs.length > 0) {
+          const last = msgs[msgs.length - 1];
+          if (last.innerText.includes("Je réfléchis")) {
+            last.parentElement.remove();
+          }
+        }
+        if (aiResponse) {
+          addMessage(aiResponse, false);
+        } else {
+          addMessage("❌ Désolé, je n’ai pas pu obtenir une réponse. Essaie d’être plus précis ou réessaie plus tard.");
+        }
+      }
+    }
+
+    function askExample(q) {
+      document.getElementById("user-input").value = q;
+      sendMessage();
+    }
+
+    function handleKeyPress(e) {
+      if (e.key === "Enter") sendMessage();
+    }
+
+    window.onload = function() {
+      document.getElementById("user-input").focus();
+    };
+  </script>
+</body>
+</html>
