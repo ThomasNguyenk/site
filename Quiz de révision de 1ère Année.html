@@ -7,121 +7,281 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
-/* --- STYLE GLOBAL --- */
+/* --- STYLE GLOBAL (Inchangé) --- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: url('https://e0.pxfuel.com/wallpapers/955/776/desktop-wallpaper-assassins-creed-4-logo-version-black-flag-game-2013-assassin-s-creed-logo.jpg') no-repeat center center fixed;
-  background-size: cover;
-  color: #e0e0e0;
-  min-height: 100vh;
-  padding: 20px;
-  background-color: #1a1a2e;
+    font-family: 'Roboto', sans-serif;
+    background: url('https://e0.pxfuel.com/wallpapers/955/776/desktop-wallpaper-assassins-creed-4-logo-version-black-flag-game-2013-assassin-s-creed-logo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #e0e0e0;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #1a1a2e;
 }
 
 .container { max-width: 1000px; margin: auto; }
 
-/* HEADER */
 header {
-  text-align: center;
-  padding: 40px 20px;
-  color: white;
-  text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
-  background: linear-gradient(rgba(16, 16, 32, 0.8), rgba(16, 16, 32, 0.8)), url('https://e1.pxfuel.com/desktop-wallpaper/344/998/desktop-wallpaper-assassin-s-creed-for-pc-10041-assassin-creed.jpg') no-repeat center center;
-  background-size: cover;
-  border-radius: 15px;
-  border: 2px solid #5757a3;
-  box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+    text-align: center;
+    padding: 40px 20px;
+    color: white;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+    background: linear-gradient(rgba(16, 16, 32, 0.8), rgba(16, 16, 32, 0.8)), url('https://e1.pxfuel.com/desktop-wallpaper/344/998/desktop-wallpaper-assassin-s-creed-for-pc-10041-assassin-creed.jpg') no-repeat center center;
+    background-size: cover;
+    border-radius: 15px;
+    border: 2px solid #5757a3;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+    margin-bottom: 20px;
 }
 
-h1 { font-size: 2.8rem; color: #92dff3; }
-.subtitle { font-size: 1.3rem; opacity: 0.9; font-style: italic; }
+h1 { 
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3rem; 
+    color: #92dff3; 
+    letter-spacing: 2px;
+}
+.subtitle { font-size: 1.4rem; opacity: 0.9; font-style: italic; font-weight: 300; }
 
-/* --- BLOCS --- */
+/* --- BLOCS QUIZ --- */
 .quiz-container {
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(8px);
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
 .quiz-header {
-  background: #0d1a33;
-  color: white;
-  padding: 25px;
-  text-align: center;
-  border-bottom: 2px solid #5757a3;
+    background: #0d1a33;
+    color: white;
+    padding: 20px 25px;
+    text-align: center;
+    border-bottom: 3px solid #5757a3;
 }
+.quiz-header h2 { font-size: 1.5rem; }
+
+/* Sélections */
+#questionType, #questionCount {
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: 1px solid #5757a3;
+    background-color: #1a1a2e;
+    color: white;
+    appearance: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#questionType:hover, #questionCount:hover { background-color: #2a2a4e; }
+
+/* PROGRESS BAR */
+.progress-bar-container {
+    height: 10px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #92dff3;
+    transition: width 0.4s ease;
+    border-radius: 0 5px 5px 0;
+}
+
 
 /* --- QUESTIONS --- */
 .quiz-body { padding: 30px; }
 
 .question {
-  margin-bottom: 30px;
-  padding: 20px;
-  background: rgba(0,0,0,0.3);
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    margin-bottom: 30px;
+    padding: 25px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+    border-left: 5px solid #5757a3;
+    transition: all 0.3s ease;
 }
 
-.question-number { color: #ffcc00; font-weight: bold; margin-bottom: 10px; }
-.question-text { font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; color: #fff; }
+.question-number { color: #ffcc00; font-weight: bold; margin-bottom: 10px; font-size: 1em; }
+.question-text { font-size: 1.3rem; font-weight: 400; margin-bottom: 20px; color: #fff; }
 
+/* INTERACTIVITÉ OPTION */
 .option {
-  padding: 12px;
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 8px;
-  cursor: pointer;
-  background: rgba(255,255,255,0.05);
-  margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 10px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.05);
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-.option:hover { background: rgba(70,70,150,0.3); }
+.option:hover { 
+    background: rgba(70,70,150,0.4); 
+    border-color: #92dff3;
+}
+
+/* Personnalisation du Radio Button pour l'esthétique */
+.option input[type="radio"] { display: none; }
+
+.option span { margin-left: 15px; transition: color 0.3s; }
+
+/* Cercle de style pour le radio button */
+.option:before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #92dff3;
+    background-color: transparent;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* État sélectionné */
 .option input[type="radio"]:checked + span { font-weight: bold; color: #92dff3; }
 
+.option input[type="radio"]:checked ~ .option::before {
+    background-color: #92dff3;
+    border-color: #92dff3;
+}
+.option input[type="radio"]:checked ~ span { color: #92dff3; }
+
+.option[data-selected="true"]::before {
+    background-color: #92dff3 !important;
+    border-color: #92dff3 !important;
+}
+
+
+/* --- FEEDBACK VISUEL (Après correction) --- */
+.question.correct {
+    border-left: 5px solid #2ecc71; 
+    background: rgba(46, 204, 113, 0.2);
+}
+.question.incorrect {
+    border-left: 5px solid #e74c3c; 
+    background: rgba(231, 76, 60, 0.2);
+}
+
+.option.is-correct {
+    background: rgba(46, 204, 113, 0.3);
+    border-color: #2ecc71;
+    font-weight: bold;
+}
+.option.is-correct:before {
+    border-color: #2ecc71;
+    background-color: #2ecc71 !important;
+}
+
+.option.is-incorrect-selection {
+    background: rgba(231, 76, 60, 0.3);
+    border-color: #e74c3c;
+    text-decoration: line-through;
+}
+.option.is-incorrect-selection:before {
+    border-color: #e74c3c;
+    background-color: #e74c3c !important;
+}
+
+
 /* --- BOUTONS --- */
-.buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.buttons { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
 .btn {
-  padding: 12px 25px; border: none; border-radius: 8px;
-  font-size: 1rem; cursor: pointer;
-  transition: all 0.3s ease;
+    padding: 12px 25px; border: none; border-radius: 8px;
+    font-size: 1rem; cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 700;
+    text-transform: uppercase;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 .submit-btn { background: #5757a3; color: white; }
-.reset-btn { background: #e74c3c; color: white; }
-.pdf-btn { background: #3498db; color: white; }
-.pdf-btn:hover { background: #2980b9; }
-.mindmap-btn { background: #16a085; color: white; }
-.mindmap-btn:hover { background: #138d75; }
+
 
 /* --- RÉSULTATS --- */
 .results {
-  display: none;
-  margin-top: 30px;
-  padding: 20px;
-  border-radius: 10px;
-  background: rgba(16,16,32,0.8);
-  border: 1px solid #5757a3;
-  color: white;
-  text-align: center;
+    margin-top: 30px;
+    padding: 30px;
+    border-radius: 15px;
+    background: rgba(16,16,32,0.9);
+    border: 2px solid #92dff3;
+    color: white;
+    text-align: center;
+    transform: scale(0.9);
+    opacity: 0;
+    transition: all 0.5s ease;
+    display: none; 
+}
+.results.show {
+    display: block;
+    transform: scale(1);
+    opacity: 1;
 }
 
-.score { font-size: 2rem; color: #ffcc00; }
-.message { font-size: 1.3rem; margin: 10px 0; }
+.score { font-size: 2.5rem; color: #ffcc00; font-weight: 700; margin-bottom: 5px; }
+.message { font-size: 1.5rem; margin: 10px 0 20px 0; font-style: italic; }
+
+
+/* --- STYLES HISTORIQUE DES SCORES --- */
+#scoreHistory { text-align: left; }
+#scoreHistory h4 {
+    color: #ffcc00;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 5px;
+}
+#scoreHistory table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 0.95em;
+    text-align: left;
+    border-radius: 8px;
+    overflow: hidden;
+}
+#scoreHistory th, #scoreHistory td {
+    padding: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+#scoreHistory th {
+    color: #92dff3;
+    background-color: rgba(0,0,0,0.4);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#scoreHistory td {
+    color: #e0e0e0;
+}
+.review-comment {
+    font-size: 0.85em;
+    color: #ffcc00; 
+    font-style: italic;
+    font-weight: 300;
+}
+.review-comment.none {
+    color: #2ecc71; 
+    font-style: normal;
+}
+
 
 /* --- FOOTER --- */
 footer {
-  text-align: center;
-  padding: 15px;
-  color: #b0b0b0;
-  font-size: 0.85rem;
-  background-color: rgba(16,16,32,0.95);
-  border-top: 2px solid #5757a3;
-  box-shadow: 0 -2px 8px rgba(0,0,0,0.5);
+    text-align: center;
+    padding: 15px;
+    color: #b0b0b0;
+    font-size: 0.85rem;
+    background-color: rgba(16,16,32,0.95);
+    border-top: 2px solid #5757a3;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.5);
+    margin-top: 20px;
 }
 </style>
 </head>
@@ -129,717 +289,414 @@ footer {
 <body>
 <div class="container">
 <header>
-  <h1>QCM de Physique-Chimie</h1>
-  <p class="subtitle">Niveau Première - Testez vos connaissances ✨</p>
+    <h1>QCM de Physique-Chimie</h1>
+    <p class="subtitle">Niveau Première - Testez vos connaissances ✨</p>
 </header>
 
 <div class="quiz-container">
-  <div class="quiz-header">
-    <h2>Questionnaire à Choix Multiples</h2>
-    <div style="margin-top: 10px;">
-      <label for="questionType">Type de questions :</label>
-      <select id="questionType" onchange="loadQuiz()">
-        <option value="mixte" selected>Physique + Chimie</option>
-        <option value="physique">Physique uniquement</option>
-        <option value="chimie">Chimie uniquement</option>
-      </select>
-      &nbsp;&nbsp;
-      <label for="questionCount">Nombre de questions :</label>
-      <select id="questionCount" onchange="loadQuiz()">
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="15">15</option>
-        <option value="20" selected>20</option>
-      </select>
+    <div class="quiz-header">
+        <h2>Questionnaire à Choix Multiples</h2>
+        <div style="margin-top: 15px;">
+            <label for="questionType">Type de questions :</label>
+            <select id="questionType" onchange="loadQuiz()">
+                <option value="mixte" selected>Physique + Chimie</option>
+                <option value="physique">Physique uniquement</option>
+                <option value="chimie">Chimie uniquement</option>
+            </select>
+            &nbsp;&nbsp;
+            <label for="questionCount">Nombre de questions :</label>
+            <select id="questionCount" onchange="loadQuiz()">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20" selected>20</option>
+            </select>
+        </div>
     </div>
-  </div>
-
-  <div class="quiz-body">
-    <div id="quiz"></div>
-
-    <div class="buttons">
-      <button class="btn submit-btn" onclick="checkAnswers()">Soumettre</button>
-      <button class="btn reset-btn" onclick="loadQuiz()">Réinitialiser</button>
+    
+    <div class="progress-bar-container">
+        <div id="progressBar" class="progress-bar"></div>
     </div>
 
-    <div class="results" id="results">
-      <div class="score" id="score"></div>
-      <div class="message" id="message"></div>
-      <div class="buttons">
-        <button class="btn pdf-btn" onclick="generatePDF()">Télécharger le corrigé</button>
-        <button class="btn mindmap-btn" onclick="generateMindMap()">Carte mentale du thème</button>
-        <button class="btn reset-btn" onclick="loadQuiz()">Recommencer</button>
-      </div>
+    <div class="quiz-body">
+        <div id="quiz"></div>
+
+        <div class="buttons quiz-actions">
+            <button class="btn submit-btn" id="submitBtn" onclick="checkAnswers()">Soumettre</button>
+            <button class="btn reset-btn" onclick="loadQuiz()">Réinitialiser</button>
+        </div>
+
+        <div class="results" id="results">
+            <div class="score" id="score"></div>
+            <div class="message" id="message"></div>
+            
+            <div id="scoreHistory" style="margin-top: 25px;">
+                </div>
+
+            <div class="buttons">
+                <button class="btn pdf-btn" onclick="generatePDF()">Télécharger le corrigé</button>
+                <button class="btn mindmap-btn" onclick="generateMindMap()">Carte mentale du thème</button>
+                <button class="btn reset-btn" onclick="loadQuiz()">Recommencer</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <footer><p>&copy; 2025 Nguyen Thomas. Tous droits réservés.</p></footer>
 </div>
 
 <script>
-// --- QUESTIONS (avec type) ---
-// --- QUESTIONS (50 questions au total, mix physique/chimie) ---
+// --- BANQUE DE QUESTIONS (INCHANGÉE) ---
 const questions = [
-  // QUESTIONS ORIGINALES
-  {
-    text: "Quelle est la formule de l'énergie cinétique ?",
-    options: {
-      a: "Ec = mv",
-      b: "Ec = 1/2 mv²",
-      c: "Ec = m/v",
-      d: "Ec = m×v²"
-    },
-    answer: "b"
-  },
-  {
-    text: "Quelle est l'unité de la force ?",
-    options: {
-      a: "Joule",
-      b: "Newton",
-      c: "Pascal",
-      d: "Watt"
-    },
-    answer: "b"
-  },
-  {
-    text: "Quelle est la loi reliant U, R et I ?",
-    options: {
-      a: "Loi de Newton",
-      b: "Loi d'Ohm",
-      c: "Loi de Coulomb",
-      d: "Loi de Joule"
-    },
-    answer: "b"
-  },
-  {
-    text: "Quelle est la formule de la masse volumique ?",
-    options: {
-      a: "ρ = m/V",
-      b: "ρ = V/m",
-      c: "ρ = m×V",
-      d: "ρ = m+V"
-    },
-    answer: "a"
-  },
-  {
-    text: "Quelle est la constante de gravitation universelle ?",
-    options: {
-      a: "9,81",
-      b: "6,67×10⁻¹¹",
-      c: "3×10⁸",
-      d: "1,6×10⁻¹⁹"
-    },
-    answer: "b"
-  },
-  {
-    text: "Quelle est l'unité de la pression ?",
-    options: {
-      a: "Pa",
-      b: "N",
-      c: "J",
-      d: "W"
-    },
-    answer: "a"
-  },
-  {
-    text: "Quelle particule n'a pas de charge ?",
-    options: {
-      a: "Proton",
-      b: "Neutron",
-      c: "Électron",
-      d: "Ion"
-    },
-    answer: "b"
-  },
-  {
-    text: "Quelle est la vitesse de la lumière ?",
-    options: {
-      a: "3×10⁸ m/s",
-      b: "9,8 m/s²",
-      c: "1,6×10⁻¹⁹ m/s",
-      d: "6,02×10²³ m/s"
-    },
-    answer: "a"
-  },
-  {
-    text: "Quelle est la charge élémentaire ?",
-    options: {
-      a: "9,81 N",
-      b: "6,67×10⁻¹¹ N.m²/kg²",
-      c: "1,6×10⁻¹⁹ C",
-      d: "3×10⁸ m/s"
-    },
-    answer: "c"
-  },
-  {
-    text: "Quelle loi décrit la force électrostatique ?",
-    options: {
-      a: "Loi de Coulomb",
-      b: "Loi de Newton",
-      c: "Loi d'Ohm",
-      d: "Loi de Joule"
-    },
-    answer: "a"
-  },
-  {
-    text: "Quelle est la formule de la vitesse ?",
-    options: {
-      a: "v = d/t",
-      b: "v = t/d",
-      c: "v = d×t",
-      d: "v = d-t"
-    },
-    answer: "a"
-  },
-  {
-    text: "Quelle est l'unité de l'énergie ?",
-    options: {
-      a: "Joule",
-      b: "Newton",
-      c: "Watt",
-      d: "Volt"
-    },
-    answer: "a"
-  },
-  {
-    text: "Quelle est l'équation de la loi des gaz parfaits ?",
-    options: {
-      a: "PV = nRT",
-      b: "P = F/S",
-      c: "E = mc²",
-      d: "U = RI"
-    },
-    answer: "a"
-  },
-  {
-    text: "Quelle est l'unité de la puissance électrique ?",
-    options: {
-      a: "Watt",
-      b: "Joule",
-      c: "Volt",
-      d: "Ampère"
-    },
-    answer: "a"
-  },
-  {
-    text: "La lumière se comporte comme :",
-    options: {
-      a: "Une onde",
-      b: "Une particule",
-      c: "Les deux",
-      d: "Ni l'un ni l'autre"
-    },
-    answer: "c"
-  },
-  {
-    text: "L'énergie potentielle de pesanteur d'un objet dépend de sa vitesse.",
-    options: { a: "Vrai", b: "Faux" },
-    answer: "b"
-  },
-  {
-    text: "Dans une solution aqueuse, le pH est d'autant plus faible que la concentration en ions H₃O⁺ est élevée.",
-    options: { a: "Vrai", b: "Faux" },
-    answer: "a"
-  },
-  {
-    text: "Le principe d'inertie stipule qu'un objet soumis à des forces qui se compensent est nécessairement immobile.",
-    options: { a: "Vrai", b: "Faux" },
-    answer: "b"
-  },
-  {
-    text: "Un atome est électriquement neutre car il possède autant de protons que de neutrons.",
-    options: { a: "Vrai", b: "Faux" },
-    answer: "b"
-  },
-  {
-    text: "La puissance électrique P consommée par un dipôle s'exprime par la relation P = R × I².",
-    options: { a: "Vrai", b: "Faux" },
-    answer: "a"
-  },
-
-  // --- NOUVELLES QUESTIONS (30 questions alternant physique/chimie) ---
-  // PHYSIQUE 1
-  {
-    text: "Quelle est la formule de l'énergie potentielle de pesanteur ?",
-    options: {
-      a: "Ep = mgh",
-      b: "Ep = 1/2 mv²",
-      c: "Ep = mh",
-      d: "Ep = gh"
-    },
-    answer: "a"
-  },
-  // CHIMIE 1
-  {
-    text: "Quelle est la formule chimique de l'eau ?",
-    options: {
-      a: "H₂O₂",
-      b: "HO",
-      c: "H₂O",
-      d: "H₃O"
-    },
-    answer: "c"
-  },
-  // PHYSIQUE 2
-  {
-    text: "Quelle est la deuxième loi de Newton ?",
-    options: {
-      a: "F = ma",
-      b: "F = m/a",
-      c: "F = m + a",
-      d: "F = a/m"
-    },
-    answer: "a"
-  },
-  // CHIMIE 2
-  {
-    text: "Quel est le nombre d'Avogadro ?",
-    options: {
-      a: "3×10⁸",
-      b: "6,02×10²³",
-      c: "1,6×10⁻¹⁹",
-      d: "9,81"
-    },
-    answer: "b"
-  },
-  // PHYSIQUE 3
-  {
-    text: "Quelle est l'unité de la fréquence ?",
-    options: {
-      a: "Hertz",
-      b: "Joule",
-      c: "Watt",
-      d: "Newton"
-    },
-    answer: "a"
-  },
-  // CHIMIE 3
-  {
-    text: "Quel est le pH d'une solution neutre à 25°C ?",
-    options: {
-      a: "0",
-      b: "7",
-      c: "14",
-      d: "1"
-    },
-    answer: "b"
-  },
-  // PHYSIQUE 4
-  {
-    text: "Quelle est la formule du travail d'une force constante ?",
-    options: {
-      a: "W = F×d",
-      b: "W = F/d",
-      c: "W = F×d×cosθ",
-      d: "W = m×g×h"
-    },
-    answer: "c"
-  },
-  // CHIMIE 4
-  {
-    text: "Quelle est la formule du dioxyde de carbone ?",
-    options: {
-      a: "CO",
-      b: "CO₂",
-      c: "C₂O",
-      d: "CO₃"
-    },
-    answer: "b"
-  },
-  // PHYSIQUE 5
-  {
-    text: "Quelle est l'unité de la charge électrique ?",
-    options: {
-      a: "Ampère",
-      b: "Volt",
-      c: "Coulomb",
-      d: "Ohm"
-    },
-    answer: "c"
-  },
-  // CHIMIE 5
-  {
-    text: "Quelle est la masse molaire de l'eau (H₂O) ?",
-    options: {
-      a: "16 g/mol",
-      b: "18 g/mol",
-      c: "20 g/mol",
-      d: "22 g/mol"
-    },
-    answer: "b"
-  },
-  // PHYSIQUE 6
-  {
-    text: "Quelle est la formule de la période T d'un pendule simple ?",
-    options: {
-      a: "T = 2π√(L/g)",
-      b: "T = 2π√(g/L)",
-      c: "T = π√(L/g)",
-      d: "T = √(L/g)"
-    },
-    answer: "a"
-  },
-  // CHIMIE 6
-  {
-    text: "Quel gaz compose environ 78% de l'atmosphère terrestre ?",
-    options: {
-      a: "Oxygène",
-      b: "Dioxyde de carbone",
-      c: "Azote",
-      d: "Argon"
-    },
-    answer: "c"
-  },
-  // PHYSIQUE 7
-  {
-    text: "Quelle est l'unité de la résistance électrique ?",
-    options: {
-      a: "Ohm",
-      b: "Volt",
-      c: "Ampère",
-      d: "Watt"
-    },
-    answer: "a"
-  },
-  // CHIMIE 7
-  {
-    text: "Quelle est la formule de l'acide sulfurique ?",
-    options: {
-      a: "HCl",
-      b: "H₂SO₄",
-      c: "HNO₃",
-      d: "H₃PO₄"
-    },
-    answer: "b"
-  },
-  // PHYSIQUE 8
-  {
-    text: "Quelle est la relation entre puissance, énergie et temps ?",
-    options: {
-      a: "P = E×t",
-      b: "P = E/t",
-      c: "P = t/E",
-      d: "P = E+t"
-    },
-    answer: "b"
-  },
-  // CHIMIE 8
-  {
-    text: "Quel est le symbole chimique du sodium ?",
-    options: {
-      a: "S",
-      b: "So",
-      c: "Na",
-      d: "Sd"
-    },
-    answer: "c"
-  },
-  // PHYSIQUE 9
-  {
-    text: "Quelle est la formule de l'accélération ?",
-    options: {
-      a: "a = Δv/Δt",
-      b: "a = v×t",
-      c: "a = v/t²",
-      d: "a = v+t"
-    },
-    answer: "a"
-  },
-  // CHIMIE 9
-  {
-    text: "Quelle est la formule du méthane ?",
-    options: {
-      a: "CH₄",
-      b: "C₂H₆",
-      c: "CH₃",
-      d: "C₃H₈"
-    },
-    answer: "a"
-  },
-  // PHYSIQUE 10
-  {
-    text: "Quelle est l'unité du champ électrique ?",
-    options: {
-      a: "V/m",
-      b: "N/C",
-      c: "Les deux",
-      d: "Aucune des deux"
-    },
-    answer: "c"
-  },
-  // CHIMIE 10
-  {
-    text: "Combien d'électrons peut contenir la couche électronique K (n=1) ?",
-    options: {
-      a: "2",
-      b: "8",
-      c: "18",
-      d: "32"
-    },
-    answer: "a"
-  },
-  // PHYSIQUE 11
-  {
-    text: "Quelle est la loi de conservation en mécanique ?",
-    options: {
-      a: "Conservation de la masse",
-      b: "Conservation de l'énergie",
-      c: "Conservation de la charge",
-      d: "Toutes ces réponses"
-    },
-    answer: "b"
-  },
-  // CHIMIE 11
-  {
-    text: "Quelle est la formule de l'ion hydroxyde ?",
-    options: {
-      a: "H⁺",
-      b: "OH⁻",
-      c: "H₃O⁺",
-      d: "O²⁻"
-    },
-    answer: "b"
-  },
-  // PHYSIQUE 12
-  {
-    text: "Quelle est l'unité de l'intensité lumineuse ?",
-    options: {
-      a: "Lumen",
-      b: "Candela",
-      c: "Lux",
-      d: "Watt"
-    },
-    answer: "b"
-  },
-  // CHIMIE 12
-  {
-    text: "Quel type de liaison chimique implique un partage d'électrons ?",
-    options: {
-      a: "Liaison ionique",
-      b: "Liaison covalente",
-      c: "Liaison métallique",
-      d: "Liaison hydrogène"
-    },
-    answer: "b"
-  },
-  // PHYSIQUE 13
-  {
-    text: "Quelle est la formule de la longueur d'onde λ en fonction de la vitesse c et de la fréquence f ?",
-    options: {
-      a: "λ = c×f",
-      b: "λ = c/f",
-      c: "λ = f/c",
-      d: "λ = c+f"
-    },
-    answer: "b"
-  },
-  // CHIMIE 13
-  {
-    text: "Quelle est la configuration électronique de l'atome de carbone (Z=6) ?",
-    options: {
-      a: "1s² 2s² 2p²",
-      b: "1s² 2s² 2p⁴",
-      c: "1s² 2s¹ 2p³",
-      d: "1s² 2s² 2p⁶"
-    },
-    answer: "a"
-  },
-  // PHYSIQUE 14
-  {
-    text: "Dans un circuit en série, que peut-on dire de l'intensité ?",
-    options: {
-      a: "Elle varie",
-      b: "Elle est identique partout",
-      c: "Elle diminue",
-      d: "Elle augmente"
-    },
-    answer: "b"
-  },
-  // CHIMIE 14
-  {
-    text: "Quelle est la formule de l'ammoniac ?",
-    options: {
-      a: "NH₂",
-      b: "NH₃",
-      c: "NH₄",
-      d: "N₂H₄"
-    },
-    answer: "b"
-  },
-  // PHYSIQUE 15
-  {
-    text: "Quelle grandeur physique est mesurée en Tesla ?",
-    options: {
-      a: "Le champ électrique",
-      b: "Le champ magnétique",
-      c: "La force",
-      d: "La pression"
-    },
-    answer: "b"
-  },
-  // CHIMIE 15
-  {
-    text: "Quel est le nom de la réaction chimique où une substance gagne des électrons ?",
-    options: {
-      a: "Oxydation",
-      b: "Réduction",
-      c: "Combustion",
-      d: "Neutralisation"
-    },
-    answer: "b"
-  }
+    { text: "Quelle est la formule de l'énergie cinétique ?", options: { a: "Ec = mv", b: "Ec = 1/2 mv²", c: "Ec = m/v", d: "Ec = m×v²" }, answer: "b", type: "physique", theme: "Énergie et Travail" },
+    { text: "Quelle est l'unité de la force ?", options: { a: "Joule", b: "Newton", c: "Pascal", d: "Watt" }, answer: "b", type: "physique", theme: "Mécanique de Newton" },
+    { text: "Quelle est la loi reliant U, R et I ?", options: { a: "Loi de Newton", b: "Loi d'Ohm", c: "Loi de Coulomb", d: "Loi de Joule" }, answer: "b", type: "physique", theme: "Électricité (Loi d'Ohm)" },
+    { text: "Quelle est la formule de la masse volumique ?", options: { a: "ρ = m/V", b: "ρ = V/m", c: "ρ = m×V", d: "ρ = m+V" }, answer: "a", type: "chimie", theme: "Quantité de matière" }, 
+    { text: "Quelle est la constante de gravitation universelle ?", options: { a: "9,81", b: "6,67×10⁻¹¹", c: "3×10⁸", d: "1,6×10⁻¹⁹" }, answer: "b", type: "physique", theme: "Interactions fondamentales" },
+    { text: "Quelle est l'unité de la pression ?", options: { a: "Pa", b: "N", c: "J", d: "W" }, answer: "a", type: "physique", theme: "Pression et Forces" },
+    { text: "Quelle particule n'a pas de charge ?", options: { a: "Proton", b: "Neutron", c: "Électron", d: "Ion" }, answer: "b", type: "chimie", theme: "Structure de l'atome" },
+    { text: "Quelle est la vitesse de la lumière ?", options: { a: "3×10⁸ m/s", b: "9,8 m/s²", c: "1,6×10⁻¹⁹ m/s", d: "6,02×10²³ m/s" }, answer: "a", type: "physique", theme: "Ondes et Propagation" },
+    { text: "Quelle est la charge élémentaire ?", options: { a: "9,81 N", b: "6,67×10⁻¹¹ N.m²/kg²", c: "1,6×10⁻¹⁹ C", d: "3×10⁸ m/s" }, answer: "c", type: "physique", theme: "Charge et Électricité" },
+    { text: "Quelle loi décrit la force électrostatique ?", options: { a: "Loi de Coulomb", b: "Loi de Newton", c: "Loi d'Ohm", d: "Loi de Joule" }, answer: "a", type: "physique", theme: "Interactions fondamentales" },
+    { text: "Quelle est la formule de la vitesse ?", options: { a: "v = d/t", b: "v = t/d", c: "v = d×t", d: "v = d-t" }, answer: "a", type: "physique", theme: "Cinématique" },
+    { text: "Quelle est l'unité de l'énergie ?", options: { a: "Joule", b: "Newton", c: "Watt", d: "Volt" }, answer: "a", type: "physique", theme: "Énergie et Travail" },
+    { text: "Quelle est l'équation de la loi des gaz parfaits ?", options: { a: "PV = nRT", b: "P = F/S", c: "E = mc²", d: "U = RI" }, answer: "a", type: "chimie", theme: "Gaz Parfaits" },
+    { text: "Quelle est l'unité de la puissance électrique ?", options: { a: "Watt", b: "Joule", c: "Volt", d: "Ampère" }, answer: "a", type: "physique", theme: "Électricité (Puissance)" },
+    { text: "La lumière se comporte comme :", options: { a: "Une onde", b: "Une particule", c: "Les deux", d: "Ni l'un ni l'autre" }, answer: "c", type: "physique", theme: "Dualité onde-particule" },
+    { text: "L'énergie potentielle de pesanteur d'un objet dépend de sa vitesse.", options: { a: "Vrai", b: "Faux" }, answer: "b", type: "physique", theme: "Énergie Potentielle" },
+    { text: "Dans une solution aqueuse, le pH est d'autant plus faible que la concentration en ions H₃O⁺ est élevée.", options: { a: "Vrai", b: "Faux" }, answer: "a", type: "chimie", theme: "pH et Acido-Basicité" },
+    { text: "Le principe d'inertie stipule qu'un objet soumis à des forces qui se compensent est nécessairement immobile.", options: { a: "Vrai", b: "Faux" }, answer: "b", type: "physique", theme: "Mécanique de Newton" },
+    { text: "Un atome est électriquement neutre car il possède autant de protons que de neutrons.", options: { a: "Vrai", b: "Faux" }, answer: "b", type: "chimie", theme: "Structure de l'atome" },
+    { text: "La puissance électrique P consommée par un dipôle s'exprime par la relation P = R × I².", options: { a: "Vrai", b: "Faux" }, answer: "a", type: "physique", theme: "Électricité (Puissance)" },
+    { text: "Quelle est la formule de l'énergie potentielle de pesanteur ?", options: { a: "Ep = mgh", b: "Ep = 1/2 mv²", c: "Ep = mh", d: "Ep = gh" }, answer: "a", type: "physique", theme: "Énergie Potentielle" },
+    { text: "Quelle est la formule chimique de l'eau ?", options: { a: "H₂O₂", b: "HO", c: "H₂O", d: "H₃O" }, answer: "c", type: "chimie", theme: "Formules Chimiques" },
+    { text: "Quelle est la deuxième loi de Newton ?", options: { a: "F = ma", b: "F = m/a", c: "F = m + a", d: "F = a/m" }, answer: "a", type: "physique", theme: "Mécanique de Newton" },
+    { text: "Quel est le nombre d'Avogadro ?", options: { a: "3×10⁸", b: "6,02×10²³", c: "1,6×10⁻¹⁹", d: "9,81" }, answer: "b", type: "chimie", theme: "Quantité de matière" },
+    { text: "Quelle est l'unité de la fréquence ?", options: { a: "Hertz", b: "Joule", c: "Watt", d: "Newton" }, answer: "a", type: "physique", theme: "Ondes et Propagation" },
+    { text: "Quel est le pH d'une solution neutre à 25°C ?", options: { a: "0", b: "7", c: "14", d: "1" }, answer: "b", type: "chimie", theme: "pH et Acido-Basicité" },
+    { text: "Quelle est la formule du travail d'une force constante ?", options: { a: "W = F×d", b: "W = F/d", c: "W = F×d×cosθ", d: "W = m×g×h" }, answer: "c", type: "physique", theme: "Énergie et Travail" },
+    { text: "Quelle est la formule du dioxyde de carbone ?", options: { a: "CO", b: "CO₂", c: "C₂O", d: "CO₃" }, answer: "b", type: "chimie", theme: "Formules Chimiques" },
+    { text: "Quelle est l'unité de la charge électrique ?", options: { a: "Ampère", b: "Volt", c: "Coulomb", d: "Ohm" }, answer: "c", type: "physique", theme: "Charge et Électricité" },
+    { text: "Quelle est la masse molaire de l'eau (H₂O) ?", options: { a: "16 g/mol", b: "18 g/mol", c: "20 g/mol", d: "22 g/mol" }, answer: "b", type: "chimie", theme: "Quantité de matière" },
+    { text: "Quelle est la formule de la période T d'un pendule simple ?", options: { a: "T = 2π√(L/g)", b: "T = 2π√(g/L)", c: "T = π√(L/g)", d: "T = √(L/g)" }, answer: "a", type: "physique", theme: "Oscillations et Ondes" },
+    { text: "Quel gaz compose environ 78% de l'atmosphère terrestre ?", options: { a: "Oxygène", b: "Dioxyde de carbone", c: "Azote", d: "Argon" }, answer: "c", type: "chimie", theme: "Composition de l'Air" },
+    { text: "Quelle est l'unité de la résistance électrique ?", options: { a: "Ohm", b: "Volt", c: "Ampère", d: "Watt" }, answer: "a", type: "physique", theme: "Électricité (Loi d'Ohm)" },
+    { text: "Quelle est la formule de l'acide sulfurique ?", options: { a: "HCl", b: "H₂SO₄", c: "HNO₃", d: "H₃PO₄" }, answer: "b", type: "chimie", theme: "Formules Chimiques" },
+    { text: "Quelle est la relation entre puissance, énergie et temps ?", options: { a: "P = E×t", b: "P = E/t", c: "P = t/E", d: "P = E+t" }, answer: "b", type: "physique", theme: "Énergie et Travail" },
+    { text: "Quel est le symbole chimique du sodium ?", options: { a: "S", b: "So", c: "Na", d: "Sd" }, answer: "c", type: "chimie", theme: "Symboles Chimiques" },
+    { text: "Quelle est la formule de l'accélération ?", options: { a: "a = Δv/Δt", b: "a = v×t", c: "a = v/t²", d: "a = v+t" }, answer: "a", type: "physique", theme: "Cinématique" },
+    { text: "Quelle est la formule du méthane ?", options: { a: "CH₄", b: "C₂H₆", c: "CH₃", d: "C₃H₈" }, answer: "a", type: "chimie", theme: "Chimie Organique" },
+    { text: "Quelle est l'unité du champ électrique ?", options: { a: "V/m", b: "N/C", c: "Les deux", d: "Aucune des deux" }, answer: "c", type: "physique", theme: "Charge et Électricité" },
+    { text: "Combien d'électrons peut contenir la couche électronique K (n=1) ?", options: { a: "2", b: "8", c: "18", d: "32" }, answer: "a", type: "chimie", theme: "Structure de l'atome" },
+    { text: "Quelle est la loi de conservation en mécanique ?", options: { a: "Conservation de la masse", b: "Conservation de l'énergie", c: "Conservation de la charge", d: "Toutes ces réponses" }, answer: "b", type: "physique", theme: "Énergie et Travail" },
+    { text: "Quelle est la formule de l'ion hydroxyde ?", options: { a: "H⁺", b: "OH⁻", c: "H₃O⁺", d: "O²⁻" }, answer: "b", type: "chimie", theme: "pH et Acido-Basicité" },
+    { text: "Quelle est l'unité de l'intensité lumineuse ?", options: { a: "Lumen", b: "Candela", c: "Lux", d: "Watt" }, answer: "b", type: "physique", theme: "Lumière et Photométrie" },
+    { text: "Quel type de liaison chimique implique un partage d'électrons ?", options: { a: "Liaison ionique", b: "Liaison covalente", c: "Liaison métallique", d: "Liaison hydrogène" }, answer: "b", type: "chimie", theme: "Liaisons Chimiques" },
+    { text: "Quelle est la formule de la longueur d'onde λ en fonction de la vitesse c et de la fréquence f ?", options: { a: "λ = c×f", b: "λ = c/f", c: "λ = f/c", d: "λ = c+f" }, answer: "b", type: "physique", theme: "Ondes et Propagation" },
+    { text: "Quelle est la configuration électronique de l'atome de carbone (Z=6) ?", options: { a: "1s² 2s² 2p²", b: "1s² 2s² 2p⁴", c: "1s² 2s¹ 2p³", d: "1s² 2s² 2p⁶" }, answer: "a", type: "chimie", theme: "Structure de l'atome" },
+    { text: "Dans un circuit en série, que peut-on dire de l'intensité ?", options: { a: "Elle varie", b: "Elle est identique partout", c: "Elle diminue", d: "Elle augmente" }, answer: "b", type: "physique", theme: "Électricité (Circuits)" },
+    { text: "Quelle est la formule de l'ammoniac ?", options: { a: "NH₂", b: "NH₃", c: "NH₄", d: "N₂H₄" }, answer: "b", type: "chimie", theme: "Formules Chimiques" },
+    { text: "Quelle grandeur physique est mesurée en Tesla ?", options: { a: "Le champ électrique", b: "Le champ magnétique", c: "La force", d: "La pression" }, answer: "b", type: "physique", theme: "Magnétisme" },
+    { text: "Quel est le nom de la réaction chimique où une substance gagne des électrons ?", options: { a: "Oxydation", b: "Réduction", c: "Combustion", d: "Neutralisation" }, answer: "b", type: "chimie", theme: "Oxydoréduction" }
 ];
 
 
 function shuffle(array){ return array.sort(()=>Math.random()-0.5); }
-
-// --- CHARGER LE QUIZ ---
-function loadQuiz(){
-  const quizDiv=document.getElementById("quiz");
-  quizDiv.innerHTML="";
-
-  const type=document.getElementById("questionType").value;
-  const count=parseInt(document.getElementById("questionCount").value);
-
-  let filtered=questions;
-  if(type!=="mixte"){ filtered=questions.filter(q=>q.type===type); }
-
-  const selected=shuffle(filtered).slice(0,count);
-  window.currentQuestions=selected;
-
-  selected.forEach((q,i)=>{
-    quizDiv.innerHTML+=`
-    <div class="question">
-      <div class="question-number">Question ${i+1}/${selected.length}</div>
-      <div class="question-text">${q.text}</div>
-      <div class="options">
-        ${Object.entries(q.options).map(([k,v])=>`
-          <label class="option">
-            <input type="radio" name="q${i}" value="${k}">
-            <span>${k}) ${v}</span>
-          </label>`).join("")}
-      </div>
-    </div>`;
-  });
-
-  document.getElementById("results").style.display="none";
+function updateProgressBar() {
+    const totalQuestions = window.currentQuestions ? window.currentQuestions.length : 0;
+    if (totalQuestions === 0) return;
+    const answeredQuestions = document.querySelectorAll('.question input:checked').length;
+    const percentage = (answeredQuestions / totalQuestions) * 100;
+    document.getElementById('progressBar').style.width = `${percentage}%`;
 }
 
-// --- CORRECTION ---
-function checkAnswers(){
-  let score=0;
-  const questionsDiv=document.querySelectorAll(".question");
-  questionsDiv.forEach((qDiv,i)=>{
-    const checked=qDiv.querySelector("input:checked");
-    if(checked && checked.value===window.currentQuestions[i].answer) score++;
-  });
 
-  document.getElementById("score").textContent=`Score: ${score}/${window.currentQuestions.length}`;
-  const msg=document.getElementById("message");
-  const pct=(score/window.currentQuestions.length)*100;
-  msg.textContent = pct>=80 ? "Excellent 🌟" : pct>=60 ? "Bien joué 👍" : "Continuez à réviser 📚";
-  document.getElementById("results").style.display="block";
+// --- GESTION DE L'HISTORIQUE DES SCORES (INCHANGÉE) ---
+
+function saveScore(score, total, topicsToReview) { 
+    const type = document.getElementById("questionType").value;
+    const now = new Date();
+    const formattedDate = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+
+    const newScore = {
+        score: score,
+        total: total,
+        type: type,
+        date: formattedDate,
+        topicsToReview: topicsToReview 
+    };
+
+    let history = JSON.parse(localStorage.getItem('quizScores')) || [];
+    history.unshift(newScore);
+    history = history.slice(0, 10);
+    localStorage.setItem('quizScores', JSON.stringify(history));
+
+    displayScores();
 }
 
-// --- PDF ---
-function generatePDF(){
-  if(!window.currentQuestions){ alert("Aucun quiz généré !"); return; }
-  const { jsPDF } = window.jspdf; const doc = new jsPDF();
-  doc.text("Corrigé du QCM de Physique-Chimie",10,10);
-  let y=20;
-  window.currentQuestions.forEach((q,i)=>{
-    doc.text(`${i+1}. ${q.text}`,10,y);
-    y+=6;
-    doc.text(`Réponse : ${q.answer}) ${q.options[q.answer]}`,15,y);
-    y+=10;
-    if(y>270){ doc.addPage(); y=20; }
-  });
-  doc.save("Corrigé_Quiz.pdf");
-}
+function displayScores() {
+    const scores = JSON.parse(localStorage.getItem('quizScores')) || [];
+    const historyDiv = document.getElementById('scoreHistory');
 
-// --- CARTE MENTALE (avec questions + réponses) ---
-function generateMindMap(){
-  if(!window.currentQuestions){ alert("Générez d'abord un quiz."); return; }
-  
-  const canvas = document.createElement('canvas');
-  canvas.width = 1600; canvas.height = 1000;
-  const ctx = canvas.getContext('2d');
-  
-  // Fond
-  ctx.fillStyle = "#0b1739";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  
-  // Titre central
-  const theme = document.getElementById("questionType").value;
-  ctx.fillStyle = "#ffcc00";
-  ctx.font = "bold 32px Arial";
-  ctx.textAlign = "center";
-  ctx.fillText(`Carte Mentale - ${theme.toUpperCase()}`, canvas.width/2, 70);
-  
-  const centerX = canvas.width/2;
-  const centerY = canvas.height/2;
-  const radius = 320;
-  const nodes = window.currentQuestions.slice(0,10); // max 10 bulles
+    if (scores.length === 0) {
+        historyDiv.innerHTML = '<p style="font-size: 0.9em; margin-top: 15px; opacity: 0.8;">Aucun score enregistré pour l\'instant.</p>';
+        return;
+    }
 
-  ctx.strokeStyle = "#92dff3";
-  ctx.lineWidth = 2;
-  
-  nodes.forEach((q,i)=>{
-    const angle = (i / nodes.length) * Math.PI * 2;
-    const x = centerX + radius * Math.cos(angle);
-    const y = centerY + radius * Math.sin(angle);
-    
-    // Branche
-    ctx.beginPath();
-    ctx.moveTo(centerX, centerY);
-    ctx.lineTo(x, y);
-    ctx.stroke();
+    let historyHTML = '<h4>Historique des 10 derniers scores</h4>';
+    historyHTML += '<table><thead><tr><th>Date</th><th>Type</th><th>Score</th><th>Commentaire / Conseils</th></tr></thead><tbody>';
 
-    // Bulle
-    ctx.beginPath();
-    ctx.arc(x, y, 110, 0, Math.PI*2);
-    ctx.fillStyle = "#162a45";
-    ctx.fill();
-    ctx.strokeStyle = "#3498db";
-    ctx.stroke();
-    
-    // Texte question + réponse
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "14px Arial";
-    ctx.textAlign = "center";
-    const text = q.text + "\n→ " + q.options[q.answer];
-    const lines = wrapText(ctx, text, 160);
-    lines.forEach((line, j)=>{
-      ctx.fillText(line, x, y - (lines.length*8) + j*16);
+    scores.forEach(s => {
+        const percentage = Math.round((s.score / s.total) * 100);
+        let colorStyle = percentage >= 70 ? '#2ecc71' : percentage >= 50 ? '#92dff3' : '#e74c3c';
+        const style = `style="color: ${colorStyle};"`;
+
+        let commentText = '';
+        let commentClass = '';
+        if (s.topicsToReview && s.topicsToReview.length > 0) {
+            const uniqueTopics = [...new Set(s.topicsToReview)].join(', ');
+            commentText = `À revoir : ${uniqueTopics}.`;
+            commentClass = 'review-comment';
+        } else {
+            commentText = 'Bravo ! Pas de sujet critique.';
+            commentClass = 'review-comment none';
+        }
+
+
+        historyHTML += `
+            <tr ${style}>
+                <td>${s.date}</td>
+                <td>${s.type.charAt(0).toUpperCase() + s.type.slice(1)}</td>
+                <td><strong>${s.score} / ${s.total}</strong> (${percentage}%)</td>
+                <td class="${commentClass}">${commentText}</td> 
+            </tr>
+        `;
     });
-  });
 
-  const link = document.createElement('a');
-  link.download = `Carte_Mentale_${theme}.png`;
-  link.href = canvas.toDataURL("image/png");
-  link.click();
+    historyHTML += '</tbody></table>';
+    historyDiv.innerHTML = historyHTML;
+}
+
+// --- CHARGER LE QUIZ (Inchangé) ---
+function loadQuiz(){
+    const quizDiv = document.getElementById("quiz");
+    quizDiv.innerHTML = "";
+    document.getElementById("results").classList.remove('show');
+    document.getElementById("submitBtn").disabled = false;
+    document.getElementById('progressBar').style.width = '0%'; 
+
+    const type = document.getElementById("questionType").value;
+    const count = parseInt(document.getElementById("questionCount").value);
+
+    let filtered = questions;
+    if(type !== "mixte"){ 
+        filtered = questions.filter(q => q.type === type); 
+        if (filtered.length < count) {
+             
+        }
+    }
+
+    const selected = shuffle(filtered).slice(0, count);
+    window.currentQuestions = selected;
+
+    selected.forEach((q, i) => {
+        quizDiv.innerHTML += `
+        <div class="question" data-index="${i}">
+            <div class="question-number">Question ${i+1}/${selected.length}</div>
+            <div class="question-text">${q.text}</div>
+            <div class="options-group">
+                ${Object.entries(q.options).map(([k, v]) => `
+                    <label class="option">
+                        <input type="radio" name="q${i}" value="${k}" onchange="updateProgressBar()">
+                        <span>${k}) ${v}</span>
+                    </label>`).join("")}
+            </div>
+        </div>`;
+    });
+    
+    displayScores(); 
+}
+
+
+// --- CORRECTION (Inchangée) ---
+function checkAnswers(){
+    let score = 0;
+    const questionsDiv = document.querySelectorAll(".question");
+    const topicsToReview = []; 
+
+    questionsDiv.forEach((qDiv, i) => {
+        const questionData = window.currentQuestions[i];
+        const checkedInput = qDiv.querySelector("input:checked");
+        const optionsLabels = qDiv.querySelectorAll(".option");
+
+        optionsLabels.forEach(label => label.style.pointerEvents = 'none');
+        document.getElementById("submitBtn").disabled = true;
+
+        let isCorrect = false;
+        if (checkedInput && checkedInput.value === questionData.answer) {
+            score++;
+            isCorrect = true;
+        } else if (!isCorrect) {
+            topicsToReview.push(questionData.theme);
+        }
+
+        qDiv.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+        optionsLabels.forEach(label => {
+            const input = label.querySelector('input');
+            
+            if (input.value === questionData.answer) {
+                label.classList.add('is-correct');
+            } else if (checkedInput && input === checkedInput && !isCorrect) {
+                label.classList.add('is-incorrect-selection');
+            }
+        });
+    });
+
+    const totalQuestions = window.currentQuestions.length;
+    document.getElementById("score").textContent = `Score final : ${score}/${totalQuestions}`;
+    const msg = document.getElementById("message");
+    const pct = (score / totalQuestions) * 100;
+
+    let messageText = "";
+    if (pct >= 90) {
+        messageText = "Maîtrise totale ! Impressionnant ! 🧠✨";
+    } else if (pct >= 70) {
+        messageText = "Excellent résultat ! Vous êtes sur la bonne voie ! 👍";
+    } else if (pct >= 50) {
+        messageText = "Bonne base. Quelques révisions et c'est parfait ! 📚";
+    } else {
+        messageText = "Continuez à réviser, le potentiel est là ! 💪";
+    }
+    
+    msg.textContent = messageText;
+    document.getElementById("results").classList.add('show');
+    
+    saveScore(score, totalQuestions, topicsToReview); 
+}
+
+// --- FONCTION PDF (CORRIGÉE POUR LA LISIBILITÉ) ---
+function generatePDF(){
+    if(!window.currentQuestions){ alert("Aucun quiz généré !"); return; }
+    const { jsPDF } = window.jspdf; 
+    const doc = new jsPDF();
+    
+    const data = window.currentQuestions.map((q, i) => [
+        i + 1,
+        q.text,
+        // Ajout du thème dans la réponse
+        `${q.answer}) ${q.options[q.answer]}\n[Thème: ${q.theme}]`
+    ]);
+    
+    doc.text("Corrigé du QCM de Physique-Chimie", 10, 15);
+    doc.autoTable({
+        startY: 20,
+        head: [['N°', 'Question', 'Réponse Correcte']],
+        body: data,
+        theme: 'striped',
+        styles: { 
+            fontSize: 9, // Légère réduction de la taille de police pour gagner de la place
+            cellPadding: 2 
+        },
+        headStyles: { 
+            fillColor: [87, 87, 163] 
+        },
+        // NOUVEAU : Configuration des largeurs de colonnes
+        columnStyles: {
+            0: { cellWidth: 15 }, // N°
+            1: { cellWidth: 80 }, // Question (Réduit pour donner de la place à la réponse)
+            2: { cellWidth: 95 }  // Réponse Correcte (Augmenté pour contenir le thème)
+        }
+    });
+    
+    doc.save("Corrigé_Quiz.pdf");
+}
+
+// --- FONCTIONS Carte Mentale (Inchangées) ---
+
+function generateMindMap(){
+    if(!window.currentQuestions){ alert("Générez d'abord un quiz."); return; }
+    const canvas = document.createElement('canvas');
+    canvas.width = 1600; canvas.height = 1000;
+    const ctx = canvas.getContext('2d');
+    
+    ctx.fillStyle = "#0b1739";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    
+    const theme = document.getElementById("questionType").value;
+    ctx.fillStyle = "#ffcc00";
+    ctx.font = "bold 32px 'Orbitron'";
+    ctx.textAlign = "center";
+    ctx.fillText(`Carte Mentale - ${theme.toUpperCase()}`, canvas.width/2, 70);
+    
+    const centerX = canvas.width/2;
+    const centerY = canvas.height/2;
+    const radius = 320;
+    const nodes = window.currentQuestions.slice(0,10); 
+
+    ctx.strokeStyle = "#92dff3";
+    ctx.lineWidth = 2;
+    
+    nodes.forEach((q,i)=>{
+        const angle = (i / nodes.length) * Math.PI * 2;
+        const x = centerX + radius * Math.cos(angle);
+        const y = centerY + radius * Math.sin(angle);
+        
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(x, y, 110, 0, Math.PI*2);
+        ctx.fillStyle = "#162a45";
+        ctx.fill();
+        ctx.strokeStyle = "#3498db";
+        ctx.stroke();
+        
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "14px 'Roboto'";
+        ctx.textAlign = "center";
+        const text = q.text + "\nRéponse: " + q.options[q.answer]; 
+        const lines = wrapText(ctx, text, 160);
+        lines.forEach((line, j)=>{
+            ctx.fillText(line, x, y - (lines.length*8) + j*16);
+        });
+    });
+
+    const link = document.createElement('a');
+    link.download = `Carte_Mentale_${theme}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
 }
 
 function wrapText(ctx, text, maxWidth){
-  const words = text.split(" ");
-  const lines = [];
-  let line = "";
-  for(let i=0;i<words.length;i++){
-    const test = line + words[i] + " ";
-    const width = ctx.measureText(test).width;
-    if(width > maxWidth && i > 0){
-      lines.push(line);
-      line = words[i] + " ";
-    } else {
-      line = test;
+    const words = text.split(" ");
+    const lines = [];
+    let line = "";
+    for(let i=0;i<words.length;i++){
+        const test = line + words[i] + " ";
+        if (words[i].includes('\n')) {
+             const subWords = words[i].split('\n');
+             if (line !== "") lines.push(line);
+             lines.push(subWords[0]);
+             line = subWords[1] + " ";
+             continue;
+        }
+        const width = ctx.measureText(test).width;
+        if(width > maxWidth && i > 0){
+            lines.push(line);
+            line = words[i] + " ";
+        } else {
+            line = test;
+        }
     }
-  }
-  lines.push(line);
-  return lines;
+    lines.push(line.trim());
+    return lines;
 }
 
-window.onload=loadQuiz;
+
+window.onload = loadQuiz;
 </script>
 </body>
 </html>
