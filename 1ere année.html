@@ -218,13 +218,6 @@
 </head>
 <body>
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    // VÉRIFICATION D'ACCÈS ADAPTÉE À LA PREMIÈRE ANNÉE
-    if (localStorage.getItem("isLoggedIn") !== "true" || localStorage.getItem("studentClass") !== "Première") {
-        alert("⛔ Accès réservé aux élèves de Première.");
-        window.location.replace("index.html");
-    }
-});
 </script>
 
 <div class="bandeau">
