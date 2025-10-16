@@ -3,145 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion Étudiant</title>
+    <title>Accueil Étudiant - Tableau de Bord</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* Variables de couleur de Connexion étudiant.html */
+        :root {
+            --primary-color: #4a90e2; /* Bleu clair */
+            --secondary-color: #1a4f8d; /* Bleu foncé */
+            --background-color: #f0f2f5;
+            --text-color: #333;
+        }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #ccc;
-            background: url('https://e0.pxfuel.com/wallpapers/955/776/desktop-wallpaper-assassins-creed-4-logo-version-black-flag-game-2013-assassin-s-creed-logo.jpg') 
-                no-repeat center center fixed;
-            background-size: cover;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding-top: 60px; /* Espace pour le bandeau fixé */
+        }
+
+        /* --- STYLES DU BANDEAU DE NAVIGATION --- */
+        .bandeau {
+            width: 100%;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 10px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            min-height: 100vh;
         }
-        .login-container {
-            background: rgba(16, 16, 32, 0.95); 
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            border: 2px solid #5757a3;
-        }
-        .login-container h1 {
-            color: #92dff3;
-            margin-bottom: 30px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #e0e0ff;
-            font-weight: 500;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #5757a3;
-            border-radius: 5px;
-            background-color: rgba(255, 255, 255, 0.1);
+        .menu-btn {
+            background: none;
+            border: 2px solid white;
             color: white;
-            font-size: 16px;
-        }
-        .form-group input:focus {
-            outline: none;
-            border-color: #92dff3;
-            box-shadow: 0 0 5px rgba(146, 223, 243, 0.5);
-        }
-        button {
-            width: 100%;
-            padding: 15px;
-            background-color: #5757a3;
-            color: white;
-            border: none;
-            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 1.2rem;
             cursor: pointer;
-            font-size: 1.1em;
+            border-radius: 8px;
             transition: background-color 0.3s;
         }
-        button:hover {
-            background-color: #7a7ac9;
+        .menu-btn:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
         }
-        #message {
-            margin-top: 20px;
-            color: red;
-            font-weight: bold;
+        .menu-links {
+            display: flex;
+            gap: 20px;
+        }
+        .menu-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 5px 10px;
+            transition: color 0.3s, background-color 0.3s, border-radius 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .menu-links a:hover,
+        .menu-links a.active {
+            color: var(--primary-color);
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        .menu-links .logout-link {
+             background-color: #d32f2f; /* Rouge pour le bouton Déconnexion */
+             border-radius: 8px;
+             padding: 5px 15px;
+        }
+        .menu-links .logout-link:hover {
+             background-color: #e57373;
+             border-bottom: 2px solid #d32f2f;
+        }
+        @media (max-width: 768px) {
+            .bandeau {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .menu-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 10px;
+            }
+            .menu-btn {
+                display: block;
+            }
+            .menu-links a {
+                padding: 10px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                width: 100%;
+            }
+        }
+        /* Contenu principal de la page d'accueil */
+        .content {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .welcome-message {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h1>Connexion Élève</h1>
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="email">Email :</label>
-                <input type="email" id="email" name="email" required placeholder="Ex: eleve@test.fr">
-            </div>
-            <div class="form-group">
-                <label for="password">Mot de passe :</label>
-                <input type="password" id="password" name="password" required placeholder="Entrez 'mdp' pour tester">
-            </div>
-            <button type="submit">Se connecter</button>
-            <div id="message"></div>
-        </form>
+
+    <div class="bandeau">
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+        <div class="menu-links" id="menuLinks">
+            <a href="index.html" class="active">Accueil</a>
+            <a href="1ere année.html">Cours</a>
+            <a href="Quiz de révision de 1ère Année.html">Quiz</a>
+            <a href="espaceNote.html">Notes</a>
+            <a href="AideAvecIA.html">Questions à l'aide de l'IA</a>
+            <a href="MiniDéfi.html">Mini défi</a>
+            <a href="AnnexeMotClé.html">Mots Clé</a>
+            <a href="#" class="logout-link" onclick="logout()">Déconnexion (<span id="userNameDisplay"></span>)</a>
+        </div>
     </div>
 
-    <script>
-        const HOME_PAGE = "index.html"; // Redirige vers la page d'accueil protégée
+    <div class="content">
+        <div class="welcome-message">
+            <h1 id="welcomeTitle">Chargement...</h1>
+            <p>Classe : <span id="classDisplay"></span></p>
+        </div>
         
-        // Simule la base de données (DOIT ÊTRE IDENTIQUE à index.html)
-        const STUDENTS_DB = [
-            { email: "eleve@test.fr", password: "mdp", name: "Clément Dupont", class: "Première" },
-            { email: "user@seconde.fr", password: "mdp", name: "Sophie Martin", class: "Seconde" }
-            // Ajoutez d'autres utilisateurs ici
-        ];
+        <h2>Votre Tableau de Bord Étudiant</h2>
+        <p>Bienvenue sur votre espace personnel ! Utilisez le bandeau de navigation ci-dessus pour accéder à toutes les sections de votre programme : cours, quiz de révision, espace notes et plus encore.</p>
+        <p>Le système de connexion vous a redirigé ici après validation du 2FA.</p>
+    </div>
 
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Empêche le rechargement de la page
-            
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-            const messageDiv = document.getElementById('message');
-            messageDiv.textContent = "";
+<script>
+    const LOGIN_PAGE = "Connexion étudiant.html"; // Redirection vers le formulaire de connexion principal
 
-            // 1. VÉRIFICATION DES IDENTIFIANTS
-            const student = STUDENTS_DB.find(s => s.email === email && s.password === password);
-
-            if (student) {
-                // 2. CONNEXION RÉUSSIE : ENREGISTREMENT DANS LE LOCAL STORAGE
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('currentUser', student.name);
-                localStorage.setItem('studentClass', student.class); // Enregistre la classe
-                
-                messageDiv.style.color = 'lightgreen';
-                messageDiv.textContent = "Connexion réussie ! Redirection...";
-                
-                // 3. REDIRECTION VERS LA PAGE D'ACCUEIL PROTÉGÉE
-                setTimeout(() => {
-                    window.location.replace(HOME_PAGE);
-                }, 1000); // Laisse 1 seconde pour voir le message de succès
-
-            } else {
-                // Échec de la connexion
-                messageDiv.style.color = 'red';
-                messageDiv.textContent = "Email ou mot de passe incorrect.";
+    // Fonction pour gérer l'affichage du menu sur mobile
+    function toggleMenu() {
+        const menu = document.getElementById('menuLinks');
+        if (menu.style.display === 'flex') {
+            menu.style.display = 'none';
+        } else {
+            menu.style.display = 'flex';
+            if (window.innerWidth <= 768) {
+                menu.style.flexDirection = 'column';
             }
-        });
+        }
+    }
 
-        // OPTIONNEL : Si l'utilisateur est déjà connecté et arrive sur cette page, rediriger vers l'accueil
-        document.addEventListener('DOMContentLoaded', () => {
-             if (localStorage.getItem('isLoggedIn') === 'true') {
-                 window.location.replace(HOME_PAGE);
-             }
-         });
-    </script>
+    // Fonction de déconnexion
+    function logout() {
+        // Supprimer toutes les variables de session pertinentes
+        localStorage.removeItem('activeUser');
+        localStorage.removeItem('studentClass');
+        // Supprime les variables de l'autre formulaire de connexion au cas où
+        localStorage.removeItem('isLoggedIn'); 
+        localStorage.removeItem('currentUser'); 
+        
+        alert("Déconnexion réussie. Redirection vers la page de connexion.");
+        window.location.replace(LOGIN_PAGE); // Rediriger
+    }
+    
+    // Fonction de vérification de la connexion
+    function checkLogin() {
+        // Vérifie si l'utilisateur est connecté via le token de 'Connexion étudiant.html'
+        const activeUser = localStorage.getItem('activeUser');
+        const studentClass = localStorage.getItem('studentClass');
+
+        if (!activeUser) {
+            // Si pas de session, on redirige vers la page de connexion
+            window.location.replace(LOGIN_PAGE);
+        } else {
+            // Si connecté, on met à jour les informations de bienvenue
+            document.getElementById('welcomeTitle').textContent = `Bienvenue, ${activeUser} !`;
+            document.getElementById('userNameDisplay').textContent = activeUser;
+            document.getElementById('classDisplay').textContent = studentClass;
+        }
+    }
+
+    // Exécuter la vérification de la connexion au chargement de la page
+    document.addEventListener('DOMContentLoaded', checkLogin);
+</script>
 </body>
 </html>
