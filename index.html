@@ -4,24 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil Étudiant - Tableau de Bord</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* Variables de couleur de Connexion étudiant.html */
+        /* --- Variables de couleur --- */
         :root {
             --primary-color: #4a90e2; /* Bleu clair */
             --secondary-color: #1a4f8d; /* Bleu foncé */
             --background-color: #f0f2f5;
             --text-color: #333;
         }
+
+        /* --- Fond de page --- */
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
             margin: 0;
-            padding-top: 60px; /* Espace pour le bandeau fixé */
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            background-image: url('https://ecoleexpo.com/wp-content/uploads/2022/01/cropped-Ecole-Expo-site.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center center;
+            background-attachment: fixed;
+
+            /* Centrage du contenu */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
         }
 
-        /* --- STYLES DU BANDEAU DE NAVIGATION --- */
+        /* --- Bandeau de navigation --- */
         .bandeau {
             width: 100%;
             background-color: var(--secondary-color);
@@ -70,14 +82,15 @@
             border-bottom: 2px solid var(--primary-color);
         }
         .menu-links .logout-link {
-             background-color: #d32f2f; /* Rouge pour le bouton Déconnexion */
-             border-radius: 8px;
-             padding: 5px 15px;
+            background-color: #d32f2f;
+            border-radius: 8px;
+            padding: 5px 15px;
         }
         .menu-links .logout-link:hover {
-             background-color: #e57373;
-             border-bottom: 2px solid #d32f2f;
+            background-color: #e57373;
+            border-bottom: 2px solid #d32f2f;
         }
+
         @media (max-width: 768px) {
             .bandeau {
                 flex-direction: column;
@@ -98,14 +111,16 @@
                 width: 100%;
             }
         }
-        /* Contenu principal de la page d'accueil */
+
+        /* --- Contenu principal centré --- */
         .content {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px 50px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            max-width: 800px;
+            text-align: center;
+            margin-top: 80px; /* évite que le bandeau masque le contenu */
         }
         .welcome-message {
             font-size: 1.5rem;
@@ -114,6 +129,7 @@
             padding-bottom: 10px;
             margin-bottom: 20px;
         }
+
     </style>
 </head>
 <body>
@@ -144,9 +160,8 @@
     </div>
 
 <script>
-    const LOGIN_PAGE = "Connexion étudiant.html"; // Redirection vers le formulaire de connexion principal
+    const LOGIN_PAGE = "Connexion étudiant.html";
 
-    // Fonction pour gérer l'affichage du menu sur mobile
     function toggleMenu() {
         const menu = document.getElementById('menuLinks');
         if (menu.style.display === 'flex') {
@@ -159,38 +174,29 @@
         }
     }
 
-    // Fonction de déconnexion
     function logout() {
-        // Supprimer toutes les variables de session pertinentes
         localStorage.removeItem('activeUser');
         localStorage.removeItem('studentClass');
-        // Supprime les variables de l'autre formulaire de connexion au cas où
         localStorage.removeItem('isLoggedIn'); 
         localStorage.removeItem('currentUser'); 
-        
         alert("Déconnexion réussie. Redirection vers la page de connexion.");
-        window.location.replace(LOGIN_PAGE); // Rediriger
+        window.location.replace(LOGIN_PAGE);
     }
     
-    // Fonction de vérification de la connexion
     function checkLogin() {
-        // Vérifie si l'utilisateur est connecté via le token de 'Connexion étudiant.html'
         const activeUser = localStorage.getItem('activeUser');
         const studentClass = localStorage.getItem('studentClass');
-
         if (!activeUser) {
-            // Si pas de session, on redirige vers la page de connexion
             window.location.replace(LOGIN_PAGE);
         } else {
-            // Si connecté, on met à jour les informations de bienvenue
             document.getElementById('welcomeTitle').textContent = `Bienvenue, ${activeUser} !`;
             document.getElementById('userNameDisplay').textContent = activeUser;
             document.getElementById('classDisplay').textContent = studentClass;
         }
     }
 
-    // Exécuter la vérification de la connexion au chargement de la page
     document.addEventListener('DOMContentLoaded', checkLogin);
 </script>
+
 </body>
 </html>
