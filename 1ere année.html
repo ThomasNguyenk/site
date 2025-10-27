@@ -3,15 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cours de Première - Physique-Chimie</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <title>Cours de Première - Physique-Chimie</title>
 
   <style>
     /* === BASE === */
     body {
       margin: 0;
       font-family: "Poppins", sans-serif;
-      background: radial-gradient(circle at top, #0b0b1e, #010008);
+      background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsBy_ZpD0CRTKbBANdJ_9niRkXApSxG42zjEG9kbzDmfBWgrLBuVJUVTT_G4v25KHOXow&usqp=CAU");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
       color: #e6e6ff;
       overflow-x: hidden;
     }
@@ -31,12 +35,6 @@
       border-bottom: 1px solid rgba(150, 90, 255, 0.4);
       box-shadow: 0 0 25px rgba(120, 60, 255, 0.2);
       z-index: 1000;
-      animation: fadeDown 0.8s ease forwards;
-    }
-
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
     }
 
     .menu-btn {
@@ -104,20 +102,12 @@
       margin: 120px auto 60px;
       text-align: center;
       padding: 20px;
-      animation: fadeIn 1s ease;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(25px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* === TABLEAU D’INTRO === */
     table.intro {
       width: 90%;
       margin: 0 auto 40px;
       border-collapse: collapse;
-      overflow: hidden;
       border-radius: 16px;
       background: rgba(30, 30, 60, 0.5);
       backdrop-filter: blur(10px);
@@ -142,27 +132,6 @@
       border-top: 1px solid rgba(120, 80, 255, 0.3);
     }
 
-    table.intro tr:last-child td {
-      background: rgba(255, 40, 40, 0.15);
-      color: #ffb3b3;
-      border-top: 2px solid rgba(255, 120, 120, 0.4);
-      font-weight: bold;
-    }
-
-    /* === SECTION TITLE === */
-    .section-title {
-      background: linear-gradient(90deg, rgba(100, 50, 255, 0.3), rgba(0, 200, 255, 0.3));
-      color: #c8b3ff;
-      padding: 15px 25px;
-      border-radius: 12px;
-      display: inline-block;
-      font-size: 1.7rem;
-      margin-bottom: 40px;
-      border: 1px solid rgba(150, 100, 255, 0.3);
-      box-shadow: 0 0 20px rgba(100, 60, 255, 0.4);
-    }
-
-    /* === CARTES === */
     .cards-container {
       display: flex;
       flex-wrap: wrap;
@@ -173,7 +142,6 @@
     .card {
       width: 320px;
       border-radius: 20px;
-      overflow: hidden;
       background: rgba(30, 30, 60, 0.45);
       border: 1px solid rgba(140, 100, 255, 0.3);
       box-shadow: 0 0 25px rgba(100, 50, 255, 0.25);
@@ -191,14 +159,11 @@
       font-weight: 600;
       background: rgba(100, 60, 255, 0.3);
       padding: 15px;
-      border-bottom: 1px solid rgba(150, 100, 255, 0.4);
       color: #d8ccff;
       text-shadow: 0 0 8px rgba(160, 120, 255, 0.6);
     }
 
-    .card-content {
-      padding: 20px;
-    }
+    .card-content { padding: 20px; }
 
     .card-content a {
       display: block;
@@ -215,6 +180,104 @@
     .card-content a:hover {
       background: rgba(140, 80, 255, 0.5);
       text-shadow: 0 0 6px #fff;
+    }
+
+    /* === SECTION VIDÉOS === */
+    .video-section {
+      margin-top: 80px;
+      text-align: center;
+      color: #e6e6ff;
+    }
+
+    .video-section h2 {
+      font-size: 2rem;
+      color: #b29cff;
+      text-shadow: 0 0 10px #7d5cff;
+      margin-bottom: 40px;
+    }
+
+    .video-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .video-card {
+      background: rgba(20, 15, 40, 0.6);
+      border: 1px solid rgba(150, 90, 255, 0.3);
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(100, 60, 255, 0.3);
+      backdrop-filter: blur(8px);
+      padding: 15px;
+      width: 360px;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 1s ease, transform 1s ease, box-shadow 0.6s ease;
+    }
+
+    .video-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+      box-shadow: 0 0 35px rgba(160, 100, 255, 0.6);
+    }
+
+    .video-card iframe {
+      width: 100%;
+      height: 200px;
+      border-radius: 10px;
+      border: none;
+      box-shadow: 0 0 10px rgba(150, 100, 255, 0.4);
+    }
+
+    .video-card a {
+      display: inline-block;
+      margin-top: 10px;
+      color: #bda9ff;
+      text-decoration: none;
+      background: rgba(100, 60, 200, 0.2);
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .video-card a:hover {
+      background: rgba(160, 100, 255, 0.4);
+      color: #fff;
+      box-shadow: 0 0 10px #b48cff;
+    }
+
+    .add-video {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .add-video input {
+      padding: 10px;
+      width: 300px;
+      border-radius: 8px;
+      border: 1px solid rgba(150, 100, 255, 0.3);
+      background: rgba(20, 15, 40, 0.7);
+      color: #fff;
+      outline: none;
+    }
+
+    .add-video button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #7d5cff, #00e0ff);
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s ease;
+    }
+
+    .add-video button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px #7d5cff;
     }
 
     /* === FOOTER === */
@@ -235,13 +298,13 @@
     <button class="menu-btn" onclick="toggleMenu()">☰</button>
     <div class="menu-links" id="menuLinks">
       <a href="index.html">Accueil</a>
-      <a href="1ere année.html">Cours</a>
-      <a href="Quiz de révision de 1ère Année.html">Quiz</a>
+      <a href="1ere-annee.html">Cours</a>
+      <a href="Quiz-de-revision.html">Quiz</a>
       <a href="espaceNote.html">Notes</a>
       <a href="AideAvecIA.html">IA</a>
-      <a href="MiniDéfi.html">Mini défi</a>
-      <a href="AnnexeMotClé.html">Mots Clé</a>
-      <a href="Connexion étudiant.html">Connexion</a>
+      <a href="MiniDefi.html">Mini défi</a>
+      <a href="AnnexeMotCle.html">Mots-clés</a>
+      <a href="Connexion.html">Connexion</a>
     </div>
   </div>
 
@@ -252,8 +315,8 @@
         <tr><th>Cours Première de Physique-Chimie ⚛️⚗️</th></tr>
       </thead>
       <tbody>
-        <tr><td>Bienvenue aux cours de Première de physique-chimie ! Ces ressources vous aideront à maîtriser les notions clés pour la spécialité et le BAC.</td></tr>
-        <tr><td>⚠️ Note : Préparez vos TP à l'avance !</td></tr>
+        <tr><td>Bienvenue ! Ces ressources vous aideront à maîtriser les notions clés pour la spécialité et le BAC.</td></tr>
+        <tr><td>⚠️ Note : préparez vos TP à l'avance !</td></tr>
       </tbody>
     </table>
 
@@ -263,43 +326,80 @@
       <div class="card">
         <div class="card-header">📘 COURS</div>
         <div class="card-content">
-          <a href="#">Chapitre 1 : Cohésion de la matière</a>
-          <a href="#">Chapitre 2 : Lois de Newton</a>
-          <a href="#">Chapitre 3 : Spectres UV/Visible</a>
-          <a href="#">Chapitre 4 : Quantité de matière</a>
-          <a href="#">Chapitre 5 : Le son</a>
-          <a href="#">Chapitre 6 : Réactions chimiques</a>
+          <a href="cours/cohesion_matiere.pdf" target="_blank">Chapitre 1 : Cohésion de la matière</a>
+          <a href="cours/lois_newton.pdf" target="_blank">Chapitre 2 : Lois de Newton</a>
+          <a href="cours/spectres_uv.pdf" target="_blank">Chapitre 3 : Spectres UV/Visible</a>
         </div>
       </div>
 
       <div class="card">
         <div class="card-header">🧪 EXERCICES</div>
         <div class="card-content">
-          <a href="#">Série 1 : Structures et Molécules</a>
-          <a href="#">Série 2 : Énergie et Puissance</a>
-          <a href="#">Série 3 : Dosages et Solubilité</a>
-          <a href="#">Série 4 : Ondes et Signaux</a>
+          <a href="exercices/exo_molecules.pdf" target="_blank">Série 1 : Structures et molécules</a>
+          <a href="exercices/exo_energie.pdf" target="_blank">Série 2 : Énergie et puissance</a>
         </div>
       </div>
 
       <div class="card">
         <div class="card-header">📝 DST</div>
         <div class="card-content">
-          <a href="#">DST 1 : Structures et Molécules</a>
-          <a href="#">DST 2 : Énergie et Puissance</a>
-          <a href="#">DST 3 : Dosages et Solubilité</a>
-          <a href="#">DST 4 : Ondes et Signaux</a>
+          <a href="dst/dst1.pdf" target="_blank">DST 1 : Structures et molécules</a>
+          <a href="dst/dst2.pdf" target="_blank">DST 2 : Énergie et puissance</a>
         </div>
       </div>
     </div>
+
+    <!-- === SECTION VIDÉOS === -->
+    <section class="video-section">
+      <h2>🎥 Vidéos éducatives</h2>
+
+      <div class="video-list" id="videoList">
+        <div class="video-card">
+          <iframe src="https://i.ytimg.com/vi/2yswjX5VX8E/maxresdefault.jpg" allowfullscreen></iframe>
+          <a href="https://www.youtube.com/watch?v=2yswjX5VX8E&list=PLFf1gA-ubk_SMwa86SHe82c0dqvRGwOtH" target="_blank">Voir sur YouTube</a>
+        </div>
+
+        <div class="video-card">
+          <iframe src="https://i.ytimg.com/vi/Phsc5Qp3tFA/sddefault.jpg" allowfullscreen></iframe>
+          <a href="https://www.youtube.com/watch?v=Phsc5Qp3tFA" target="_blank">Voir sur YouTube</a>
+        </div>
+
+        <div class="video-card">
+          <iframe src="https://www.youtube.com/embed/Tn6-PIqc4UM" allowfullscreen></iframe>
+          <a href="https://www.youtube.com/watch?v=Tn6-PIqc4UM" target="_blank">Voir sur YouTube</a>
+        </div>
+
+        <div class="video-card">
+          <iframe src="https://www.youtube.com/embed/Tn6-PIqc4UM" allowfullscreen></iframe>
+          <a href="https://www.youtube.com/watch?v=Tn6-PIqc4UM" target="_blank">Voir sur YouTube</a>
+        </div>
+
+        <div class="video-card">
+          <iframe src="https://www.youtube.com/embed/Tn6-PIqc4UM" allowfullscreen></iframe>
+          <a href="https://www.youtube.com/watch?v=Tn6-PIqc4UM" target="_blank">Voir sur YouTube</a>
+        </div>
+      </div>
+    </section>
   </section>
 
-  <footer>&copy; 2025 — Programmée par <b>NGUYEN Thomas</b>. Tous droits réservés.</footer>
+  <footer>&copy; 2025 — Programmé par <b>NGUYEN Thomas</b>. Tous droits réservés.</footer>
 
   <script>
     function toggleMenu() {
       document.getElementById("menuLinks").classList.toggle("active");
     }
+
+    // --- Apparition des vidéos au scroll ---
+    const videoCards = document.querySelectorAll('.video-card');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    videoCards.forEach(card => observer.observe(card));
   </script>
 </body>
 </html>
