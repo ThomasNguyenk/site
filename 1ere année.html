@@ -3,288 +3,270 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cours de Première</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Cours de 2nd - Physique-Chimie</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --or: #C8A97E;
-      --bleu-nuit: #1B263B;
-      --bleu-vert: #0B5345;
-      --blanc: #F9F9F9;
-      --violet: #4A235A;
-    }
-
+    /* === BASE === */
     body {
       margin: 0;
-      font-family: "Poppins", sans-serif;
-      background-color: #f4f4f4;
-      background-image: url('https://ecoleexpo.com/wp-content/uploads/2022/01/cropped-Ecole-Expo-site.png');
-      background-repeat: no-repeat;
-      background-size: contain;
-      background-position: center;
-      background-attachment: fixed;
-      color: var(--bleu-nuit);
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top, #0a0a1f, #02010a);
+      color: #e5e5ff;
+      overflow-x: hidden;
     }
 
-    /* --- BANDEAU --- */
+    /* === NAVIGATION FUTURISTE === */
     .bandeau {
-      background-color: var(--bleu-nuit);
-      background-image: url('https://img.freepik.com/premium-photo/abstract-technology-background-geometric-structure-connection-lines-dots-light-effect_34628-765.jpg?w=1060');
-      background-size: cover;
-      background-position: center;
-      padding: 12px 25px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
       z-index: 1000;
+      padding: 12px 0;
+      backdrop-filter: blur(12px);
+      background: rgba(25, 25, 35, 0.55);
+      border-bottom: 1px solid rgba(120, 70, 255, 0.5);
+      box-shadow: 0 0 20px rgba(120, 70, 255, 0.2);
+      animation: fadeInDown 0.8s ease forwards;
+    }
+
+    @keyframes fadeInDown {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .menu-container {
+      width: 90%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .menu-btn {
-      font-size: 28px;
-      cursor: pointer;
-      color: white;
+      font-size: 26px;
+      color: #a389ff;
       background: none;
       border: none;
+      cursor: pointer;
       display: none;
+      transition: transform 0.3s ease;
     }
+    .menu-btn:hover { transform: rotate(90deg); }
 
     .menu-links {
       display: flex;
-      gap: 20px;
-    }
-
-    .menu-links a {
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      transition: 0.3s;
-      padding: 8px 12px;
-      border-radius: 6px;
-    }
-
-    .menu-links a:hover {
-      background-color: rgba(255, 255, 255, 0.15);
-      color: var(--or);
-    }
-
-    /* --- SECTION PRINCIPALE --- */
-    section {
-      max-width: 1200px;
-      margin: 120px auto 60px;
-      text-align: center;
-      padding: 20px;
-    }
-
-    /* --- TABLEAU D’INTRO --- */
-    table.intro {
-      width: 90%;
-      margin: 0 auto 40px;
-      border-collapse: collapse;
-      overflow: hidden;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-    }
-
-    table.intro th {
-      background-color: var(--violet);
-      color: var(--blanc);
-      font-size: 1.6rem;
-      padding: 20px;
-      text-shadow: 1px 1px 4px #000;
-    }
-
-    table.intro td {
-      background-color: rgba(255, 255, 255, 0.9);
-      padding: 20px;
-      line-height: 1.6;
-      font-size: 1.1rem;
-    }
-
-    table.intro tr:last-child td {
-      background-color: #880808;
-      color: var(--blanc);
-      font-weight: 600;
-      border-top: 3px solid var(--or);
-    }
-
-    /* --- TITRE DE SECTION --- */
-    .section-title {
-      background-color: var(--bleu-vert);
-      color: var(--or);
-      padding: 15px 25px;
-      border-radius: 10px;
-      display: inline-block;
-      font-size: 1.7rem;
-      margin-bottom: 40px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
-
-    /* --- CARTES --- */
-    .cards-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
       gap: 25px;
     }
 
-    .card {
-      width: 320px;
-      background-size: cover;
-      background-position: center;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
-    }
-
-    .card-header {
-      padding: 15px;
-      font-size: 1.4rem;
-      font-weight: 600;
-      background-color: rgba(0, 0, 0, 0.6);
-      color: white;
-      text-shadow: 1px 1px 3px #000;
-    }
-
-    .card-content {
-      padding: 20px;
-      background-color: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(5px);
-    }
-
-    .card-content a {
-      display: block;
-      background-color: rgba(255, 255, 255, 0.2);
-      color: var(--or);
-      font-weight: 600;
+    .menu-links a {
+      position: relative;
+      color: #e0e0ff;
       text-decoration: none;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
-      transition: 0.3s;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 6px 10px;
+      transition: all 0.3s ease;
     }
 
-    .card-content a:hover {
-      background-color: rgba(255, 255, 255, 0.4);
-      color: white;
+    .menu-links a::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0%;
+      height: 2px;
+      background: linear-gradient(90deg, #00e0ff, #a389ff);
+      transition: all 0.4s ease;
+      transform: translateX(-50%);
     }
 
-    /* Fonds des cartes */
-    .cours-card {
-      background-image: url('https://static.vecteezy.com/ti/photos-gratuite/t2/69780224-vibrant-fluorescent-liquides-dans-verre-tester-tubes-arrange-dans-une-fonce-science-laboratoire-photo.jpeg');
-    }
-    .exo-card {
-      background-image: url('https://img.freepik.com/photos-premium/livres-debout-table-fond-fond_158398-85.jpg');
-    }
-    .dst-card {
-      background-image: url('https://m.media-amazon.com/images/I/61viNH5KPTL._UF894,1000_QL80_.jpg');
+    .menu-links a:hover::after { width: 80%; }
+    .menu-links a:hover {
+      color: #9f8fff;
+      text-shadow: 0 0 8px #7a5cff;
     }
 
-    /* --- FOOTER --- */
-    footer {
-      text-align: center;
-      padding: 15px;
-      background: var(--bleu-nuit);
-      color: var(--blanc);
-      font-size: 0.9rem;
-    }
-
-    /* --- RESPONSIVE --- */
+    /* === MODE MOBILE === */
     @media (max-width: 768px) {
-      .menu-btn {
-        display: block;
-      }
+      .menu-btn { display: block; }
       .menu-links {
         display: none;
         flex-direction: column;
         width: 100%;
-        background: rgba(0, 0, 0, 0.9);
-        text-align: center;
         position: absolute;
         top: 60px;
         left: 0;
+        background: rgba(20, 20, 35, 0.95);
+        backdrop-filter: blur(8px);
+        border-top: 1px solid rgba(150, 100, 255, 0.3);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        padding: 15px 0;
+        text-align: center;
       }
-      .menu-links.active {
-        display: flex;
+      .menu-links a {
+        display: block;
+        padding: 12px;
+        font-size: 18px;
       }
+      .menu-links.active { display: flex; }
+    }
+
+    /* === SECTION PRINCIPALE === */
+    section {
+      padding-top: 100px;
+      max-width: 1100px;
+      margin: auto;
+      text-align: center;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* === TITRE PRINCIPAL === */
+    .title-box {
+      background: rgba(20, 20, 40, 0.7);
+      border: 1px solid rgba(150, 80, 255, 0.5);
+      border-radius: 15px;
+      box-shadow: 0 0 25px rgba(100, 60, 255, 0.3);
+      padding: 25px;
+      color: #e8e6ff;
+      margin-bottom: 30px;
+    }
+
+    .title-box h1 {
+      font-size: 2rem;
+      color: #a58cff;
+      text-shadow: 0 0 10px #704dff;
+    }
+
+    /* === AVERTISSEMENT === */
+    .alert {
+      background: rgba(255, 40, 40, 0.15);
+      border: 1px solid rgba(255, 100, 100, 0.4);
+      color: #ffb3b3;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      font-weight: bold;
+      text-shadow: 0 0 5px rgba(255, 0, 0, 0.4);
+    }
+
+    /* === CARTES COURS & EXERCICES === */
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+    }
+
+    .card {
+      width: 300px;
+      padding: 25px;
+      border-radius: 20px;
+      background: rgba(30, 30, 60, 0.45);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(150, 100, 255, 0.2);
+      box-shadow: 0 0 20px rgba(100, 50, 255, 0.2);
+      color: #f3f2ff;
+      transition: all 0.4s ease;
+    }
+    .card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 0 25px rgba(140, 80, 255, 0.5);
+    }
+
+    .card h3 {
+      font-size: 1.4rem;
+      color: #9c7eff;
+      border-bottom: 2px solid rgba(120, 80, 255, 0.5);
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+    }
+
+    .card a {
+      display: block;
+      margin: 10px 0;
+      color: #e0dfff;
+      text-decoration: none;
+      background: rgba(80, 60, 150, 0.4);
+      border: 1px solid rgba(150, 100, 255, 0.3);
+      border-radius: 8px;
+      padding: 10px;
+      transition: all 0.3s ease;
+    }
+    .card a:hover {
+      background: rgba(140, 80, 255, 0.5);
+      text-shadow: 0 0 5px #fff;
+    }
+
+    /* === FOOTER === */
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #bbb;
+      background: rgba(15, 15, 25, 0.9);
+      border-top: 1px solid rgba(120, 70, 255, 0.3);
+      margin-top: 50px;
     }
   </style>
 </head>
 
 <body>
-  <div class="bandeau">
-    <button class="menu-btn" onclick="toggleMenu()">☰</button>
-    <div class="menu-links" id="menuLinks">
-      <a href="index.html">Accueil</a>
-      <a href="1ere année.html">Cours</a>
-      <a href="Quiz de révision de 1ère Année.html">Quiz</a>
-      <a href="espaceNote.html">Notes</a>
-      <a href="AideAvecIA.html">IA</a>
-      <a href="MiniDéfi.html">Mini défi</a>
-      <a href="AnnexeMotClé.html">Mots Clé</a>
-      <a href="Connexion étudiant.html">Connexion</a>
+  <!-- === MENU === -->
+  <nav class="bandeau">
+    <div class="menu-container">
+      <button class="menu-btn" onclick="toggleMenu()">☰</button>
+      <div class="menu-links" id="menuLinks">
+        <a href="index.html">Accueil</a>
+        <a href="Cours de 2nd.html">Cours</a>
+        <a href="Quiz de révision de seconde.html">Quiz</a>
+        <a href="espaceNote.html">Notes</a>
+        <a href="AideAvecIA.html">Questions à l’aide de l’IA</a>
+        <a href="MiniDéfi.html">Mini défi</a>
+        <a href="Connexion étudiant.html">Connexion</a>
+      </div>
     </div>
-  </div>
+  </nav>
 
+  <!-- === CONTENU PRINCIPAL === -->
   <section>
-    <table class="intro">
-      <thead>
-        <tr><th>Cours Première de Physique-Chimie ⚛️⚗️</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Bienvenue aux cours de Première de physique-chimie ! Ces ressources vous aideront à maîtriser les notions clés pour la spécialité et le BAC.</td></tr>
-        <tr><td>⚠️ Note : Préparez vos TP à l'avance !</td></tr>
-      </tbody>
-    </table>
+    <div class="title-box">
+      <h1>Cours de Physique-Chimie - Niveau Seconde 🧪</h1>
+      <p>Explorez, révisez et perfectionnez vos connaissances grâce à nos cours et exercices interactifs.</p>
+    </div>
 
-    <div class="section-title">Cours et Exercices de Première</div>
+    <div class="alert">⚠️ Note importante : Les téléphones sont interdits pendant les cours.</div>
 
     <div class="cards-container">
-      <div class="card cours-card">
-        <div class="card-header">📘 COURS</div>
-        <div class="card-content">
-          <a href="#">Chapitre 1 : Cohésion de la matière</a>
-          <a href="#">Chapitre 2 : Lois de Newton</a>
-          <a href="#">Chapitre 3 : Spectres UV/Visible</a>
-          <a href="#">Chapitre 4 : Quantité de matière</a>
-          <a href="#">Chapitre 5 : Le son</a>
-          <a href="#">Chapitre 6 : Réactions chimiques</a>
-        </div>
+      <!-- === COURS === -->
+      <div class="card">
+        <h3>📚 Cours</h3>
+        <a href="https://gervillereache.lyc.ac-guadeloupe.fr/wp-content/uploads/sites/70/2021/03/Tableau-scaled.jpg">Tableau périodique des éléments</a>
+        <a href="http://cst.unice.fr/documents/M1EEF/Cours-de-physique-1v2.pdf">Chimie 1</a>
+        <a href="#">Physique 1</a>
+        <a href="#">Cours 4</a>
+        <a href="#">Cours 5</a>
+        <a href="#">Cours 6</a>
       </div>
 
-      <div class="card exo-card">
-        <div class="card-header">🧪 EXERCICES</div>
-        <div class="card-content">
-          <a href="#">Série 1 : Structures et Molécules</a>
-          <a href="#">Série 2 : Énergie et Puissance</a>
-          <a href="#">Série 3 : Dosages et Solubilité</a>
-          <a href="#">Série 4 : Ondes et Signaux</a>
-        </div>
-      </div>
-
-      <div class="card dst-card">
-        <div class="card-header">📝 DST</div>
-        <div class="card-content">
-          <a href="#">DST 1 : Structures et Molécules</a>
-          <a href="#">DST 2 : Énergie et Puissance</a>
-          <a href="#">DST 3 : Dosages et Solubilité</a>
-          <a href="#">DST 4 : Ondes et Signaux</a>
-        </div>
+      <!-- === EXERCICES === -->
+      <div class="card">
+        <h3>🧠 Exercices</h3>
+        <a href="#">Exercice 1</a>
+        <a href="#">Exercice 2 : Les équations</a>
+        <a href="#">Exercice 3</a>
+        <a href="#">Exercice 4</a>
       </div>
     </div>
   </section>
 
-  <footer>&copy; 2025 — Programmée par NGUYEN Thomas. Tous droits réservés.</footer>
+  <footer>
+    <p>&copy; 2025 — Programmée par <b>NGUYEN Thomas</b>. Tous droits réservés.</p>
+  </footer>
 
   <script>
     function toggleMenu() {
