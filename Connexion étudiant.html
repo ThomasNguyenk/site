@@ -106,7 +106,10 @@ button:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(74,144,2
 </div>
 
 <script>
-function loadUsers(){ try { return JSON.parse(localStorage.getItem('USERS')||'[]'); } catch(e){ return []; } }
+function loadUsers(){ 
+  try { return JSON.parse(localStorage.getItem('USERS')||'[]'); } 
+  catch(e){ return []; } 
+}
 function saveUsers(users){ localStorage.setItem('USERS', JSON.stringify(users)); }
 
 function showView(id){
@@ -124,7 +127,6 @@ document.querySelectorAll('.toggle-password').forEach(toggle=>{
   });
 });
 
-// Variables globales
 let userPending2FA=null;
 let currentMfaCode=null;
 
@@ -135,9 +137,13 @@ function updateMfaMessage(){
 
 function finaliseLogin(user){
   currentMfaCode=null;
+  // Sauvegarde des informations utilisateur
   localStorage.setItem('activeUser', user.username);
   localStorage.setItem('studentClass', user.class || 'Première');
-  setTimeout(()=>window.location.href='index.html',500);
+  localStorage.setItem('isLoggedIn', true);
+
+  // Délai pour assurer l’enregistrement avant redirection
+  setTimeout(()=>window.location.href='index.html', 500);
 }
 
 // === INSCRIPTION ===
@@ -148,12 +154,15 @@ document.getElementById('registerForm').addEventListener('submit',e=>{
   const err=errorMsg;
   err.textContent='';
   const users=loadUsers();
+
   if(password.length<3){ err.textContent='Mot de passe trop court.'; return; }
   if(users.some(u=>u.username.toLowerCase()===username.toLowerCase())){ err.textContent='Nom déjà utilisé.'; return; }
+
   const newUser={username,password,class:'Première'};
   users.push(newUser);
   saveUsers(users);
-  // Après inscription → on demande la vérification 2FA
+
+  // Étape 2FA
   userPending2FA=newUser;
   currentMfaCode=generateMfaCode();
   updateMfaMessage();
@@ -169,8 +178,10 @@ document.getElementById('loginForm').addEventListener('submit',e=>{
   const user=users.find(u=>u.username.toLowerCase()===username.toLowerCase());
   const err=errorMsg;
   err.textContent='';
+
   if(!user){ err.textContent='Utilisateur introuvable.'; return; }
   if(user.password!==password){ err.textContent='Mot de passe incorrect.'; return; }
+
   userPending2FA=user;
   currentMfaCode=generateMfaCode();
   updateMfaMessage();
@@ -183,6 +194,7 @@ document.getElementById('mfaForm').addEventListener('submit',e=>{
   const code=mfaCode.value.trim();
   const err=errorMsg;
   err.textContent='';
+
   if(!userPending2FA){ showView('login-view'); return; }
   if(code===currentMfaCode){
     alert(`Bienvenue ${userPending2FA.username} 👋`);
@@ -192,7 +204,7 @@ document.getElementById('mfaForm').addEventListener('submit',e=>{
   }
 });
 
-// Création d’un compte par défaut (utile au premier lancement)
+// Création d’un compte par défaut
 (function(){
   if(loadUsers().length===0){
     saveUsers([{username:'etudiant1',password:'123',class:'Première'}]);
